@@ -34,6 +34,23 @@
         "commands": ["nx run arteflix:res:dev", "nx run arteflix:dev"],
         "parallel": true
       }
+    },
+    "all:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx run arteflix:res:build", "nx run arteflix:build"],
+        "parallel": true
+      }
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "dependsOn": ["all:build"],
+      "defaultConfiguration": "local",
+      "options": {
+        "engine": "docker",
+        "context": "dist/",
+        "file": "apps/arteflix/Dockerfile"
+      }
     }
   }
 }
