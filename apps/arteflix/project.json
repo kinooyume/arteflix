@@ -1,0 +1,39 @@
+{
+  "name": "arteflix",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/arteflix",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "make target for rescript",
+  "targets": {
+    "res:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run rescript -w"
+      },
+      "inputs": ["{projectRoot}/src/res/**.res"],
+      "outputs": [
+        "{projectRoot}/src/res/**.bs.mjs",
+        "{projectRoot}/src/res/**.gen.ts"
+      ]
+    },
+    "res:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run rescript build"
+      },
+      "inputs": ["{projectRoot}/src/res/**.res"],
+      "outputs": [
+        "{projectRoot}/src/res/**.bs.mjs",
+        "{projectRoot}/src/res/**.gen.ts"
+      ]
+    },
+    "all:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx run arteflix:res:dev", "nx run arteflix:dev"],
+        "parallel": true
+      }
+    }
+  }
+}

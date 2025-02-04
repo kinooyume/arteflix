@@ -1,0 +1,28 @@
+open Emotion
+
+// NOTE: same issue with react-aria
+
+// NOTE: check si on l'ajoute pas au bouton principale
+
+module Style = {
+  let button = ReactDOM.Style.make(~position="relative", ())->css
+  let circle = ReactDOM.Style.make(~fill={Colors.primaryWhite}, ())->css
+  let circleHover = ReactDOM.Style.make(~fill={Colors.greyGrey_10}, ())->css
+}
+
+type playButtonRoundedProps = {
+  href: string,
+  linkAlt?: option<LinkAlt.make>,
+}
+
+@react.component(: playButtonRoundedProps)
+let make = (~href) => {
+  <Button href size=Rounded variant=Secondary>
+    <svg width="15" height="20" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M14.3794 9.13718C15.1279 9.6128 15.1196 10.708 14.3641 11.1724L1.82831 18.8764C1.02877 19.3678 4.6228e-07 18.7925 4.39194e-07 17.854L5.3732e-08 2.1843C3.04476e-08 1.23775 1.04468 0.663827 1.84358 1.17148L14.3794 9.13718Z"
+        fill={Colors.greyGrey_700}
+      />
+    </svg>
+  </Button>
+}
