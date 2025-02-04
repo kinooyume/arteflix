@@ -1,0 +1,21 @@
+type params = {lang: string, id: string, title: string}
+type props = {data: ArteData.t}
+
+let default = ({data}: props) =>
+  <div>
+    {data.props.pageProps.props.page.value.zones
+    ->Array.map(zone => <ZoneInfo zone />)
+    ->React.array}
+  </div>
+
+let getServerSideProps :  Next.GetServerSideProps.t<props, params, _> = async ctx => {
+  let dataResult = await ArteParser.parse(~online=true, ~queries=ctx.req.url, ~path="mockups/arteHome.json")
+  switch dataResult {
+  | Ok(data) => {
+      "props": {
+        data: data,
+      },
+    }
+  | Error(err) => err->raise
+  }
+}

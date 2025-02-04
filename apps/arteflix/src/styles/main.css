@@ -1,0 +1,18 @@
+@import './_fonts.css';
+
+body {
+  background: var(--Grey-Grey-900, #141414);
+  color: white;
+  padding: 0;
+  margin: 0;
+}
+
+/* React Aria hack for dialog */
+html {
+  overflow: auto !important;
+  padding: 0 !important;
+}
+
+div[data-testid=underlay] {
+  display: none !important;
+}

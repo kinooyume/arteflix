@@ -1,0 +1,8 @@
+export default ({ color, size }) => (
+  <svg xmlns="http://www.w3.org/2000/svg"
+width={size} height={size}
+    viewBox="0 0 48 48">
+    <path d="M20 12l-2.83 2.83 9.17 9.17-9.17 9.17 2.83 2.83 12-12z" fill={color}/>
+    <path d="M0 0h48v48h-48z" fill="none" />
+  </svg>
+);

@@ -1,0 +1,44 @@
+@scope("window") @val
+external addWindowEventListener: (string, unit => unit) => unit = "addEventListener"
+@scope("window") @val
+external removeWindowEventListener: (string, unit => unit) => unit = "removeEventListener"
+
+// https://github.com/illusionalsagacity/rescript-use-sync-external-store
+
+let usePreferredLanguageSubscribe = callback => {
+  addEventListener("languagechange", callback)
+  () => removeEventListener("languagechange", callback)
+}
+
+let getPreferredLanguageSnapshot = () => {
+  navigator.language
+}
+
+let getPreferredLanguageServerSnapshot = () => {
+  Js.Exn.raiseError("usePreferredLanguage is a client-only hook")
+}
+
+// const usePreferredLanguageSubscribe = (callback: (event: Event) => void) => {
+//   window.addEventListener("languagechange", callback);
+//   return () => window.removeEventListener("languagechange", callback);
+// };
+//
+// const getPreferredLanguageSnapshot = () => {
+//   return navigator.language;
+// };
+//
+// const getPreferredLanguageServerSnapshot = () => {
+//   throw Error("usePreferredLanguage is a client-only hook");
+// };
+//
+// /**
+//  * React hook to get the user's preferred language
+//  * @returns {string} The user's preferred language
+//  */
+// export default function usePreferredLanguage() {
+//   return useSyncExternalStore(
+//     usePreferredLanguageSubscribe,
+//     getPreferredLanguageSnapshot,
+//     getPreferredLanguageServerSnapshot,
+//   );
+// }

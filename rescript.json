@@ -1,0 +1,43 @@
+{
+  "name": "arteflix",
+  "namespace": false,
+  "jsx": {
+    "version": 4
+  },
+  "bs-dependencies": [
+    "@rescript/react",
+    "@rescript/core",
+    "rescript-schema",
+    "rescript-nodejs",
+    "@glennsl/rescript-fetch",
+    "rescript-swr",
+    "rescript-webapi"
+  ],
+
+  "bsc-flags": ["-open RescriptCore", "-open RescriptSchema"],
+  "ppx-flags": ["rescript-schema-ppx/bin"],
+  "sources": [
+    {
+      "dir": "apps/arteflix/src/res/",
+      "subdirs": true
+    },
+    {
+      "dir": "libs/shared/ui/src/",
+      "subdirs": true
+    }
+  ],
+  "package-specs": {
+    "module": "esmodule",
+    "in-source": true
+  },
+  "suffix": ".bs.mjs",
+  "gentypeconfig": {
+    "module": "esmodule",
+    "moduleResolution": "node",
+    "generatedFileExtension": ".gen.tsx",
+    "debug": {
+      "all": false,
+      "basic": false
+    }
+  }
+}
