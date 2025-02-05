@@ -25,6 +25,7 @@ const { composePlugins, withNx } = require('@nx/next');
  **/
 const nextConfig = {
   transpilePackages: transpileModules,
+  output: 'standalone',
   webpack: (config, options) => {
     const { isServer } = options;
 
