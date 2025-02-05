@@ -11,7 +11,7 @@ I build this to test the usability of rescript in a real project with some **hot
 - `React 19` and  `Next.js` \*\*
 - Queries fetching through `swr` and [rescript-swr](https://github.com)
 
-- `bun` and `nx` as
+- `bun` and `nx`
 
 - `docker`
 
