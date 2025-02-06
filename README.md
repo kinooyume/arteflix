@@ -16,11 +16,6 @@ I build this to test the usability of rescript in a real project with some **hot
 - `docker`
 
 <details>
-  <summary>Style</summary>
- `emotions`
-</details>
-
-<details>
   <summary>Testing</summary>
   - `playwright`
   - `Storybook`
