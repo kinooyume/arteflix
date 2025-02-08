@@ -1,10 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -13,11 +10,12 @@
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/jest.config.[jt]s",
       "!{projectRoot}/src/test-setup.[jt]s",
-      "!{projectRoot}/test-setup.[jt]s"
+      "!{projectRoot}/test-setup.[jt]s",
+      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+      "!{projectRoot}/.storybook/**/*",
+      "!{projectRoot}/tsconfig.storybook.json"
     ],
-    "sharedGlobals": [
-      "{workspaceRoot}/.github/workflows/ci.yml"
-    ]
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
   "nxCloudId": "679b3fcd4013b91a7c9f81c3",
   "plugins": [
@@ -56,13 +54,20 @@
         "defaultEngine": "docker",
         "defaultRegistry": "docker.io"
       }
+    },
+    {
+      "plugin": "@nx/storybook/plugin",
+      "options": {
+        "serveStorybookTargetName": "storybook",
+        "buildStorybookTargetName": "build-storybook",
+        "testStorybookTargetName": "test-storybook",
+        "staticStorybookTargetName": "static-storybook"
+      }
     }
   ],
   "targetDefaults": {
     "e2e-ci--**/*": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     }
   },
   "generators": {

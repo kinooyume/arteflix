@@ -50,3 +50,6 @@ out
 **/*.bs.mjs
 lib
 
+
+
+storybook-static
