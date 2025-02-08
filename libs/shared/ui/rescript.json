@@ -1,0 +1,30 @@
+{
+  "name": "ui",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "esmodule",
+      "in-source": true
+    }
+  ],
+  "bs-dependencies": ["@rescript/core", "@rescript/react", "rescript-webapi"],
+  "suffix": ".bs.mjs",
+  "gentypeconfig": {
+    "module": "esmodule",
+    "moduleResolution": "node",
+    "generatedFileExtension": ".gen.tsx",
+    "debug": {
+      "all": false,
+      "basic": false
+    }
+  },
+  "bsc-flags": ["-open RescriptCore"],
+  "jsx": {
+    "version": 4
+  }
+}
