@@ -1,12 +1,12 @@
-import react from '@vitejs/plugin-react';
-import type { StorybookConfig } from '@storybook/react-vite';
-import { mergeConfig } from 'vite';
 import { loadCsf } from '@storybook/csf-tools';
+import type { StorybookConfig } from '@storybook/react-vite';
+import react from '@vitejs/plugin-react';
+import { mergeConfig } from 'vite';
 
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
-import { Indexer, IndexerOptions, IndexInput } from 'storybook/internal/types';
 import { readFileSync } from 'node:fs';
+import { IndexerOptions, IndexInput } from 'storybook/internal/types';
 
 const storyFileRegex = /^(.*)Stories\.bs\.mjs$/;
 
@@ -24,7 +24,6 @@ const config: StorybookConfig = {
   stories: [
     '../src/components/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
     '../src/components/**/*Stories.bs.@(mjs)',
-    '../src/**/*.custom-stories.@(js|jsx|ts|tsx)',
   ],
 
   experimental_indexers: async (existingIndexers) => {
