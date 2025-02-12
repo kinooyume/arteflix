@@ -8,6 +8,7 @@ module Style = {
       ~display="flex",
       ~flexDirection="column",
       ~justifyContent="center",
+      ~textDecoration="none",
       ~alignItems="center",
       ~borderRadius="4px",
       ~border="none",
@@ -55,7 +56,7 @@ module Style = {
       )->css,
     ]->cx
 
-  let rounded = ReactDOM.Style.make(~borderRadius="20px", ~width="36px", ~height="36px", ())->css
+  let rounded = ReactDOM.Style.make(~borderRadius="20px", ~width="36px", ~height="36px", ~position="relative", ())->css
   let primary =
     ReactDOM.Style.make(~backgroundColor={Colors.primaryRed}, ~color={Colors.primaryWhite}, ())->css
 

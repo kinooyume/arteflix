@@ -50,6 +50,7 @@ module Style = {
       ~display="flex",
       ~outline="none !important",
       ~flexDirection="row",
+      ~textDecoration="none",
       ~alignItems="center",
       ~padding="16px  52px 16px 16px",
       ~transition="all 0.2s ease-out",
