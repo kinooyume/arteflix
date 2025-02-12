@@ -1,7 +1,5 @@
 open Emotion
 
-// NOTE: same issue with react-aria
-
 // NOTE: check si on l'ajoute pas au bouton principale
 
 module Style = {
