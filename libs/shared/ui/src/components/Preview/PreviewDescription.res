@@ -3,15 +3,16 @@ open Emotion
 module Style = {
   let wrapper =
     ReactDOM.Style.make(
-      ~backgroundColor=Colors.greyGrey_900,
-      ~display="flex-inline",
+      ~display="inline-flex",
       ~flexDirection="column",
       ~padding="20px 0px 88px 0px",
       ~gap="16px",
       ~width="100%",
+      ~maxWidth="323px",
       ~justifyContent="flex-start",
       ~alignItems="flex-start",
       ~borderRadius="0 0 4px 4px",
+      ~backgroundColor=Colors.greyGrey_900,
       (),
     )->css
 }

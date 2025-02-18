@@ -4,8 +4,8 @@ open ReactAria
 let style = imagePath =>
   ReactDOM.Style.make(
     ~display="flex",
-    // ~width="323px",
-    // ~height="181px",
+    ~maxWidth="323px",
+    ~maxHeight="181px",
     ~width="100%",
     ~height="100%",
     ~minHeight="123px",
