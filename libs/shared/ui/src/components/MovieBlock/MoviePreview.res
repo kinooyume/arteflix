@@ -24,16 +24,23 @@ let make = React.memo((
 ) => {
   let meta = []
   switch ageRestriction {
-  | Some(restriction) => meta->Array.push(<MaturityRatingTag> restriction </MaturityRatingTag>)
+  | Some(restriction) =>
+    meta->Array.push(<MaturityRatingTag key="maturity"> restriction </MaturityRatingTag>)
   | None => ()
   }
   switch audios {
   | Some(audios) =>
     switch audios->Array.length > 0 {
     | true =>
-      meta->Array.push(<>
-        {audios->Array.map(audio => <QualityTag> audio </QualityTag>)->React.array}
-      </>)
+      meta->Array.push(
+        <React.Fragment key="audios">
+          {audios
+          ->Array.mapWithIndex((audio, index) =>
+            <QualityTag key={`audio-${index->Int.toString}`}> audio </QualityTag>
+          )
+          ->React.array}
+        </React.Fragment>,
+      )
     | false => ()
     }
   | None => ()
@@ -54,8 +61,8 @@ let make = React.memo((
           animate={{width: "323px", height: "181px", transition: {duration: 0.2}}}
           exit={{width: "218px", height: "123px", transition: {duration: 0.1}}}>
           // <PlayerTransition urlOption=NoVideo>
-        // NOTE: probably merge with movieCardImage
-            <PreviewImage srcBase=img href />
+          // NOTE: probably merge with movieCardImage
+          <PreviewImage srcBase=img href />
           // </PlayerTransition>
         </Motion.div>
         <Motion.div
