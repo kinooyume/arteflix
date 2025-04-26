@@ -7,6 +7,6 @@ export let metadata = {
   title: "Arteflix",
   description: "Arte with Netflix UI",
 }
-export default async function Page({ params }) {
+export default async function Page({ params }: { params: any }) {
   return DirectRes(params);
 }
