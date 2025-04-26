@@ -8,6 +8,6 @@ export let metadata = {
   description: "Arte with Netflix UI",
 }
 
-export default async function Page({ params }) {
+export default async function Page({ params }: { params: any }) {
   return VideoRes(params);
 }
