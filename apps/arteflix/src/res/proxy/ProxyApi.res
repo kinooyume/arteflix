@@ -2,6 +2,13 @@ open ArteParser.Endpoints
 
 external recordAsJson: 'a => Js.Json.t = "%identity"
 
+let home = async (params: Params.home) => {
+  switch await ArteApiSource.Fetcher.home(params) {
+  | data => data->recordAsJson->Next.NextResponse.json
+  | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
+  }
+}
+
 // TODO: Add Exception Logs
 module Home = {
   let get = async (params: Params.home) => {

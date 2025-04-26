@@ -1,8 +1,3 @@
-// Bon alors ici
-// C'est la partie, on récupère le html
-// On parse, valide et tout ça
-// et on Renvoit une promesse de ArteData.t
-
 open Fetch
 
 exception FetchError(Exn.t)
@@ -43,24 +38,6 @@ let make = (baseUrl): ArteParser.Endpoints.t => {
     }
   }
 
-  // NOTE: utilisé en front
-  // let validate = text =>
-  //   switch text->S.parseOrThrow(ArteDataHtml.schema) {
-  //   | Ok(data) => data
-  //   | Error(err) => raise(ParseError(err))
-  //   }
-  //
-  // let validate = text =>
-  // let validate = text => {
-  //   Js.log("Validate time !")
-  //   try "t"->S.parseJsonStringOrThrow(ArteDataHtml.schema) catch {
-  //   | S.Raised(err) => {
-  //       Js.log(err)
-  //       raise(ParseError(err))
-  //     }
-  //   }
-  // }
-
   let transform = (data: ArteDataHtml.t): ArteData.t => {
     let {page, parent, metadata, apiPlayerConfig} = data.props.pageProps.props
     {
@@ -99,10 +76,6 @@ let make = (baseUrl): ArteParser.Endpoints.t => {
       await get(~path)
     },
     category: async ({lang, category, title}) => {
-      // let categoryPath = switch title {
-      //   | Some(title) => title
-      //   | None => "categories"
-      // }
       let path = switch title {
       | None => `/${lang}/${category}`
       | Some(t) => `/${lang}/${category}/${t}`
@@ -110,9 +83,6 @@ let make = (baseUrl): ArteParser.Endpoints.t => {
       await get(~path)
     },
   }
-
-  // let path = queries->Js.Dict.values->Array.join("/")
-  // let urlParams = params->Js.Dict.values->Array.join("/")
 }
 
 let source = make("https://www.arte.tv")

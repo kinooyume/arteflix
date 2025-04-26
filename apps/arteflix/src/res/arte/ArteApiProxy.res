@@ -6,7 +6,7 @@ open ArteApi
 
 // ProxyParams ?
 module Urls: ArteUrls = {
-  let home = ({lang}: Params.home) => `/proxy/html/${lang}`
+  let home = ({lang}: Params.home) => `/proxy/api/${lang}`
   let direct = ({lang}: Params.direct) => `/proxy/html/${lang}/live`
   let video = ({lang, id}: Params.video) => {
     `/proxy/html/${lang}/videos/${id}`
