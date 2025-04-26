@@ -5,48 +5,38 @@ exception FetchError(Exn.t)
 exception ParseError(S.error)
 exception MockupError(Exn.t)
 
-let fetch = async (~url) => {
-  try {
-    let resp = await fetch(
-      url,
-      {
-        method: #GET,
-      },
-    )
-    await Response.text(resp)
-  } catch {
-  | Exn.Error(err) => raise(FetchError(err))
-  }
-}
-
 // NOTE: Content / PlayerConfig ==> different schema in validate
 // ==> C'est tout
 
 module Content = {
-  // Donc, validate aussi utilisé en front
-  // let validate = text =>
-  //   switch text->S.parseOrThrow(ArteDataApi.contentSchema) {
-  //   | Ok(data) => data
-  //   | Error(err) => raise(ParseError(err))
-  //   }
-  let validate = text =>text->S.parseOrThrow(ArteDataApi.contentSchema)
+  let validate = text => text->S.parseJsonStringOrThrow(ArteDataApi.contentSchema)
 
-  let get = async (~url) => {
-    let stringData = await fetch(~url)
-    validate(stringData)
+  let fetcher = async (url): ArteDataApi.content => {
+    try {
+      let resp = await fetch(
+        url,
+        {
+          method: #GET,
+        },
+      )
+      let stringData = await Response.text(resp)
+      stringData->validate
+    } catch {
+    | Exn.Error(err) => raise(FetchError(err))
+    }
   }
 }
 
 module PlayerConfig = {
   let validate = text => text->S.parseOrThrow(ArteDataApi.playerSchema)
-  // let validate = text =>
-  //   switch text->S.parseOrThrow(ArteDataApi.playerSchema) {
-  //   | Ok(data) => data
-  //   | Error(err) => raise(ParseError(err))
-  //   }
 
   let get = async (~url) => {
-    let stringData = await fetch(~url)
+    let stringData = await fetch(
+      url,
+      {
+        method: #GET,
+      },
+    )
     validate(stringData)
   }
 }
@@ -69,11 +59,11 @@ module type ArteUrls = {
 }
 
 module MakeArteApi = (Urls: ArteUrls) => {
-// TODO: home not needed as we don't have apiPlayerConfig
+  // TODO: home not needed as we don't have apiPlayerConfig
   let home = async (queries: Params.home) => {
     let url = Urls.home(queries)
     Js.log2("ArteApi", url)
-    let content = await Content.get(~url)
+    let content = await Content.fetcher(url)
     Js.log2("Content", content)
     let data: ArteData.t = {
       content: content.value,
@@ -95,7 +85,7 @@ module MakeArteApi = (Urls: ArteUrls) => {
     let contentUrl = queries->Urls.video
     // let playerUrl = queries->Urls.player
     let playerUrl = "TMP urls player"
-    let content = await Content.get(~url=contentUrl)
+    let content = await Content.fetcher(contentUrl)
     let playerConfig = await PlayerConfig.get(~url=playerUrl)
 
     let data: ArteData.t = {
@@ -134,3 +124,4 @@ module MakeArteApi = (Urls: ArteUrls) => {
     }
   }
 }
+
