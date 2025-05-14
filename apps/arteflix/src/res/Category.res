@@ -1,4 +1,4 @@
-open ArteParser.Endpoints
+open ArteContract
 
 let revalidate = 60
 

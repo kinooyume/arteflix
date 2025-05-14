@@ -3,7 +3,7 @@
 // @react.component(: ArteData.t)
 // let make = (~content, ~apiPlayerConfig) =>
 
-open ArteParser.Endpoints
+open ArteContract
 
 open ArteApiProxy
 type props_ = {params: Params.category}

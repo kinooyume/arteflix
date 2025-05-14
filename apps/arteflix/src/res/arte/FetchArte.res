@@ -1,23 +1,24 @@
-open ArteParser
-open ArteParser.Endpoints
+// NOTE: C'etait pour le fallback
+// de API/HTML
+// TODO: Ca va disparaitre
 
 type pageFetchers = {
-  home: list<Endpoints.home>,
-  direct: list<Endpoints.direct>,
-  playerConfig: list<Endpoints.video>,
-  video: list<Endpoints.video>,
-  collection: list<Endpoints.video>,
-  genre: list<Endpoints.video>,
-  category: list<Endpoints.category>,
+  home: list<ArteContract.home>,
+  direct: list<ArteContract.direct>,
+  playerConfig: list<ArteContract.video>,
+  video: list<ArteContract.video>,
+  collection: list<ArteContract.video>,
+  genre: list<ArteContract.video>,
+  category: list<ArteContract.category>,
 }
 
 // NOTE: Mettre ces lists dans chaque pages
 let prodFetchers: pageFetchers = {
-  home: list{ArteApiSource.Fetcher.home},
+  home: list{ArteApi.Fetcher.home},
   direct: list{ArteHtml.source.direct},
   video: list{ArteHtml.source.video},
   collection: list{ArteHtml.source.video},
-  playerConfig: list{ArteApiSource.Fetcher.player},
+  playerConfig: list{ArteApi.Fetcher.player},
   genre: list{ArteHtml.source.video},
   category: list{ArteHtml.source.category},
 }
@@ -46,7 +47,7 @@ let rec attemptFetchers = async (fetchers: list<fetcher<'a>>, queries: 'a): Arte
 
 // TODO: separate player and video/trailer
 // ==> En pause pour fetcher playerConfig + data
-type videoRequest = PlayerConfig(Endpoints.video) | Content(Endpoints.video) | Error(exn)
+type videoRequest = PlayerConfig(ArteContract.video) | Content(ArteContract.video) | Error(exn)
 
 type video = Video | Collection | Genre
 
@@ -55,6 +56,7 @@ type content = {
   data: videoRequest,
 }
 
+open ArteContract
 let makeVideoGet = (queries: Params.video) => {
   let fetchers = if queries.id->String.includes("-A") {
     [

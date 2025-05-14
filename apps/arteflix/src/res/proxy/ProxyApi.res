@@ -1,29 +1,32 @@
-open ArteParser.Endpoints
+open ArteContract
 
 external recordAsJson: 'a => Js.Json.t = "%identity"
 
+// NOTE: Appelé par le proxy
+// ==>  ArteApi Fetcher -> ArteApi
+//
+// NOTE: ce qu'on veut mocké, c'est cette partie là en fait
+// Donc balleks
+//
+// TODO: implement Pino Logs
+
 let home = async (params: Params.home) => {
-  switch await ArteApiSource.Fetcher.home(params) {
+  switch await ArteApi.Fetcher.home(params) {
   | data => data->recordAsJson->Next.NextResponse.json
   | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
   }
 }
 
-// TODO: Add Exception Logs
-module Home = {
-  let get = async (params: Params.home) => {
-    await (
-      switch await ArteApiSource.Fetcher.home(params) {
-      | data => data->recordAsJson->Next.NextResponse.json
-      | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
-      }
-    )
+let video = async (params: Params.video) => {
+  switch await ArteApi.Fetcher.video(params) {
+  | data => data->recordAsJson->Next.NextResponse.json
+  | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
   }
 }
 
 module Player = {
   let get = async (params: Params.video) => {
-    switch await ArteApiSource.Fetcher.player(params) {
+    switch await ArteApi.Fetcher.player(params) {
     | config => config->recordAsJson->Next.NextResponse.json
     | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
     }
@@ -32,7 +35,7 @@ module Player = {
 
 module Trailer = {
   let get = async (params: Params.video) => {
-    switch await ArteApiSource.Fetcher.trailer(params) {
+    switch await ArteApi.Fetcher.trailer(params) {
     | config => config->recordAsJson->Next.NextResponse.json
     | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
     }

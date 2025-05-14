@@ -2,7 +2,7 @@
 
 // NOTE: same as Videojclient, but different call
 // and different behavior, will see
-open ArteParser.Endpoints
+open ArteContract
 
 let defaultOptions: VideoJs.playerOptions = {
   controls: true,

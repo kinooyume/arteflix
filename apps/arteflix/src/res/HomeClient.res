@@ -1,24 +1,22 @@
 @@directive("'use client';")
 
-// @react.component(: ArteData.t)
-// let make = (~content, ~apiPlayerConfig) =>
-
-open ArteParser.Endpoints
+open ArteContract
 open ArteApiProxy
+open ClientFetcher
 
 type props_ = {params: Params.home}
 
 @react.component(: props_)
 let make = (~params) => {
-  let {data, error} = Swr.useSWR(params->Urls.home, ClientFetcher.Html.fetcher)
+  let {data, error} = Swr.useSWR(params->Urls.home, fetcher(validateArteData, ...))
 
   <>
     {switch error {
     | Some(err) =>
-        Js.log(err)
+      Js.log(err)
       switch err {
-      | ClientFetcher.FetchError(_) => <ServerError message="A fetch error occur" />
-      | ClientFetcher.ParseError(_) => <ServerError message="A parsing error occur" />
+      | FetchError(_) => <ServerError message="A fetch error occur" />
+      | ParseError(_) => <ServerError message="A parsing error occur" />
       | Exn.Error(_) => <ServerError message="500 Error | Failed to fetch Arte error" />
       | _ => <ServerError message="500 Error | Failed to fetch Arte error" />
       }
@@ -27,10 +25,10 @@ let make = (~params) => {
     {switch data {
     | Some(arteData) =>
       <>
-        {switch arteData.apiPlayerConfig {
-        | Some(playerConfig) => <p> {"Player"->React.string} </p>
-        | None => React.null
-        }}
+        // {switch arteData.apiPlayerConfig {
+        // | Some(playerConfig) => <p> {"Player"->React.string} </p>
+        // | None => React.null
+        // }}
         <div>
           {arteData.content.zones
           ->Array.map(zone =>

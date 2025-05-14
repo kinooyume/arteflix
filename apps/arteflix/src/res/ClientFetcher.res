@@ -4,8 +4,25 @@ open Fetch
 exception FetchError(Exn.t)
 exception ParseError(S.error)
 
-module Html = {
+let validateArteData = text => text->S.parseJsonStringOrThrow(ArteData.schema)
 
+// Common Fetcher Content for ArteData
+let fetcher = async (validateArteData, url) => {
+  try {
+    let resp = await fetch(
+      url,
+      {
+        method: #GET,
+      },
+    )
+    let stringData = await Response.text(resp)
+    stringData->validateArteData
+  } catch {
+  | Exn.Error(err) => raise(FetchError(err))
+  }
+}
+
+module Html = {
   let validate = text => text->S.parseJsonStringOrThrow(ArteData.schema)
 
   // Common Fetcher Content for ArteData
@@ -18,7 +35,6 @@ module Html = {
         },
       )
       let stringData = await Response.text(resp)
-      // Js.log2("fetcher:", stringData)
       stringData->validate
     } catch {
     | Exn.Error(err) => raise(FetchError(err))
@@ -28,10 +44,8 @@ module Html = {
 
 open FetchArte
 
-// NOTE: En fait pas forcément
-
 module WillRemove = {
-  let home = async (params: ArteParser.Endpoints.Params.home) => {
+  let home = async (params: ArteContract.Params.home) => {
     // je voudrais que ça soit server
     // attemptFetchers(prodFetchers.home, params)
     // let lang = switch params.lang {
@@ -47,30 +61,31 @@ module WillRemove = {
     // | Exn.Error(err) => raise(FetchError(err))
     // }
     Js.log2("ClientFetcher", params)
-    ArteApiSource.Fetcher.home(params)
+    ArteApi.Fetcher.home(params)
   }
 
-  let player = (params: ArteParser.Endpoints.Params.video) => ArteApiSource.Fetcher.player(params)
+  let player = (params: ArteContract.Params.video) => ArteApi.Fetcher.player(params)
 
-  let trailer = (params: ArteParser.Endpoints.Params.video) => ArteApiSource.Fetcher.trailer(params)
+  let trailer = (params: ArteContract.Params.video) => ArteApi.Fetcher.trailer(params)
 
-  let video = (params: ArteParser.Endpoints.Params.video) => {
+  let video = (params: ArteContract.Params.video) => {
     attemptFetchers(prodFetchers.video, params)
   }
 
-  let collection = (params: ArteParser.Endpoints.Params.video) => {
+  let collection = (params: ArteContract.Params.video) => {
     attemptFetchers(prodFetchers.collection, params)
   }
 
-  let genre = (params: ArteParser.Endpoints.Params.video) => {
+  let genre = (params: ArteContract.Params.video) => {
     attemptFetchers(prodFetchers.genre, params)
   }
 
-  let category = (params: ArteParser.Endpoints.Params.category) => {
+  let category = (params: ArteContract.Params.category) => {
     attemptFetchers(prodFetchers.category, params)
   }
 
-  let direct = (params: ArteParser.Endpoints.Params.direct) => {
+  let direct = (params: ArteContract.Params.direct) => {
     attemptFetchers(prodFetchers.direct, params)
   }
 }
+
