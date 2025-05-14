@@ -1,5 +1,5 @@
 // @@directive("'use server';")
-open ArteParser.Endpoints
+open ArteContract
 
 let default = async (promiseParams: promise<Params.direct>) => {
   let params = await promiseParams

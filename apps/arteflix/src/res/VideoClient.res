@@ -1,5 +1,5 @@
 @@directive("'use client';")
-open ArteParser.Endpoints
+open ArteContract
 
 let defaultOptions: VideoJs.playerOptions = {
   controls: true,
@@ -21,8 +21,6 @@ let makePlayer = (~playerConfig: ArtePlayerConfig.t) => {
 }
 
 open ArteApiProxy
-// Bon, pour video/collection; on va séparer le -A, et fallback au cas ou
-// Swr.Infinite.useSWRInfinite
 @react.component
 let make = (~params: Params.video) => {
   let {data, error} = Swr.useSWR(params->Urls.video, ClientFetcher.Html.fetcher)

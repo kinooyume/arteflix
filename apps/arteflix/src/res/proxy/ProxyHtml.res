@@ -1,4 +1,4 @@
-open ArteParser.Endpoints
+open ArteContract
 
 external recordAsJson: 'a => Js.Json.t = "%identity"
 

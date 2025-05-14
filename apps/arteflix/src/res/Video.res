@@ -1,5 +1,5 @@
 // @@directive("'use server';")
-open ArteParser.Endpoints
+open ArteContract
 
 module VideoClientMemo = {
   let make = React.memo(VideoClient.make)

@@ -5,15 +5,13 @@
 // :lang[en], :id[116705-107-A]
 
 @schema
-type pageValue = {zones: array<ArteZone.t>,
-  // metadata: ArteMetadata.t 
+type pageValue = {
+  zones: array<ArteZone.t>,
+  // metadata: ArteMetadata.t
 }
 
 @schema
 type page = {value: pageValue}
-
-// Api Player
-// https://api.arte.tv/api/player/v2/config/fr/112907-091-A
 
 @schema
 type content = {
@@ -28,6 +26,7 @@ let contentPlaceholder = {
   parent: None,
 }
 
+// NOTE: both when html
 @schema
 type t = {
   content: content,

@@ -38,7 +38,7 @@ let get = async (~path) => {
   transform(data)
 }
 
-let endpoints: ArteParser.Endpoints.t = {
+let endpoints: ArteContract.t = {
   home: async _ => {
     await get(~path="./mockups/arteHome2.json")
   },

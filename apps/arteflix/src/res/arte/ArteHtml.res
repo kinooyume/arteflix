@@ -4,7 +4,7 @@ exception FetchError(Exn.t)
 exception ArteStatusError(int)
 exception HtmlParsingError(string)
 
-let make = (baseUrl): ArteParser.Endpoints.t => {
+let make = (baseUrl): ArteContract.t => {
   let fetch = async urlParams => {
     try {
       let resp = await fetch(
