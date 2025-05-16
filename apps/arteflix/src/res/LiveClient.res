@@ -3,6 +3,8 @@
 // NOTE: same as Videojclient, but different call
 // and different behavior, will see
 open ArteContract
+open ClientFetcher
+open ArteApiProxy
 
 let defaultOptions: VideoJs.playerOptions = {
   controls: true,
@@ -23,13 +25,9 @@ let makePlayer = (~playerConfig: ArtePlayerConfig.t) => {
   }
 }
 
-open ArteApiProxy
-// Bon, pour video/collection; on va séparer le -A, et fallback au cas ou
 @react.component
-let make = (~params: Params.direct) => {
-  // TODO: check for multiple swr
-  // let playerConfig = Swr.useSWR(params, SwrFetcher.player)
-  let {data, error} = Swr.useSWR(params->Urls.direct, ClientFetcher.Html.fetcher)
+let make = (~params: Params.live) => {
+  let {data, error} = Swr.useSWR(params->Urls.live, fetcher(validateArteData, ...))
 
   // {switch playerConfig.data {
   // | Some(playerConfig) => makePlayer(~playerConfig)
@@ -52,15 +50,15 @@ let make = (~params: Params.direct) => {
     | Some(arteData) =>
       <>
         <div>
-          {arteData.content.zones
+          {arteData.zones
           ->Array.map(zone =>
             <Lazyload key={zone.id} once=true height=300 offset=200>
               <ZoneVideo
-                id="direct"
+                id="LIVE"
+                lang={params.lang}
                 zone
-                playerConfig={arteData.apiPlayerConfig}
-                metadata={arteData.content.metadata}
-                parent={arteData.content.parent}
+                metadata={arteData.metadata}
+                parent={arteData.parent}
               />
             </Lazyload>
           )

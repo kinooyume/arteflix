@@ -181,14 +181,6 @@ let make = (~url, ~options) => {
     }
   }, [videoRef])
 
-  //   // Js.Json.strin
-  //   // Colors->Dict.o
-  //   //
-  //
-  // external recordAsJson: 'a => Js.Dict.t<Js.Json.t> = "%identity"
-  //
-  // let json = params2->recordAsJson→Js.Json.object_
-
   React.useEffect(() => {
     Some(
       () => {

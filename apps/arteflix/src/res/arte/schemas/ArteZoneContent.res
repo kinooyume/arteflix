@@ -89,6 +89,7 @@ type geoblocking = {
  * @callToAction: i18n for call to action
  */
 
+// NOTE: check tout ce qui est nullable, ça doit etre pour les videos ?
 @schema
 type t = {
   deeplink: @s.nullable option<string>,

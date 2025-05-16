@@ -1,7 +1,6 @@
 @schema
 type template = [
   | #"slider-square"
-  | #"single-collectionContent"
   | #"horizontal-landscapeBigWithSubtitle"
   | #"horizontal-portrait"
   | #"horizontal-landscape"
@@ -14,6 +13,8 @@ type template = [
   | #"ebu-box"
   | // NOTE: Video
   #"single-programContent"
+  | // NOTE: Collection
+  #"single-collectionContent"
   | #"tableview-playnext"
   | #"vertical-label"
   | #"single-partner"

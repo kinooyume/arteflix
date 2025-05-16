@@ -10,7 +10,16 @@ type heroTemplateProps = {
 }
 
 @react.component(: heroTemplateProps)
-let make = (~imageSrc, ~imageAlt, ~title, ~subtitle, ~description, ~url, ~overflow=true, ~callToAction=None) =>
+let make = (
+  ~imageSrc,
+  ~imageAlt,
+  ~title,
+  ~subtitle,
+  ~description,
+  ~url,
+  ~overflow=true,
+  ~callToAction=None,
+) =>
   <HeroImage src={imageSrc} alt={imageAlt} overflow>
     <HeroContent title subtitle description callToAction href={url} />
   </HeroImage>
