@@ -4,7 +4,7 @@ type tag = [#Ok]
 @schema
 type content = {
   tag: tag,
-  value: ArteData.content,
+  value: ArteData.t,
 }
 
 @schema type player = {data: ArtePlayerConfig.t}

@@ -5,8 +5,10 @@ let makeHero = (zone: ArteZone.t) => {
       | Some(caption) => caption
       | None => content.title
       }
+    // TODO: use correct image size
       <HeroTemplate
-        imageSrc={content.mainImage.url->String.replace("__SIZE__", "1220x686")}
+        // imageSrc={content.mainImage.url->String.replace("__SIZE__", "1220x686")}
+        imageSrc={content.mainImage.url->String.replace("__SIZE__", "1920x1080")}
         imageAlt
         title=content.title
         subtitle=content.subtitle

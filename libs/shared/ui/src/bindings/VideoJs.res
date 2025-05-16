@@ -1,11 +1,10 @@
-type t = Dom.element 
+type t = Dom.element
 
 type controlBar = {
   children: array<string>
 }
 
 type preload = [#auto | #metadata | #none]
-
 type autoplay  = [ #play | #muted | #any ]
 
 

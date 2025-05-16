@@ -1,23 +1,13 @@
-// NOTE: move, ça concerne le proxy
 open ArteContract
 
 module Urls = {
   let home = ({lang}: Params.home) => `/proxy/api/${lang}`
-  let direct = ({lang}: Params.direct) => `/proxy/html/${lang}/live`
-  let video = ({lang, id}: Params.video) => {
-    `/proxy/api/${lang}/videos/${id}`
-  }
-  // NOTE: we probably want to make two different routes
-  let category = ({lang, category, title}: Params.category) =>
-    switch title {
-    | Some(t) => `/proxy/api/${lang}/${category}/${t}`
-    | None => `/proxy/api/${lang}/${category}`
-    }
-
-  // let player = ({lang, id}: Params.video) => {
-  //   `/proxy/html/${lang}/player/${id}`
-  // }
-  // let trailer = ({lang, id}: Params.video) => {
-  //   `/proxy/html/${lang}/trailer/${id}`
-  // }
+  let program = ({lang, id}: Params.program) => `/proxy/api/${lang}/program/${id}`
+  let collection = ({lang, id}: Params.collection) => `/proxy/api/${lang}/collection/${id}`
+  let category = ({lang, id}: Params.collection) => `/proxy/api/${lang}/collection/${id}`
+  let player = ({lang, id}: Params.program) => `/proxy/api/${lang}/player/${id}`
+  let playlist = ({lang, id}: Params.program) => `/proxy/api/${lang}/playlist/${id}`
+  let trailer = ({lang, id}: Params.program) => `/proxy/api/${lang}/trailer/${id}`
+  let live = ({lang}: Params.live) => `/proxy/api/${lang}/live`
+  // let livePlayer = ({lang}: Params.live) => `/proxy/api/${lang}/player/LIVE`
 }

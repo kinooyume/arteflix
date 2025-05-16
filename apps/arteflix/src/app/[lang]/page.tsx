@@ -1,4 +1,4 @@
-import HomeRes from '../../res/Home.bs.mjs';
+import HomeRes from '../../res/pages/HomePage.bs.mjs';
 
 export const revalidate = 60;
 export const dynamicParams = true;

@@ -30,7 +30,7 @@ let make = (~params) => {
         // | None => React.null
         // }}
         <div>
-          {arteData.content.zones
+          {arteData.zones
           ->Array.map(zone =>
             <Lazyload key={zone.id} once=true height=300 offset=200>
               <Zone zone />

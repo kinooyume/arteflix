@@ -1,40 +1,35 @@
 open Fetch
 open ArteContract
 
-module Urls = {
-  let home = ({lang}: Params.home) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/HOME`
-  let direct = ({lang}: Params.direct) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/LIVE`
-
-    // /video/
-  let programs = ({lang, id}: Params.video) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${id}`
-  let collection = ({lang, id}: Params.collection) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/collections/${id}`
-
-  let category = ({lang, category}: Params.category) =>
-    // TODO: tmp, wrong
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${category}`
-  let player = ({lang, id}: Params.video) =>
-    `https://api.arte.tv/api/player/v2/config/${lang}/${id}`
-
-  // let trailer = ({lang, id}: Params.video) =>
-  //   `https://api.arte.tv/api/player/v2/trailer/${lang}/${id}`
-}
-
 exception NextDataError(string)
 exception FetchError(Exn.t)
 exception ParseError(S.error)
 exception MockupError(Exn.t)
 
-// NOTE: Content / PlayerConfig ==> different schema in validate
-// ==> C'est tout
+module Urls = {
+  let home = ({lang}: Params.home) =>
+    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/HOME`
+  let category = ({lang, id}: Params.category) =>
+    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${id}`
+  let program = ({lang, id}: Params.program) =>
+    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${id}`
+  let collection = ({lang, id}: Params.collection) =>
+    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/collections/${id}`
+  let player = ({lang, id}: Params.player) =>
+    `https://api.arte.tv/api/player/v2/config/${lang}/${id}`
+  let trailer = ({lang, id}: Params.player) =>
+    `https://api.arte.tv/api/player/v2/trailer/${lang}/${id}`
+  let playlist = ({lang, id}: Params.player) =>
+    `https://api.arte.tv/api/player/v2/playlist/${lang}/${id}`
+  let live = ({lang}: Params.live) =>
+    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/LIVE`
+}
 
-module Content = {
-  let validate = text => text->S.parseJsonStringOrThrow(ArteDataApi.contentSchema)
+module Gateway = {
+  let validateArteData = text => text->S.parseJsonStringOrThrow(ArteDataApi.contentSchema)
+  let validatePlayerData = text => text->S.parseJsonStringOrThrow(ArteDataApi.playerSchema)
 
-  let fetcher = async (url): ArteDataApi.content => {
+  let fetcher = async (validate, url) => {
     try {
       let resp = await fetch(
         url,
@@ -48,101 +43,65 @@ module Content = {
     | Exn.Error(err) => raise(FetchError(err))
     }
   }
+
+  let contentFetcher = fetcher(validateArteData, ...)
+  let playerFetcher = fetcher(validatePlayerData, ...)
 }
 
-module PlayerConfig = {
-  let validate = text => text->S.parseOrThrow(ArteDataApi.playerSchema)
-
-  let get = async (~url) => {
-    let stringData = await fetch(
-      url,
-      {
-        method: #GET,
-      },
-    )
-    validate(stringData)
-  }
-}
-
-// TODO: remove apiPlayerConfig, only used with html
 module Fetcher = {
-  let home = async (queries: Params.home) => {
-    let url = Urls.home(queries)
-    let content = await Content.fetcher(url)
-    let data: ArteData.t = {
-      content: content.value,
-      apiPlayerConfig: None,
-    }
-    data
+  let home = async (params: Params.home) => {
+    let url = Urls.home(params)
+    let content = await Gateway.contentFetcher(url)
+    content.value
   }
 
-  let direct = async (queries: Params.direct) => {
-    let url = Urls.direct(queries)
-
-    let playerConfig = await PlayerConfig.get(~url)
-    let data: ArteData.t = {
-      content: ArteData.contentPlaceholder,
-      apiPlayerConfig: Some(playerConfig.data),
-    }
-    data
+  let live = async (params: Params.live) => {
+    let url = Urls.live(params)
+    ArteData.contentPlaceholder
   }
 
-  // NOTE: Video, catalogue, category
-  let video = async (queries: Params.video) => {
-    //     if queries.id->String.includes("-A") {
-    //       // video
-    //     } else if queries.id->String.includes("RC-") {
-    // // collections
-    //     } else {
-    //       // category
-    //     }
-    let contentUrl = queries->Urls.programs
-    // let playerUrl = queries->Urls.player
-    let playerUrl = "TMP urls player"
-    let content = await Content.fetcher(contentUrl)
-    let playerConfig = await PlayerConfig.get(~url=playerUrl)
+  let program = async (params: Params.program) => {
+    let contentUrl = params->Urls.program
+    let content = await Gateway.contentFetcher(contentUrl)
 
-    let data: ArteData.t = {
-      content: content.value,
-      apiPlayerConfig: Some(playerConfig.data),
-    }
-    data
+    content.value
   }
+
+  let collection = async (params: Params.collection) => {
+    let contentUrl = params->Urls.collection
+    let content = await Gateway.contentFetcher(contentUrl)
+
+    content.value
+  }
+
   // TODO: Implement
   let category = async _ => {
-    let empty: ArteData.t = {
-      content: ArteData.contentPlaceholder,
-      apiPlayerConfig: None,
-    }
-    empty
+    ArteData.contentPlaceholder
   }
 
-  let player = async (queries: ArteContract.Params.video): ArteData.t => {
-    // let playerUrl = queries->Urls.player
-    let playerUrl = "TMP urls player"
-    let playerConfig = await PlayerConfig.get(~url=playerUrl)
-    {
-      content: ArteData.contentPlaceholder,
-      apiPlayerConfig: Some(playerConfig.data),
-    }
+  let player = async (params: Params.player) => {
+    let contentUrl = params->Urls.player
+    let content = await Gateway.playerFetcher(contentUrl)
+    content.data
   }
 
-  let trailer = async (queries: ArteContract.Params.video): ArteData.t => {
-    // let playerUrl = queries->Urls.trailer
+  let trailer = async (params: ArteContract.Params.program) => {
+    // let playerUrl = params->Urls.trailer
     let playerUrl = "TMP urls player"
 
-    let playerConfig = await PlayerConfig.get(~url=playerUrl)
-    {
-      content: ArteData.contentPlaceholder,
-      apiPlayerConfig: Some(playerConfig.data),
-    }
+    // let playerConfig = await PlayerConfig.get(~url=playerUrl)
+
+    // {
+    //   content: ArteData.contentPlaceholder,
+    //   apiPlayerConfig: Some(playerConfig.data),
+    // }
+    ArteData.contentPlaceholder
   }
 }
 
 // Source pour Arte
 
 // https://api.arte.tv/api/player/v2/config/en/PNE0226
-
 
 // Playlist
 // https://api-internal.arte.tv/api/player/v2/playlist/en/111699-001-A
@@ -179,7 +138,6 @@ module Fetcher = {
 // Collection ·
 // https://www.arte.tv/api/rproxy/emac/v4/fr/web/collections/RC-023234/
 //
-
 
 // DIRECT
 // https://api.arte.tv/api/player/v2/config/fr/LIVE

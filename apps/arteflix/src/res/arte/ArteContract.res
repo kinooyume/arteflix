@@ -1,28 +1,26 @@
 module Params = {
   type home = {lang: string}
 
-  type category = {
-    lang: string,
-    category: string,
-    title: option<string>,
-  }
-  type direct = {lang: string}
+  type live = {lang: string}
 
-  type video = {
+  type program = {
     lang: string,
     id: string,
     title?: string,
   }
 
-  type collection = video
+  type collection = program
+  type category = program
 
-  type toStringData<'a> = 'a => promise<ArteData.t>
+  type player = {id: string, lang: string}
 }
 
 type home = Params.home => promise<ArteData.t>
-type direct = Params.direct => promise<ArteData.t>
-type video = Params.video => promise<ArteData.t>
-type collection = Params.video => promise<ArteData.t>
+type live = Params.live => promise<ArteData.t>
+
+type program = Params.program => promise<ArteData.t>
+type collection = Params.program => promise<ArteData.t>
+
 type category = Params.category => promise<ArteData.t>
 
-type t = {home: home, direct: direct, video: video, category: category}
+type player = Params.player => promise<ArtePlayerConfig.t>

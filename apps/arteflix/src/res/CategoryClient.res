@@ -4,12 +4,13 @@
 // let make = (~content, ~apiPlayerConfig) =>
 
 open ArteContract
-
+open ClientFetcher
 open ArteApiProxy
+
 type props_ = {params: Params.category}
 @react.component(: props_)
 let make = (~params) => {
-  let {data, error} = Swr.useSWR(params->Urls.category, ClientFetcher.Html.fetcher)
+  let {data, error} = Swr.useSWR(params->Urls.category, fetcher(validateArteData, ...))
 
   <>
     {switch error {
@@ -26,7 +27,7 @@ let make = (~params) => {
     | Some(arteData) =>
       <>
         <div>
-          {arteData.content.zones
+          {arteData.zones
           ->Array.map(zone =>
             <Lazyload key={zone.id} once=true height=300 offset=200>
               <Zone zone />

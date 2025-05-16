@@ -108,7 +108,7 @@ type attributes = {
   //chapters: null,
   rights: rights,
   streams: streams,
-  // stats: stats,
+  // stat: stat,
   ads: ads,
   restriction: restriction,
   // stickers: array<sticker>,
@@ -125,9 +125,10 @@ type t = {
   attributes: attributes,
 }
 
+// NOTE: Hum ?
 @schema
 type player = {
-  providerId: string,
+  provider: string,
   title: string,
   image: image,
   link: link,
