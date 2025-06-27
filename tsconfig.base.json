@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@arteflix/prefetch-arte": ["libs/prefetch-arte/src/index.ts"],
       "@arteflix/ui": ["libs/shared/ui/src/"]
     }
   },

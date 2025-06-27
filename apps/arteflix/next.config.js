@@ -1,9 +1,6 @@
 //@ts-check
 const fs = require('fs');
 
-console.log(process.cwd());
-// const rescript = JSON.parse(fs.readFileSync('./rescript.json', 'utf-8'));
-// const transpileModules = ['rescript'].concat(rescript['bs-dependencies']);
 // NOTE:  'rescript' + bs-dependencies
 const transpileModules = [
   'rescript',
