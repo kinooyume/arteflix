@@ -1,0 +1,47 @@
+{
+  "name": "prefetch-arte",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/prefetch-arte/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project ui --web",
+  "targets": {
+    "res:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run rescript build",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": ["{projectRoot}/rescript.json", "{projectRoot}/src/res/**.res"],
+      "outputs": [
+        "{projectRoot}/src/res/**.bs.js",
+        "{projectRoot}/src/res/**.gen.ts"
+      ]
+    },
+    "res:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run rescript -w",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": ["{projectRoot}/rescript.json", "{projectRoot}/src/res/**.res"],
+      "outputs": [
+        "{projectRoot}/src/res/**.bs.js",
+        "{projectRoot}/src/res/**.gen.ts"
+      ]
+    },
+    "start": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "bun run src/index.bs.mjs",
+        "cwd": "{projectRoot}",
+        "inputs": ["{projectRoot}/src/index.bs.mjs"]
+      }
+    },
+    "res:dev:trace": {
+      "command": "RUST_BACKTRACE=1 bun run rewatch",
+      "inputs": ["{projectRoot}/rescript.json", "{projectRoot}/src/**.res"],
+      "outputs": ["{projectRoot}/src/**.bs.js", "{projectRoot}/src/**.gen.ts"]
+    }
+  }
+}

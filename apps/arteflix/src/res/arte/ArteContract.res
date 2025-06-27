@@ -10,7 +10,8 @@ module Params = {
   }
 
   type collection = program
-  type category = program
+  type category = {lang: string, slug: string}
+  type categoryPage = {lang: string, slug: array<string>}
 
   type player = {id: string, lang: string}
 }

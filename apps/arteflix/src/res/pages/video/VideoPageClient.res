@@ -69,8 +69,16 @@ let make = (~params: Params.program) => {
   } else if params.id->String.includes("RC-") {
     Swr.useSWR(params->Urls.collection, fetcher(validateArteData, ...))
     // category
-  } else {
+  } else if params.id->String.includes("-A") {
     Swr.useSWR(params->Urls.program, fetcher(validateArteData, ...))
+  } else {
+    let slug = switch params.title {
+    | Some(title) => `videos/${params.id}/${title}`
+    | None => `videos/${params.id}`
+    }
+
+    let categoryParams: ArteContract.Params.category = {lang: params.lang, slug}
+    Swr.useSWR(categoryParams->Urls.category, fetcher(validateArteData, ...))
   }
 
   <>

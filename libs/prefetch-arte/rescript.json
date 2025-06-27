@@ -5,12 +5,10 @@
     "version": 4
   },
   "bs-dependencies": [
-    "@rescript/react",
     "@rescript/core",
     "sury",
     "rescript-nodejs",
     "@glennsl/rescript-fetch",
-    "rescript-swr",
     "rescript-webapi"
   ],
 
@@ -18,19 +16,7 @@
   "ppx-flags": ["sury-ppx/bin"],
   "sources": [
     {
-      "dir": "apps/arteflix/src/res/",
-      "subdirs": true
-    },
-    {
-      "dir": "apps/arteflix/arteRoutes/",
-      "subdirs": true
-    },
-    {
-      "dir": "libs/shared/ui/src/",
-      "subdirs": true
-    },
-    {
-      "dir": "libs/prefetch-arte/src"
+      "dir": "src"
     }
   ],
   "package-specs": {

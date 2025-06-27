@@ -24,8 +24,18 @@ let collection = async (params: Params.collection) => {
   }
 }
 
-let category = async (params: Params.category) => {
-  switch await ArteApi.Fetcher.category(params) {
+let category = async (params: Params.categoryPage) => {
+  let slug =
+    params.slug
+    ->Array.map(s => s->String.split(","))
+    ->Array.flat
+    ->Array.join("/")
+
+  let p: Params.category = {
+    lang: params.lang,
+    slug,
+  }
+  switch await ArteApi.Fetcher.category(p) {
   | data => data->recordAsJson->Next.NextResponse.json
   | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
   }
@@ -33,10 +43,7 @@ let category = async (params: Params.category) => {
 
 let player = async (params: Params.player) => {
   switch await ArteApi.Fetcher.player(params) {
-  | data => {
-    Js.log2("Player data: ", data)
-    data->recordAsJson->Next.NextResponse.json
-  }
+  | data => data->recordAsJson->Next.NextResponse.json
   | exception _ => Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
   }
 }

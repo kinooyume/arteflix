@@ -9,8 +9,8 @@ exception MockupError(Exn.t)
 module Urls = {
   let home = ({lang}: Params.home) =>
     `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/HOME`
-  let category = ({lang, id}: Params.category) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${id}`
+  let category = (lang: string, code: string) =>
+    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/${code}`
   let program = ({lang, id}: Params.program) =>
     `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${id}`
   let collection = ({lang, id}: Params.collection) =>
@@ -74,10 +74,21 @@ module Fetcher = {
     content.value
   }
 
-  // TODO: Implement
-  let category = async _ => {
-    ArteData.contentPlaceholder
+  let category = async ({lang, slug}: Params.category) => {
+    let slugList = slug->String.split("/")->List.fromArray
+    let code = switch ArteRoutesData.routes->Dict.get(lang) {
+    | Some(data) =>
+      switch data->ArteRoutesData.findPage(slugList) {
+      | Some(page) => page.code
+      | None => ""
+      }
+    | None => raise(NextDataError("No routes found for the given language"))
+    }
+    let contentUrl = Urls.category(lang, code)
+    let content = await Gateway.contentFetcher(contentUrl)
+    content.value
   }
+
 
   let player = async (params: Params.player) => {
     let contentUrl = params->Urls.player

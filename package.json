@@ -29,6 +29,8 @@
     "rescript-swr": "^2.0.0",
     "rescript-webapi": "^0.10.0",
     "slick-carousel": "^1.8.1",
+    "sury": "^10.0.4",
+    "sury-ppx": "^10.0.0",
     "swr": "^2.3.0",
     "video.js": "^8.21.0"
   },
@@ -96,10 +98,13 @@
     "@parcel/watcher",
     "@rolandpeelen/rewatch",
     "@swc/core",
+    "core-js",
+    "core-js-pure",
     "esbuild",
     "nx",
     "rescript",
     "rescript-schema-ppx",
-    "sharp"
+    "sharp",
+    "sury-ppx"
   ]
 }

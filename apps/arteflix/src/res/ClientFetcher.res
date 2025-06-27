@@ -16,10 +16,7 @@ let fetcher = async (validateArteData, url) => {
       },
     )
     let stringData = await Response.text(resp)
-    Js.log2("NOT_VALIDATEEE:", stringData)
-    let v = stringData->validateArteData
-    Js.log2("VALIDAREWEEEEEE: :", v)
-    v
+    stringData->validateArteData
   } catch {
   | Exn.Error(err) => raise(FetchError(err))
   }
