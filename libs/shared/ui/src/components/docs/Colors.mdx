@@ -4,104 +4,74 @@ import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
 
 # Colors
 
-The Arteflix color palette is inspired by Netflix's dark theme with red accents.
+Dark theme with red accent. You know the vibe.
 
-## Primary Colors
+## Main
 
 <ColorPalette>
   <ColorItem
-    title="Primary Black"
-    subtitle="Main background"
-    colors={{ black: 'rgb(0, 0, 0)' }}
+    title="Black"
+    subtitle="bg"
+    colors={{ black: '#000' }}
   />
   <ColorItem
-    title="Primary Red"
-    subtitle="Brand accent, CTAs"
-    colors={{ red: 'rgb(229, 9, 20)' }}
+    title="Red"
+    subtitle="accent"
+    colors={{ red: '#e50914' }}
   />
   <ColorItem
-    title="Primary White"
-    subtitle="Text, icons"
-    colors={{ white: 'rgb(255, 255, 255)' }}
+    title="White"
+    subtitle="text"
+    colors={{ white: '#fff' }}
   />
 </ColorPalette>
 
-## Secondary Colors
+## Greys
 
 <ColorPalette>
   <ColorItem
-    title="Red Variants"
+    title="Light"
     colors={{
-      'red-100': 'rgb(235, 57, 66)',
-      'red-200': 'rgb(193, 17, 25)',
-      'red-300': 'rgb(245, 7, 35)',
+      'grey-10': '#e5e5e5',
+      'grey-50': '#bcbcbc',
+      'grey-100': '#b3b3b3',
     }}
   />
   <ColorItem
-    title="Blue Variants"
+    title="Mid"
     colors={{
-      'blue-100': 'rgb(0, 113, 235)',
-      'blue-200': 'rgb(68, 142, 244)',
-      'blue-300': 'rgb(84, 185, 197)',
+      'grey-200': '#808080',
+      'grey-300': '#6d6d6e',
+      'grey-400': '#414141',
     }}
   />
   <ColorItem
-    title="Green"
-    subtitle="Success states"
-    colors={{ green: 'rgb(70, 211, 105)' }}
-  />
-</ColorPalette>
-
-## Grey Scale
-
-<ColorPalette>
-  <ColorItem
-    title="Light Greys"
+    title="Dark"
     colors={{
-      'grey-10': 'rgb(229, 229, 229)',
-      'grey-20': 'rgb(220, 220, 220)',
-      'grey-50': 'rgb(188, 188, 188)',
-      'grey-100': 'rgb(179, 179, 179)',
-    }}
-  />
-  <ColorItem
-    title="Mid Greys"
-    colors={{
-      'grey-200': 'rgb(128, 128, 128)',
-      'grey-300': 'rgb(109, 109, 110)',
-      'grey-400': 'rgb(65, 65, 65)',
-      'grey-500': 'rgb(58, 58, 58)',
-    }}
-  />
-  <ColorItem
-    title="Dark Greys"
-    colors={{
-      'grey-600': 'rgb(51, 51, 51)',
-      'grey-700': 'rgb(42, 42, 42)',
-      'grey-800': 'rgb(35, 35, 35)',
-      'grey-900': 'rgb(20, 20, 20)',
+      'grey-600': '#333',
+      'grey-800': '#232323',
+      'grey-900': '#141414',
     }}
   />
 </ColorPalette>
 
-## Transparent Colors
+## Transparency
 
 <ColorPalette>
   <ColorItem
-    title="White Transparency"
+    title="White alpha"
     colors={{
-      'white-15': 'rgba(255, 255, 255, 0.15)',
-      'white-30': 'rgba(255, 255, 255, 0.3)',
-      'white-50': 'rgba(255, 255, 255, 0.5)',
-      'white-70': 'rgba(255, 255, 255, 0.7)',
+      '15%': 'rgba(255,255,255,0.15)',
+      '50%': 'rgba(255,255,255,0.5)',
+      '70%': 'rgba(255,255,255,0.7)',
     }}
   />
   <ColorItem
-    title="Black Transparency"
+    title="Black alpha"
     colors={{
-      'black-30': 'rgba(0, 0, 0, 0.3)',
-      'black-60': 'rgba(0, 0, 0, 0.6)',
-      'black-90': 'rgba(0, 0, 0, 0.9)',
+      '30%': 'rgba(0,0,0,0.3)',
+      '60%': 'rgba(0,0,0,0.6)',
+      '90%': 'rgba(0,0,0,0.9)',
     }}
   />
 </ColorPalette>
