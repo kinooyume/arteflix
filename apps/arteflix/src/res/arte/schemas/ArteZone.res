@@ -51,7 +51,31 @@ let templateSchema = S.string->S.transform(s => {
       Console.warn2("[ArteZone] Unknown template:", other)
       #unknown
     },
-  serializer: template => (template :> string),
+  serializer: template =>
+    switch template {
+    | #unknown => "unknown"
+    | #"slider-square" => "slider-square"
+    | #"horizontal-landscapeBigWithSubtitle" => "horizontal-landscapeBigWithSubtitle"
+    | #"horizontal-portrait" => "horizontal-portrait"
+    | #"horizontal-landscape" => "horizontal-landscape"
+    | #"horizontal-landscape-genre" => "horizontal-landscape-genre"
+    | #"event-textOnRightSide" => "event-textOnRightSide"
+    | #"single-newsletter" => "single-newsletter"
+    | #"event-textOnLeftSide" => "event-textOnLeftSide"
+    | #"horizontal-landscapeBig" => "horizontal-landscapeBig"
+    | #"vertical-landscape" => "vertical-landscape"
+    | #"ebu-box" => "ebu-box"
+    | #"single-programContent" => "single-programContent"
+    | #"single-collectionContent" => "single-collectionContent"
+    | #"tableview-playnext" => "tableview-playnext"
+    | #"vertical-label" => "vertical-label"
+    | #"single-partner" => "single-partner"
+    | #"verticalFirstHighlighted-landscape" => "verticalFirstHighlighted-landscape"
+    | #"slider-landscape" => "slider-landscape"
+    | #"tableview-guide" => "tableview-guide"
+    | #"single-banner" => "single-banner"
+    | #"text-linear" => "text-linear"
+    },
 })
 
 @schema
