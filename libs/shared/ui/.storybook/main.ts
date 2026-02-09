@@ -22,6 +22,7 @@ const rescriptIndexer = async (
 
 const config: StorybookConfig = {
   stories: [
+    '../src/components/docs/*.mdx',
     '../src/components/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
     '../src/components/**/*Stories.bs.@(mjs)',
   ],
