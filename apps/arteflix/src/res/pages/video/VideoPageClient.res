@@ -94,6 +94,10 @@ let make = (~params: Params.program) => {
     }}
     {switch data {
     | Some(arteData) =>
+      Console.log2(
+        "[VideoPage] Zones order:",
+        arteData.zones->Array.map(z => `${(z.displayOptions.template :> string)} (${z.title})`),
+      )
       <>
         <div>
           {arteData.zones
