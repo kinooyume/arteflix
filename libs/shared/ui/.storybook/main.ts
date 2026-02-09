@@ -35,7 +35,13 @@ const config: StorybookConfig = {
     return [...(existingIndexers || []), customIndexer];
   },
   //
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+  ],
+  docs: {
+    autodocs: 'tag',
+  },
   framework: {
     name: '@storybook/react-vite',
     options: {},

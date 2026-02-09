@@ -1,3 +1,15 @@
 html {
-  background-color: #232323;
+  background-color: #141414;
+}
+
+body {
+  margin: 0;
+  font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
