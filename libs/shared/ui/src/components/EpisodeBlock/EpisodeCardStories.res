@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<EpisodeCard.props> = {
-  title: "Atoms/Episode/Episode Card",
+  title: "Atoms/Episode/EpisodeCard",
   component: EpisodeCard.make,
 }
 

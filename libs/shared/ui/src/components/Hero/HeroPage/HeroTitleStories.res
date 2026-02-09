@@ -3,7 +3,7 @@ open StorybookMini
 
 let default: meta<HeroTitle.props> = {
 
-  title: "Design System/Atoms/Hero Title",
+  title: "Atoms/Hero/HeroTitle",
   component: HeroTitle.make,
 }
 

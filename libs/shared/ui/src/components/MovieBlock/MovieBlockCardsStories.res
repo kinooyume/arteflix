@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<MovieBlockCards.props> = {
-  title: "Design System/Organisms/Movie Block Cards",
+  title: "Organisms/MovieBlock/MovieBlockCards",
   component: MovieBlockCards.make,
 }
 

@@ -2,7 +2,7 @@ open StorybookMini
 
 let default: meta<MovieCardImage.props> = {
   component: MovieCardImage.make,
-  title: "Atoms/Card/MovieCard",
+  title: "Atoms/Cards/MovieCardImage",
 }
 
 let horizontal: storyObj<MovieCardImage.props> = {

@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<ButtonPlay.props> = {
-  title: "Atoms/Button/Button Play",
+  title: "Atoms/Buttons/ButtonPlay",
   component: ButtonPlay.make,
 }
 

@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<CardTrailer.props> = {
-  title: "Molecules/Card/CardTrailer",
+  title: "Molecules/Cards/CardTrailer",
   component: CardTrailer.make,
 }
 
