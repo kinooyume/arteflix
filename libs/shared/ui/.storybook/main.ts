@@ -26,6 +26,7 @@ const config: StorybookConfig = {
     '../src/components/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
     '../src/components/**/*Stories.bs.@(mjs)',
   ],
+  staticDirs: ['../public'],
 
   experimental_indexers: async (existingIndexers) => {
     const customIndexer = {

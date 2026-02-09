@@ -10,7 +10,7 @@ let logo: storyObj<Header.props> = {
     logo: {
       homeHref: "#",
       alt: "Arteflix Logo",
-      src: "../public/logo.png",
+      src: "/logo.png",
     },
     links: [],
   },
