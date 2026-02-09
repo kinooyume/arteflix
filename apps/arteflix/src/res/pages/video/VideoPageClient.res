@@ -44,7 +44,7 @@ let emptySingleProgramContent: ArteZone.t = {
   },
   authenticatedContent: None,
   groupedZonesName: None,
-  displayTeaserGenre: false,
+  displayTeaserGenre: Some(false),
 }
 
 @react.component

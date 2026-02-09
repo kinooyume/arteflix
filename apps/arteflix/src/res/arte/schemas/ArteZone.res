@@ -24,6 +24,7 @@ type template = [
   | #"tableview-guide"
   | // NOTE: Genre
   #"single-banner"
+  | #"text-linear"
 ]
 
 @schema
@@ -113,7 +114,7 @@ type t = {
   displayOptions: displayOptions,
   authenticatedContent: @s.nullable option<authenticateContent>,
   groupedZonesName: @s.nullable option<string>,
-  displayTeaserGenre: bool,
+  displayTeaserGenre: @s.nullable option<bool>,
 }
 
 // showItemTitle
