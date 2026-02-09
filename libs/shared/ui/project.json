@@ -42,6 +42,20 @@
         "{projectRoot}/src/**.bs.js",
         "{projectRoot}/src/**.gen.ts"
       ]
+    },
+    "all:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx run ui:res:dev", "nx run ui:storybook"],
+        "parallel": true
+      }
+    },
+    "all:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx run ui:res:build", "nx run ui:build-storybook"],
+        "parallel": false
+      }
     }
   }
 }

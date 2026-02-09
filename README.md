@@ -70,9 +70,20 @@ bun nx run arteflix:test
 
 # E2E tests
 bun nx run arteflix-e2e:e2e
+```
 
-# Storybook
-bun nx run arteflix:storybook
+### Storybook
+
+```bash
+# Development (ReScript watch + Storybook)
+bun nx run ui:all:dev
+
+# Or run separately:
+bun nx run ui:storybook        # Storybook only
+bun nx run ui:res:dev          # ReScript watch only
+
+# Build static Storybook
+bun nx run ui:all:build
 ```
 
 ### Linting
