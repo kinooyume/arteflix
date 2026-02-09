@@ -1,55 +1,112 @@
 # Arteflix
 
-> `Arte` content with `Netflix UI`
-> Mainly based on this [Figma](https://figma.com) and reverse arte api.
+A Netflix-style UI for [Arte.tv](https://arte.tv) content, built with ReScript and Next.js.
 
-I build this to test the usability of rescript in a real project with some **hot** stuffs and different techno that I'm not used to, and see how far I can go with the minimum of javascript/typescript as possible.
+This project is an experiment to test ReScript's usability in a real-world application, aiming for minimal JavaScript/TypeScript usage while integrating modern tooling.
 
-## Techno overview
+## Tech Stack
 
-- `Rescript` _11.1.4_, almost 100% except for some testing libs (playwright, react-testing-library)
-- `React 19` and  `Next.js` \*\*
-- Queries fetching through `swr` and [rescript-swr](https://github.com)
+- **ReScript** (11.1.4) - Almost 100% of the codebase
+- **Next.js 15** with React 19
+- **SWR** for data fetching via [rescript-swr](https://github.com/rescriptbr/rescript-swr)
+- **Emotion** for styling
+- **Nx** for monorepo management
+- **Bun** as package manager
 
-- `bun` and `nx`
-
-- `docker`
-
-<details>
-  <summary>Testing</summary>
-  - `playwright`
-  - `Storybook`
-  - `React Testing Library`
-  - `Jest`
-</details>
 ### Testing
+
+- Playwright (E2E)
+- Storybook (Component development)
+- Jest + React Testing Library (Unit tests)
+
+## Installation
+
+### Prerequisites
+
+- [Bun](https://bun.sh) - Install with:
+  ```bash
+  curl -fsSL https://bun.sh/install | bash
+  ```
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/arteflix.git
+cd arteflix
+
+# Install dependencies
+bun install
+```
+
+## Usage
+
+### Development
+
+```bash
+# Start development server (ReScript watch + Next.js)
+bun nx run arteflix:all:dev
+
+# Or run separately:
+bun nx run arteflix:dev        # Next.js only
+bun nx run arteflix:res:dev    # ReScript watch only
+```
+
+### Build
+
+```bash
+# Full build (ReScript + Next.js)
+bun nx run arteflix:all:build
+
+# Start production server
+bun nx run arteflix:start
+```
+
+### Testing
+
+```bash
+# Unit tests
+bun nx run arteflix:test
+
+# E2E tests
+bun nx run arteflix-e2e:e2e
+
+# Storybook
+bun nx run arteflix:storybook
+```
+
+### Linting
+
+```bash
+bun nx run arteflix:lint
+```
+
+## Project Structure
+
+```
+arteflix/
+├── apps/
+│   ├── arteflix/          # Main Next.js application
+│   └── arteflix-e2e/      # Playwright E2E tests
+└── libs/
+    ├── prefetch-arte/     # Arte API data prefetching
+    └── shared/            # Shared utilities
+```
 
 ## Features
 
-- all the content from [arte.tv](https://arte.tv) available.
-- 1:1 url from [arte.tv](https://arte.tv), meaning you can copy an url from the official website and switch the domain name from `arte.tv` to `arteflix.kinoo.dev` 
+- All content from [arte.tv](https://arte.tv) available
+- 1:1 URL compatibility - copy any URL from arte.tv and replace the domain with `arteflix.kinoo.dev`
 
-### Plan features
-- add tmdb support to fetch more information when possible
+### Planned
 
-## Mono-repo
+- TMDB integration for additional metadata
 
-The  mono-repo is handler through `nx`, here is the list of the content:
+## Known Limitations
 
-> [!WARNING]
-> Due to some current limitation with rescript, I had to tweak a bit as some features of `nx` are not well implemented. Maily: [xxxx],. However, it works well for this use case without issue.
+- Nx doesn't support the new `bun.lock` file yet ([GitHub issue](https://github.com/nrwl/nx/issues/29494))
+- ReScript local file resolution has some quirks with Nx
 
-<details>
-  <summary>Current caveats</summary>
-  - [ ] nx doesn't support the new `bun.lock` file yet. [Github issue](https://github.com/nrwl/nx/issues/29494) 
-  - [ ] rescript local file doesn't work
-</details>
+## License
 
-### App
-
-### Libraries
-
-> All the libraries are :100: written in `rescript` :party: .
-
-- `arte-api`, the result of my reverse engineering of the arte api.
-- `netflix-ui`: the ui, inspired by this [figma](https://figma.com).
+MIT
