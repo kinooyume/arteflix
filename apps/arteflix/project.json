@@ -39,7 +39,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": ["nx run arteflix:res:build", "nx run arteflix:build"],
-        "parallel": true
+        "parallel": false
       }
     }
   }
