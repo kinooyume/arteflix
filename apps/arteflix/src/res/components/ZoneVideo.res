@@ -1,4 +1,4 @@
-let makeHero = (zone: ArteZone.t, ~metadata, ~parent) => {
+let makeHero = (zone: ArteZone.t, ~metadata as _metadata, ~parent as _parent) => {
   switch zone.content.data->Array.get(0) {
   | Some(content) => {
       let imageAlt = switch content.mainImage.caption {
