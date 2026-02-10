@@ -22,9 +22,11 @@ const rescriptIndexer = async (
 
 const config: StorybookConfig = {
   stories: [
+    '../src/components/docs/*.mdx',
     '../src/components/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
     '../src/components/**/*Stories.bs.@(mjs)',
   ],
+  staticDirs: ['../public'],
 
   experimental_indexers: async (existingIndexers) => {
     const customIndexer = {
@@ -35,7 +37,13 @@ const config: StorybookConfig = {
     return [...(existingIndexers || []), customIndexer];
   },
   //
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+  ],
+  docs: {
+    autodocs: 'tag',
+  },
   framework: {
     name: '@storybook/react-vite',
     options: {},

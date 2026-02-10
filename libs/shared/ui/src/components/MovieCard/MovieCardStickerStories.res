@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<MovieCardSticker.props> = {
-  title: "Atoms/Card/CardSticker",
+  title: "Atoms/Cards/MovieCardSticker",
   component: MovieCardSticker.make,
 }
 

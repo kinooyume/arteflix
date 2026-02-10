@@ -2,7 +2,7 @@
 open StorybookMini
 
 let default: meta<MovieCardShadowOverlay.props> = {
-  title: "Atoms/Card/MovieCardShadowOverlay",
+  title: "Atoms/Cards/MovieCardShadowOverlay",
   component: MovieCardShadowOverlay.make,
 }
 

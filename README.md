@@ -1,55 +1,84 @@
 # Arteflix
 
-> `Arte` content with `Netflix UI`
-> Mainly based on this [Figma](https://figma.com) and reverse arte api.
+A Netflix-like interface for Arte.tv.
 
-I build this to test the usability of rescript in a real project with some **hot** stuffs and different techno that I'm not used to, and see how far I can go with the minimum of javascript/typescript as possible.
+Built almost entirely in ReScript — this started as an experiment to see how far I could push ReScript in a real project with minimal JS/TS escape hatches. Turns out, pretty far.
 
-## Techno overview
+## What's this?
 
-- `Rescript` _11.1.4_, almost 100% except for some testing libs (playwright, react-testing-library)
-- `React 19` and  `Next.js` \*\*
-- Queries fetching through `swr` and [rescript-swr](https://github.com)
+Take any Arte URL, swap the domain with `arteflix.kinoo.dev`, and you get the same content with a cleaner UI. That's it.
 
-- `bun` and `nx`
+Under the hood, I reverse engineered Arte's internal API to fetch all the content directly.
 
-- `docker`
+## Stack
 
-<details>
-  <summary>Testing</summary>
-  - `playwright`
-  - `Storybook`
-  - `React Testing Library`
-  - `Jest`
-</details>
-### Testing
+- **ReScript** — the whole thing, basically
+- **Next.js 15** + React 19
+- **Emotion** for styles
+- **SWR** for data fetching
+- **Nx** monorepo (yeah, it's overkill for this, but I wanted to try it)
+- **Bun** because npm is slow
 
-## Features
+## Getting started
 
-- all the content from [arte.tv](https://arte.tv) available.
-- 1:1 url from [arte.tv](https://arte.tv), meaning you can copy an url from the official website and switch the domain name from `arte.tv` to `arteflix.kinoo.dev` 
+You need [Bun](https://bun.sh):
 
-### Plan features
-- add tmdb support to fetch more information when possible
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
 
-## Mono-repo
+Then:
 
-The  mono-repo is handler through `nx`, here is the list of the content:
+```bash
+bun install
+bun nx run arteflix:all:dev
+```
 
-> [!WARNING]
-> Due to some current limitation with rescript, I had to tweak a bit as some features of `nx` are not well implemented. Maily: [xxxx],. However, it works well for this use case without issue.
+That's it. Open http://localhost:3000.
 
-<details>
-  <summary>Current caveats</summary>
-  - [ ] nx doesn't support the new `bun.lock` file yet. [Github issue](https://github.com/nrwl/nx/issues/29494) 
-  - [ ] rescript local file doesn't work
-</details>
+## Commands
 
-### App
+```bash
+# Dev
+bun nx run arteflix:all:dev      # ReScript + Next.js in watch mode
 
-### Libraries
+# Build
+bun nx run arteflix:all:build    # Full production build
+bun nx run arteflix:start        # Run prod server
 
-> All the libraries are :100: written in `rescript` :party: .
+# Storybook
+bun nx run ui:all:dev            # Component dev environment
 
-- `arte-api`, the result of my reverse engineering of the arte api.
-- `netflix-ui`: the ui, inspired by this [figma](https://figma.com).
+# Tests
+bun nx run arteflix:test         # Unit tests
+bun nx run arteflix-e2e:e2e      # E2E with Playwright
+```
+
+## Project layout
+
+```
+apps/
+  arteflix/         # the main app
+  arteflix-e2e/     # e2e tests
+libs/
+  prefetch-arte/    # arte api stuff
+  shared/ui/        # component library + storybook
+```
+
+## Deployment
+
+The app builds as a standalone Next.js server and runs in Docker. Check the Dockerfile in `apps/arteflix/`.
+
+## Known issues
+
+- Nx doesn't play nice with `bun.lock` yet — https://github.com/nrwl/nx/issues/29494
+- Some ReScript path resolution quirks with Nx, nothing major
+
+## TODO
+
+- TMDB integration for better metadata
+- Offline support maybe?
+
+## License
+
+MIT

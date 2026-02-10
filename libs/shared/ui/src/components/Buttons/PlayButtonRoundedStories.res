@@ -3,7 +3,7 @@ open StorybookMini
 
 let default: meta<PlayButtonRounded.props> = {
 
-  title: "Atoms/Button/Play Button Rounded",
+  title: "Atoms/Buttons/PlayButtonRounded",
   component: PlayButtonRounded.make,
 }
 

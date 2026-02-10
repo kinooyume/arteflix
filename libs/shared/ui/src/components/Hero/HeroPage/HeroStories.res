@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<HeroTemplate.props> = {
-  title: "Design System/Organisms/Hero (slider-square)",
+  title: "Organisms/Hero/HeroSlider",
   component: HeroTemplate.make,
 }
 

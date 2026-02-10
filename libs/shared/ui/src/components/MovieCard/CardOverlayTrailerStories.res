@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<CardOverlayTrailer.props> = {
-  title: "Atoms/Card/CardOverlayTrailer",
+  title: "Atoms/Cards/CardOverlayTrailer",
   component: CardOverlayTrailer.make,
 }
 

@@ -48,7 +48,6 @@ let make = (~zone: ArteZone.t) => {
       <ZoneBlockCards key=zone.id zone orientation=MovieCardImage.Horizontal forceTitle=true>
         BlockCardsTrailer.make
       </ZoneBlockCards>
-    //
     | #"single-newsletter" => React.null
     | #"event-textOnLeftSide" => React.null
     | #"event-textOnRightSide" => React.null

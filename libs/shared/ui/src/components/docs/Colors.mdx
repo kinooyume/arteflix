@@ -1,0 +1,77 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+
+<Meta title="Design System/Colors" />
+
+# Colors
+
+Dark theme with red accent. You know the vibe.
+
+## Main
+
+<ColorPalette>
+  <ColorItem
+    title="Black"
+    subtitle="bg"
+    colors={{ black: '#000' }}
+  />
+  <ColorItem
+    title="Red"
+    subtitle="accent"
+    colors={{ red: '#e50914' }}
+  />
+  <ColorItem
+    title="White"
+    subtitle="text"
+    colors={{ white: '#fff' }}
+  />
+</ColorPalette>
+
+## Greys
+
+<ColorPalette>
+  <ColorItem
+    title="Light"
+    colors={{
+      'grey-10': '#e5e5e5',
+      'grey-50': '#bcbcbc',
+      'grey-100': '#b3b3b3',
+    }}
+  />
+  <ColorItem
+    title="Mid"
+    colors={{
+      'grey-200': '#808080',
+      'grey-300': '#6d6d6e',
+      'grey-400': '#414141',
+    }}
+  />
+  <ColorItem
+    title="Dark"
+    colors={{
+      'grey-600': '#333',
+      'grey-800': '#232323',
+      'grey-900': '#141414',
+    }}
+  />
+</ColorPalette>
+
+## Transparency
+
+<ColorPalette>
+  <ColorItem
+    title="White alpha"
+    colors={{
+      '15%': 'rgba(255,255,255,0.15)',
+      '50%': 'rgba(255,255,255,0.5)',
+      '70%': 'rgba(255,255,255,0.7)',
+    }}
+  />
+  <ColorItem
+    title="Black alpha"
+    colors={{
+      '30%': 'rgba(0,0,0,0.3)',
+      '60%': 'rgba(0,0,0,0.6)',
+      '90%': 'rgba(0,0,0,0.9)',
+    }}
+  />
+</ColorPalette>

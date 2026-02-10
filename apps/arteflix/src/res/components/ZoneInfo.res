@@ -18,14 +18,4 @@ module HorizontalPortrait = {
 }
 
 @react.component
-let make = (~zone: ArteZone.t) =>
-  switch zone.displayOptions.template {
-  | #"slider-square" => <HorizontalPortrait zone />
-  | #"horizontal-landscapeBigWithSubtitle" => <HorizontalPortrait zone />
-  | #"horizontal-portrait" => <HorizontalPortrait zone />
-  | #"horizontal-landscape" => <HorizontalPortrait zone />
-  | #"horizontal-landscape-genre" => <HorizontalPortrait zone />
-  | #"event-textOnRightSide" => <HorizontalPortrait zone />
-  | #"single-newsletter" => <HorizontalPortrait zone />
-  | _ => <HorizontalPortrait zone />
-  }
+let make = (~zone: ArteZone.t) => <HorizontalPortrait zone />

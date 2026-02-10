@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<HoverArrow.props> = {
-  title: "Atoms/Button/Hover Arrow",
+  title: "Atoms/Buttons/HoverArrow",
   component: HoverArrow.make,
 }
 

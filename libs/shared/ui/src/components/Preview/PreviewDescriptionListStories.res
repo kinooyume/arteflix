@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<PreviewDescriptionList.props> = {
-  title: "Molecules/Lists/Preview Description List",
+  title: "Molecules/Preview/PreviewDescriptionList",
   component: PreviewDescriptionList.make,
 }
 

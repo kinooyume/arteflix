@@ -44,7 +44,7 @@ let emptySingleProgramContent: ArteZone.t = {
   },
   authenticatedContent: None,
   groupedZonesName: None,
-  displayTeaserGenre: false,
+  displayTeaserGenre: Some(false),
 }
 
 @react.component
@@ -94,9 +94,24 @@ let make = (~params: Params.program) => {
     }}
     {switch data {
     | Some(arteData) =>
+      // Move video player to top, keep API order for the rest
+      let videoZones = arteData.zones->Array.filter(z =>
+        z.displayOptions.template == #"single-programContent"
+      )
+      let otherZones = arteData.zones->Array.filter(z =>
+        z.displayOptions.template != #"single-programContent"
+      )
+      let sortedZones = Array.concat(videoZones, otherZones)
+      Console.log3(
+        "[VideoPage] Zones:",
+        sortedZones->Array.length,
+        sortedZones->Array.mapWithIndex((z, i) =>
+          `${(i + 1)->Int.toString}. ${(z.displayOptions.template :> string)} - ${z.title}`
+        ),
+      )
       <>
         <div>
-          {arteData.zones
+          {sortedZones
           ->Array.mapWithIndex((zone, index) =>
             <Lazyload key={index->Int.toString} once=true height=300 offset=200>
               <ZoneVideo

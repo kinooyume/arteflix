@@ -81,7 +81,7 @@ let make = (~zone, ~orientation, ~children, ~forceTitle=false,  ~showKind=false)
       | false => None
       }
 
-      let showTrailer = showKind || zone.displayTeaserGenre
+      let showTrailer = showKind || zone.displayTeaserGenre->Option.getOr(false)
 
       let cards = zone.content.data->cardsCached(~orientation)
 

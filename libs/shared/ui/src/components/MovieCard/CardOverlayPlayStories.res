@@ -1,7 +1,7 @@
 open StorybookMini
 
 let default: meta<CardOverlayPlay.props> = {
-  title: "Atoms/Card/CardOverlayPlay",
+  title: "Atoms/Cards/CardOverlayPlay",
   component: CardOverlayPlay.make,
 }
 
