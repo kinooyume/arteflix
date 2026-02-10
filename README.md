@@ -82,3 +82,4 @@ The app builds as a standalone Next.js server and runs in Docker. Check the Dock
 ## License
 
 MIT
+
