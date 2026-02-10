@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file. See [conven
 
 - - -
 ## v0.2.0 - 2026-02-10
+#### Bug Fixes
+- unused variables in ZoneVideo - (2419f8e) - Martin Kinoo
+#### Features
+- initial release - (19b7782) - Martin Kinoo
+#### Miscellaneous Chores
+- **(version)** v0.2.0 - (9a5bffe) - github-actions[bot]
+
+- - -
+
+## v0.2.0 - 2026-02-10
 #### Features
 - initial release - (19b7782) - Martin Kinoo
 
