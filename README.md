@@ -1,122 +1,83 @@
 # Arteflix
 
-A Netflix-style UI for [Arte.tv](https://arte.tv) content, built with ReScript and Next.js.
+A Netflix-like interface for Arte.tv.
 
-This project is an experiment to test ReScript's usability in a real-world application, aiming for minimal JavaScript/TypeScript usage while integrating modern tooling.
+Built almost entirely in ReScript — this started as an experiment to see how far I could push ReScript in a real project with minimal JS/TS escape hatches. Turns out, pretty far.
 
-## Tech Stack
+## What's this?
 
-- **ReScript** (11.1.4) - Almost 100% of the codebase
-- **Next.js 15** with React 19
-- **SWR** for data fetching via [rescript-swr](https://github.com/rescriptbr/rescript-swr)
-- **Emotion** for styling
-- **Nx** for monorepo management
-- **Bun** as package manager
+Take any Arte URL, swap the domain with `arteflix.kinoo.dev`, and you get the same content with a cleaner UI. That's it.
 
-### Testing
+Under the hood, I reverse engineered Arte's internal API to fetch all the content directly.
 
-- Playwright (E2E)
-- Storybook (Component development)
-- Jest + React Testing Library (Unit tests)
+## Stack
 
-## Installation
+- **ReScript** — the whole thing, basically
+- **Next.js 15** + React 19
+- **Emotion** for styles
+- **SWR** for data fetching
+- **Nx** monorepo
+- **Bun** because npm is slow
 
-### Prerequisites
+## Getting started
 
-- [Bun](https://bun.sh) - Install with:
-  ```bash
-  curl -fsSL https://bun.sh/install | bash
-  ```
-
-### Setup
+You need [Bun](https://bun.sh):
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/arteflix.git
-cd arteflix
+curl -fsSL https://bun.sh/install | bash
+```
 
-# Install dependencies
+Then:
+
+```bash
 bun install
-```
-
-## Usage
-
-### Development
-
-```bash
-# Start development server (ReScript watch + Next.js)
 bun nx run arteflix:all:dev
-
-# Or run separately:
-bun nx run arteflix:dev        # Next.js only
-bun nx run arteflix:res:dev    # ReScript watch only
 ```
 
-### Build
+That's it. Open http://localhost:3000.
+
+## Commands
 
 ```bash
-# Full build (ReScript + Next.js)
-bun nx run arteflix:all:build
+# Dev
+bun nx run arteflix:all:dev      # ReScript + Next.js in watch mode
 
-# Start production server
-bun nx run arteflix:start
+# Build
+bun nx run arteflix:all:build    # Full production build
+bun nx run arteflix:start        # Run prod server
+
+# Storybook
+bun nx run ui:all:dev            # Component dev environment
+
+# Tests
+bun nx run arteflix:test         # Unit tests
+bun nx run arteflix-e2e:e2e      # E2E with Playwright
 ```
 
-### Testing
-
-```bash
-# Unit tests
-bun nx run arteflix:test
-
-# E2E tests
-bun nx run arteflix-e2e:e2e
-```
-
-### Storybook
-
-```bash
-# Development (ReScript watch + Storybook)
-bun nx run ui:all:dev
-
-# Or run separately:
-bun nx run ui:storybook        # Storybook only
-bun nx run ui:res:dev          # ReScript watch only
-
-# Build static Storybook
-bun nx run ui:all:build
-```
-
-### Linting
-
-```bash
-bun nx run arteflix:lint
-```
-
-## Project Structure
+## Project layout
 
 ```
-arteflix/
-├── apps/
-│   ├── arteflix/          # Main Next.js application
-│   └── arteflix-e2e/      # Playwright E2E tests
-└── libs/
-    ├── prefetch-arte/     # Arte API data prefetching
-    └── shared/            # Shared utilities
+apps/
+  arteflix/         # the main app
+  arteflix-e2e/     # e2e tests
+libs/
+  prefetch-arte/    # arte api stuff
+  shared/ui/        # component library + storybook
 ```
 
-## Features
+## Deployment
 
-- All content from [arte.tv](https://arte.tv) available
-- 1:1 URL compatibility - copy any URL from arte.tv and replace the domain with `arteflix.kinoo.dev`
+The app builds as a standalone Next.js server and runs in Docker. Check the Dockerfile in `apps/arteflix/`.
 
-### Planned
+## Known issues
 
-- TMDB integration for additional metadata
+- Nx doesn't play nice with `bun.lock` yet — https://github.com/nrwl/nx/issues/29494
+- Some ReScript path resolution quirks with Nx, nothing major
 
-## Known Limitations
+## TODO
 
-- Nx doesn't support the new `bun.lock` file yet ([GitHub issue](https://github.com/nrwl/nx/issues/29494))
-- ReScript local file resolution has some quirks with Nx
+- TMDB integration for better metadata
+- Offline support maybe?
 
 ## License
 
