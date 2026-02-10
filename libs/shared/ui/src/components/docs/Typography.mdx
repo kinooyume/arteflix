@@ -1,63 +1,44 @@
-import { Meta, Typeset } from '@storybook/blocks';
+import { Meta } from '@storybook/blocks';
 
 <Meta title="Design System/Typography" />
 
 # Typography
 
-Arteflix uses a clean, modern sans-serif font stack similar to Netflix.
-
-## Font Family
+Netflix Sans font, fallback to Helvetica/Arial.
 
 ```css
 font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 ```
 
-## Type Scale
+## Sizes
 
 <div style={{ color: 'white', backgroundColor: '#141414', padding: '2rem' }}>
 
-### Hero Title
-<p style={{ fontSize: '3.5rem', fontWeight: 700, margin: '1rem 0', lineHeight: 1.1 }}>
-  Big Hero Title
+<p style={{ fontSize: '3.5rem', fontWeight: 700, lineHeight: 1.1 }}>
+  Hero (3.5rem/700)
 </p>
 
-### Section Title
-<p style={{ fontSize: '1.5rem', fontWeight: 700, margin: '1rem 0' }}>
-  Section Title (h2)
+<p style={{ fontSize: '1.5rem', fontWeight: 700 }}>
+  Section title (1.5rem/700)
 </p>
 
-### Card Title
-<p style={{ fontSize: '1rem', fontWeight: 600, margin: '1rem 0' }}>
-  Card Title
+<p style={{ fontSize: '1rem', fontWeight: 600 }}>
+  Card title (1rem/600)
 </p>
 
-### Body Text
-<p style={{ fontSize: '0.875rem', fontWeight: 400, margin: '1rem 0', color: 'rgba(255,255,255,0.7)' }}>
-  Body text for descriptions and metadata. This is typically used for subtitles,
-  descriptions, and other secondary content.
+<p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)' }}>
+  Body (0.875rem/400)
 </p>
 
-### Small Text
-<p style={{ fontSize: '0.75rem', fontWeight: 400, margin: '1rem 0', color: 'rgba(255,255,255,0.5)' }}>
-  Small text for tags, duration, and metadata
+<p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>
+  Small/meta (0.75rem)
 </p>
 
 </div>
 
-## Font Weights
+## Weights
 
-| Weight | Value | Usage |
-|--------|-------|-------|
-| Regular | 400 | Body text, descriptions |
-| Medium | 500 | Buttons, labels |
-| Semibold | 600 | Card titles |
-| Bold | 700 | Headings, hero text |
-
-## Text Colors
-
-| Color | Value | Usage |
-|-------|-------|-------|
-| Primary | `#ffffff` | Main text |
-| Secondary | `rgba(255,255,255,0.7)` | Descriptions |
-| Muted | `rgba(255,255,255,0.5)` | Metadata |
-| Accent | `rgb(229, 9, 20)` | Links, highlights |
+- 400 — body
+- 500 — buttons
+- 600 — card titles
+- 700 — headings
