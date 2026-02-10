@@ -1,4 +1,4 @@
-import CategoryRes from '../../../../res/Category.bs.mjs';
+import CategoryRes from '../../../../res/pages/CategoryPage.bs.mjs';
 
 // Next.js will invalidate the cache when a
 // request comes in, at most once every 60 seconds.
