@@ -81,3 +81,20 @@ jobs:
           name: Release ${{ steps.bump.outputs.version }}
           body_path: /tmp/release_notes.md
           make_latest: true
+
+      - name: Deploy to OVH
+        if: steps.bump.outputs.version != ''
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.OVH_HOST }}
+          username: ${{ secrets.OVH_USER }}
+          key: ${{ secrets.OVH_SSH_KEY }}
+          script: |
+            docker pull ghcr.io/${{ github.repository }}:latest
+            docker stop arteflix || true
+            docker rm arteflix || true
+            docker run -d \
+              --name arteflix \
+              --restart unless-stopped \
+              -p 3000:3000 \
+              ghcr.io/${{ github.repository }}:latest
