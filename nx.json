@@ -20,6 +20,7 @@
   "plugins": [
     {
       "plugin": "@nx/next/plugin",
+      "exclude": ["."],
       "options": {
         "startTargetName": "start",
         "buildTargetName": "build",
@@ -31,24 +32,28 @@
     },
     {
       "plugin": "@nx/playwright/plugin",
+      "exclude": ["."],
       "options": {
         "targetName": "e2e"
       }
     },
     {
       "plugin": "@nx/eslint/plugin",
+      "exclude": ["."],
       "options": {
         "targetName": "lint"
       }
     },
     {
       "plugin": "@nx/jest/plugin",
+      "exclude": ["."],
       "options": {
         "targetName": "test"
       }
     },
     {
       "plugin": "@nx-tools/nx-container",
+      "exclude": ["."],
       "options": {
         "defaultEngine": "docker",
         "defaultRegistry": "docker.io"
@@ -56,6 +61,7 @@
     },
     {
       "plugin": "@nx/storybook/plugin",
+      "exclude": ["."],
       "options": {
         "serveStorybookTargetName": "storybook",
         "buildStorybookTargetName": "build-storybook",
