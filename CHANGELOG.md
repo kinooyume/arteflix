@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.9.1 - 2026-02-17
+#### Bug Fixes
+- resolve merge conflict when syncing main into develop - (4330494) - Martin Kinoo
+- unit test and ci  (#11) - (03d4419) - Martin Kinoo
+- use standalone server for e2e tests - (5879177) - Martin Kinoo
+- add minimal e2e smoke test - (a8dd62b) - Martin Kinoo
+- remove broken scaffold e2e test - (06156ea) - Martin Kinoo
+- remove broken scaffold test - (72192bd) - Martin Kinoo
+#### Documentation
+- update readme with badges, storybook section and CI details - (90f76c2) - Martin Kinoo
+#### Miscellaneous Chores
+- (**version**) v0.2.1 - (e273e35) - github-actions[bot]
+- merge main into develop - (f07f075) - Martin Kinoo
+
+- - -
+
 ## v0.2.1 - 2026-02-17
 #### Bug Fixes
 - unit test and ci  (#11) - (03d4419) - Martin Kinoo
