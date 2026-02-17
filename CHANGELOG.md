@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.2.1 - 2026-02-17
+#### Bug Fixes
+- unit test and ci  (#11) - (03d4419) - Martin Kinoo
+
+- - -
+
 ## v0.2.0 - 2026-02-10
 #### Bug Fixes
 - run res:build before next build - (f6b2646) - Martin Kinoo
