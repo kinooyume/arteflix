@@ -53,11 +53,8 @@ describe('Middleware', () => {
       expect(getLocale(headers)).toBe('en');
     });
 
-    it('lowercases the locale', () => {
+    it('falls back to "en" for uppercase locale not in the list', () => {
       expect(getLocale(mockHeaders('FR-FR'))).toBe('en');
-      // Note: "FR" is sliced from "FR-FR", but "FR" (uppercase) is not
-      // in the locales array (which has "fr" lowercase), so it falls back to "en".
-      // This tests the actual behavior of the code.
     });
   });
 });

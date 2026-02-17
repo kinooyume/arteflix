@@ -24,15 +24,12 @@ describe('EpisodeCard', () => {
 
   it('does not render overlay when hover is false (default)', () => {
     const { container } = render(<EpisodeCard {...defaultProps} />);
-    // With hover=false, the overlay should not be present
-    // The container should only have the image, no overlay SVG
     const svgs = container.querySelectorAll('svg');
     expect(svgs.length).toBe(0);
   });
 
   it('renders overlay when hover is true', () => {
     const { container } = render(<EpisodeCard {...defaultProps} hover={true} />);
-    // With hover=true, CardOverlayPlay renders an SVG play icon
     const svgs = container.querySelectorAll('svg');
     expect(svgs.length).toBeGreaterThan(0);
   });
