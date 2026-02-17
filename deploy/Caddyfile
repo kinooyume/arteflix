@@ -1,0 +1,3 @@
+arteflix.kinoo.dev {
+    reverse_proxy arteflix:3000
+}
