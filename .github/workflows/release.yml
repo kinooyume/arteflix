@@ -30,9 +30,9 @@ jobs:
         if: steps.bump.outputs.version != ''
         run: |
           git push origin main --follow-tags
-          git fetch origin develop
-          git checkout -B develop origin/develop
-          git merge main --no-edit
+          git checkout develop
+          git pull origin develop
+          git merge main --no-edit -X theirs
           git push origin develop
 
       - uses: oven-sh/setup-bun@v2
