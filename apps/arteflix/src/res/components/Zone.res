@@ -1,3 +1,8 @@
+let makeHeroSrcSet = (url: string) => {
+  let size = s => url->String.replace("__SIZE__", s)
+  `${size("940x530")} 940w, ${size("1400x787")} 1400w, ${size("1920x1080")} 1920w`
+}
+
 let makeHero = (zone: ArteZone.t) => {
   switch zone.content.data->Array.get(0) {
   | Some(content) => {
@@ -5,10 +10,9 @@ let makeHero = (zone: ArteZone.t) => {
       | Some(caption) => caption
       | None => content.title
       }
-    // TODO: use correct image size
       <HeroTemplate
-        // imageSrc={content.mainImage.url->String.replace("__SIZE__", "1220x686")}
         imageSrc={content.mainImage.url->String.replace("__SIZE__", "1920x1080")}
+        imageSrcSet={makeHeroSrcSet(content.mainImage.url)}
         imageAlt
         title=content.title
         subtitle=content.subtitle

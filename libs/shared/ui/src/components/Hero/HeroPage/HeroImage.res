@@ -62,13 +62,15 @@ module Style = {
 }
 type props_ = {
   src: string,
+  srcSet?: string,
+  sizes?: string,
   alt: string,
   overflow?: bool,
   children: React.element,
 }
 
 @react.component(: props_)
-let make = (~src, ~alt, ~children, ~overflow=false) => {
+let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false) => {
   let (containerStyle, contentStyle, imgStyle, gradientStyle) = switch overflow {
   | true => (
       [Style.container, Style.containerOverflow, Style.mobileHero]->cx,
@@ -84,7 +86,7 @@ let make = (~src, ~alt, ~children, ~overflow=false) => {
     )
   }
   <section className={containerStyle}>
-    <img className={imgStyle} src={src} alt={alt} />
+    <img className={imgStyle} src={src} ?srcSet ?sizes alt={alt} />
     <div className={gradientStyle} />
     <div className={contentStyle}> children </div>
   </section>

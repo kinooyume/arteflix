@@ -91,8 +91,11 @@ let make = React.memo((
   | false => srcSized
   }
 
-  // TODO: add onError event to image
-  // create effect mount/unmount
+  let makeSrcSet = base => {
+    let size = s => base->String.replace("__SIZE__", s)
+    `${size("210x118")} 210w, ${size("325x183")} 325w, ${size("400x225")} 400w`
+  }
+  let srcSet = makeSrcSet(srcBase)
 
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle
   <Link className={Fn(className)} href>
@@ -105,6 +108,8 @@ let make = React.memo((
       }}
       className={Style.image}
       src
+      srcSet
+      sizes="(max-width: 599px) 45vw, (max-width: 1100px) 30vw, 20vw"
       alt
     />
     {switch children {

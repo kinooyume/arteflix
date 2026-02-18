@@ -18,6 +18,7 @@ let make = (~episodes) => {
   <ul className={Style.container}>
     {episodes
     ->Array.mapWithIndex((episode, index) => {
+      let imageSrcSet = episode.imageSrcSet
       <li key={index->Int.toString}>
         <EpisodeButton
           index={index + 1}
@@ -28,6 +29,7 @@ let make = (~episodes) => {
           description=episode.description
           duration=episode.duration
           imageSrc=episode.imageSrc
+          ?imageSrcSet
           imageAlt=episode.imageAlt
         />
       </li>

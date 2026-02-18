@@ -1,3 +1,8 @@
+let makeHeroSrcSet = (url: string) => {
+  let size = s => url->String.replace("__SIZE__", s)
+  `${size("940x530")} 940w, ${size("1400x787")} 1400w, ${size("1920x1080")} 1920w`
+}
+
 let makeHero = (zone: ArteZone.t, ~metadata as _metadata, ~parent as _parent) => {
   switch zone.content.data->Array.get(0) {
   | Some(content) => {
@@ -6,11 +11,9 @@ let makeHero = (zone: ArteZone.t, ~metadata as _metadata, ~parent as _parent) =>
       | None => content.title
       }
 
-      // let extra = []->Array.flat
-
       <HeroCollectionTemplate
         imageSrc={content.mainImage.url->String.replace("__SIZE__", "1920x1080")}
-        // imageSrc={content.mainImage.url->String.replace("__SIZE__", "1220x686")}
+        imageSrcSet={makeHeroSrcSet(content.mainImage.url)}
         imageAlt
         title=content.title
         subtitle=content.subtitle

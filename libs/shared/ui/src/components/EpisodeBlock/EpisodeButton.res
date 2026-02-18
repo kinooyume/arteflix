@@ -90,6 +90,7 @@ type t = {
   description: option<string>,
   duration: option<string>,
   imageSrc: string,
+  imageSrcSet?: string,
   imageAlt: string,
   selected: bool,
 }
@@ -99,7 +100,6 @@ type props_ = {
   index: int,
 }
 
-// peut etre faire un hoc pour éviter de racalculer le
 @react.component(: props_)
 let make = (
   ~index,
@@ -108,21 +108,22 @@ let make = (
   ~description,
   ~duration,
   ~imageSrc,
+  ~imageSrcSet=?,
   ~imageAlt,
   ~selected,
 ) => {
   let (hover, setHover) = React.useState(() => false)
+  let srcSet = imageSrcSet
 
   let className = switch selected {
   | true => [Style.default, Style.selected]->cx
   | false => Style.default
   }
-  // let className: Link.classNameFn = ({isHovered}) => isHovered ? Style.hover : Style.default
 
   <Link className={String(className)} onHoverChange={isHovering => setHover(_ => isHovering)} href>
     <Bullet index />
     <div className={Style.content}>
-      <EpisodeCard src=imageSrc alt=imageAlt hover />
+      <EpisodeCard src=imageSrc ?srcSet sizes="15vw" alt=imageAlt hover />
       <EpisodeButtonContent title description duration />
     </div>
   </Link>
