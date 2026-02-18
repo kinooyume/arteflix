@@ -93,7 +93,7 @@ let make = React.memo((
 
   let makeSrcSet = base => {
     let size = s => base->String.replace("__SIZE__", s)
-    `${size("210x118")} 210w, ${size("325x183")} 325w, ${size("400x225")} 400w`
+    `${size("210x118")} 210w, ${size("400x225")} 400w, ${size("720x406")} 720w`
   }
   let srcSet = makeSrcSet(srcBase)
 
@@ -109,7 +109,7 @@ let make = React.memo((
       className={Style.image}
       src
       srcSet
-      sizes="(max-width: 599px) 45vw, (max-width: 1100px) 30vw, 20vw"
+      sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 17vw"
       alt
     />
     {switch children {

@@ -59,14 +59,14 @@ let slickStyle = `
 
 let responsive = [
   {
-    breakpoint: 500,
+    breakpoint: 600,
     settings: {
       slidesToShow: 2,
       slidesToScroll: 2,
     },
   },
   {
-    breakpoint: 800,
+    breakpoint: 900,
     settings: {
       slidesToShow: 3,
       slidesToScroll: 3,
@@ -80,24 +80,24 @@ let responsive = [
     },
   },
   {
-    breakpoint: 1500,
+    breakpoint: 1400,
+    settings: {
+      slidesToShow: 5,
+      slidesToScroll: 5,
+    },
+  },
+  {
+    breakpoint: 2200,
     settings: {
       slidesToShow: 6,
       slidesToScroll: 6,
     },
   },
   {
-    breakpoint: 2200,
-    settings: {
-      slidesToShow: 9,
-      slidesToScroll: 9,
-    },
-  },
-  {
     breakpoint: 3100,
     settings: {
-      slidesToShow: 13,
-      slidesToScroll: 13,
+      slidesToShow: 8,
+      slidesToScroll: 8,
     },
   },
 ]
@@ -111,8 +111,8 @@ let make = (~children) => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 10,
+    slidesToScroll: 10,
     draggable: isTouch,
     initialSlide: 0,
     swipeToSlide: isTouch,
