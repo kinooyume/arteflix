@@ -6,7 +6,7 @@ curl -fsSL https://get.docker.com | sh
 sudo usermod -aG docker $USER
 
 echo "==> Creating deploy directory..."
-mkdir -p ~/arteflix
+mkdir -p ~/arteflix/certs
 cd ~/arteflix
 
 echo "==> Downloading compose files..."
@@ -15,4 +15,7 @@ curl -O https://raw.githubusercontent.com/kinooyume/arteflix/main/deploy/Caddyfi
 
 echo "==> Done! Now:"
 echo "1. Log out and back in (for docker group)"
-echo "2. Run: docker compose up -d"
+echo "2. Place your Cloudflare Origin Certificate in ~/arteflix/certs/"
+echo "   - origin.pem (certificate)"
+echo "   - origin-key.pem (private key)"
+echo "3. Run: docker compose up -d"
