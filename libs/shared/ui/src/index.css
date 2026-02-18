@@ -35,6 +35,12 @@
   --section-gap: clamp(24px, 1rem + 1.5vw, 46px);
 }
 
+@media (max-width: 599px) {
+  :root {
+    --hero-content-max-width: 100%;
+  }
+}
+
 html {
   background-color: #141414;
 }

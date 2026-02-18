@@ -24,15 +24,14 @@ module Link = Next.Link
 type props = {children: React.element}
 let default = ({children}: props) => {
   <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
     <body>
-      <div className="w-full text-white-900 font-base">
-        // <Navigation />
+      <div>
         <RouterProvider>
-
-          // context avec  la langue
           <AppHeader />
           <main> children </main>
-
         </RouterProvider>
       </div>
     </body>

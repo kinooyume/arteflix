@@ -36,17 +36,19 @@ module Main = {
 
 module Extra = {
   module Style = {
-    let container =
-      ReactDOM.Style.make(
-        ~display="flex",
-        ~width="240px",
-        ~flexDirection="column",
-        ~alignItems="flex-start",
-        ~gap="14px",
-        ~flexShrink="0",
-        ~color=Colors.primaryWhite,
-        (),
-      )->css
+    let container = `
+      display: flex;
+      width: 240px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      flex-shrink: 0;
+      color: ${Colors.primaryWhite};
+
+      ${Responsive.tabletDown} {
+        width: 100%;
+      }
+    `->rawCss
   }
 
   type props_ = {list: array<string>}
@@ -60,16 +62,18 @@ module Extra = {
 
 module Container = {
   module Style = {
-    let container =
-      ReactDOM.Style.make(
-        ~display="inline-flex",
-        ~flexDirection="row",
-        ~width="100%",
-        ~alignItems="space-between",
-        ~gap="32px",
-        ~padding="20px 58px 46px 58px",
-        (),
-      )->css
+    let container = `
+      display: inline-flex;
+      flex-direction: row;
+      width: 100%;
+      align-items: space-between;
+      gap: 32px;
+      padding: 20px var(--side-padding) var(--section-gap) var(--side-padding);
+
+      ${Responsive.tabletDown} {
+        flex-direction: column;
+      }
+    `->rawCss
   }
 
   type props_ = {

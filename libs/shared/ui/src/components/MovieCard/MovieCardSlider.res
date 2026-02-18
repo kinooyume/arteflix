@@ -48,6 +48,12 @@ let slickStyle = `
   .slick-next {
   right: 0;
   }
+
+  ${Responsive.mobileDown} {
+    .slick-prev, .slick-next {
+      display: none !important;
+    }
+  }
   `->rawCss
 
 let responsive = [
@@ -95,22 +101,23 @@ let responsive = [
   },
 ]
 
-let slickProps = {
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 4,
-  draggable: false,
-  initialSlide: 0,
-  swipeToSlide: false,
-  variableWidth: false,
-  responsive,
-}
 type movieCardSliderProps = {children: array<React.element>}
 
 @react.component(: movieCardSliderProps)
 let make = (~children) => {
+  let isTouch = Responsive.useTouchDevice()
+  let slickProps = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    draggable: isTouch,
+    initialSlide: 0,
+    swipeToSlide: isTouch,
+    variableWidth: false,
+    responsive,
+  }
   <div className={Style.container}>
     <ReactSlick {...slickProps} className={slickStyle}>
       {children

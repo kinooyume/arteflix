@@ -1,16 +1,12 @@
 open Emotion
 
 module Style = {
-  let size =
-    ReactDOM.Style.make(
-      ~width="128px",
-      ~height="72px",
-      ~flexBasis="128px",
-      ~flexGrow="0",
-      ~flexShrink="0",
-      ~borderRadius="2px",
-      (),
-    )->css
+  let size = `
+    width: var(--episode-card-width);
+    aspect-ratio: 128 / 72;
+    flex-shrink: 0;
+    border-radius: 2px;
+  `->rawCss
 
   let container = [ReactDOM.Style.make(~position="relative", ())->css, size]->cx
 

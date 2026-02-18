@@ -5,8 +5,8 @@ module Style = {
     ReactDOM.Style.make(
       ~display="flex",
       ~flexDirection="column",
-      ~gap="22px",
-      ~maxWidth="518px",
+      ~gap="clamp(12px, 0.5rem + 0.8vw, 22px)",
+      ~maxWidth="var(--hero-content-max-width)",
       ~flexShrink="0",
       (),
     )->css

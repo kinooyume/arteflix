@@ -33,14 +33,13 @@ module Style = {
   let medium =
     [
       Typo.Medium.bodyLW,
-      ReactDOM.Style.make(
-        ~display="flex",
-        ~height="42px",
-        ~padding="8px 26px 8px 26px",
-        ~gap="16px",
-        ~fontSize="16px",
-        (),
-      )->css,
+      `
+        display: flex;
+        height: clamp(34px, 1.8rem + 0.5vw, 42px);
+        padding: 8px clamp(16px, 0.8rem + 0.7vw, 26px);
+        gap: 16px;
+        font-size: clamp(13px, 0.65rem + 0.35vw, 16px);
+      `->rawCss,
     ]->cx
 
   let large =
@@ -48,6 +47,7 @@ module Style = {
       Typo.Medium.bodyLW,
       ReactDOM.Style.make(
         ~width="314px",
+        ~maxWidth="100%",
         ~height="40px",
         ~padding="12px 24px",
         ~gap="16px",

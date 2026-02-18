@@ -5,7 +5,7 @@ module Style = {
     ReactDOM.Style.make(
       ~display="flex",
       ~flex="1 0 0",
-      ~width="218px",
+      ~width="100%",
       ~height="48px",
       ~minHeight="48px",
       ~padding="16px",

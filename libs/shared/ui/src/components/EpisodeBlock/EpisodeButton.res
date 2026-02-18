@@ -3,7 +3,11 @@ open Emotion
 
 module Picture = {
   module Style = {
-    let size = ReactDOM.Style.make(~width="128px", ~height="72px", ~borderRadius="2px", ())->css
+    let size = `
+      width: var(--episode-card-width);
+      aspect-ratio: 128 / 72;
+      border-radius: 2px;
+    `->rawCss
 
     let container = [ReactDOM.Style.make(~position="relative", ())->css, size]->cx
   }
@@ -52,7 +56,7 @@ module Style = {
       ~flexDirection="row",
       ~textDecoration="none",
       ~alignItems="center",
-      ~padding="16px  52px 16px 16px",
+      ~padding="16px clamp(16px, 0.5rem + 2.5vw, 52px) 16px 16px",
       ~transition="all 0.2s ease-out",
       ~borderRadius=" 4px",
       ~borderBottom=`1px solid ${Colors.greyGrey_450}`,

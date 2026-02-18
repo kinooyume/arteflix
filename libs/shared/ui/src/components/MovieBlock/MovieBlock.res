@@ -5,7 +5,7 @@ module Style = {
     ReactDOM.Style.make(
       ~display="flex",
       ~flexDirection="column",
-      ~padding="20px 0px 46px 58px",
+      ~padding="20px 0px var(--section-gap) var(--side-padding)",
       ~alignItems="flex-start",
       ~gap="15px",
       ~zIndex="2",
