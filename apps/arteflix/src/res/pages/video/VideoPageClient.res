@@ -109,7 +109,7 @@ let make = (~params: Params.program) => {
           `${(i + 1)->Int.toString}. ${(z.displayOptions.template :> string)} - ${z.title}`
         ),
       )
-      <>
+      <FadeIn>
         <div>
           {sortedZones
           ->Array.mapWithIndex((zone, index) =>
@@ -126,8 +126,8 @@ let make = (~params: Params.program) => {
           )
           ->React.array}
         </div>
-      </>
-    | None => React.null
+      </FadeIn>
+    | None => <PageSkeleton />
     }}
   </>
 }

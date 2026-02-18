@@ -25,7 +25,7 @@ let make = (~params) => {
     }}
     {switch data {
     | Some(arteData) =>
-      <>
+      <FadeIn>
         <div>
           {arteData.zones
           ->Array.map(zone =>
@@ -35,8 +35,8 @@ let make = (~params) => {
           )
           ->React.array}
         </div>
-      </>
-    | None => React.null
+      </FadeIn>
+    | None => <PageSkeleton />
     }}
   </>
 }

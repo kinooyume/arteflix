@@ -24,7 +24,7 @@ let make = (~params) => {
     }}
     {switch data {
     | Some(arteData) =>
-      <>
+      <FadeIn>
         // {switch arteData.apiPlayerConfig {
         // | Some(playerConfig) => <p> {"Player"->React.string} </p>
         // | None => React.null
@@ -38,8 +38,8 @@ let make = (~params) => {
           )
           ->React.array}
         </div>
-      </>
-    | None => React.null
+      </FadeIn>
+    | None => <PageSkeleton />
     }}
   </>
 }
