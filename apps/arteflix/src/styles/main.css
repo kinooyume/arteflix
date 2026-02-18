@@ -1,5 +1,14 @@
 @import './_fonts.css';
 
+:root {
+  --side-padding: clamp(16px, 0.5rem + 3.5vw, 58px);
+  --hero-height: 80vh;
+  --hero-content-max-width: clamp(280px, 15rem + 15vw, 518px);
+
+  --episode-card-width: clamp(96px, 5rem + 2vw, 128px);
+  --section-gap: clamp(24px, 1rem + 1.5vw, 46px);
+}
+
 body {
   background: var(--Grey-Grey-900, #141414);
   color: white;

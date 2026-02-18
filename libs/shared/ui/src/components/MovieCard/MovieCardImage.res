@@ -23,9 +23,9 @@ module Style = {
     )->css
 
   let image = ReactDOM.Style.make(~borderRadius="2px", ~width="100%", ~height="100%", ())->css
-  let vertical = `width: 218px; height: 327px;`->rawCss
+  let vertical = `width: 100%; aspect-ratio: 2 / 3;`->rawCss
 
-  let horizontal = `width: 218px; height: 123px; `->rawCss
+  let horizontal = `width: 100%; aspect-ratio: 16 / 9;`->rawCss
 
   let background = (~url) => ReactDOM.Style.make(~backgroundImage="url(" ++ url ++ ")", ())->css
 }

@@ -27,9 +27,10 @@ let slickStyle = `
   }
   .slick-prev, .slick-next {
     z-index: 30;
-    top: 61px;
-    height: 123px;
+    top: 0;
+    height: 100%;
     width: 36px;
+    transform: none;
     background-color: ${Colors.transparentBlack_30};
   }
 
@@ -49,43 +50,26 @@ let slickStyle = `
   }
   `->rawCss
 
-// mes images, 218px + 6px = 224px
-// padding: 46px
-
 let responsive = [
   {
-    breakpoint: 524,
-    settings: {
-      slidesToShow: 1,
-      slidesToScroll: 1,
-    },
-  },
-  {
-    breakpoint: 788,
+    breakpoint: 500,
     settings: {
       slidesToShow: 2,
       slidesToScroll: 2,
     },
   },
   {
-    breakpoint: 982,
+    breakpoint: 800,
     settings: {
       slidesToShow: 3,
       slidesToScroll: 3,
     },
   },
   {
-    breakpoint: 1146,
+    breakpoint: 1100,
     settings: {
       slidesToShow: 4,
       slidesToScroll: 4,
-    },
-  },
-  {
-    breakpoint: 1360,
-    settings: {
-      slidesToShow: 5,
-      slidesToScroll: 5,
     },
   },
   {
@@ -96,59 +80,17 @@ let responsive = [
     },
   },
   {
-    breakpoint: 1700,
-    settings: {
-      slidesToShow: 7,
-      slidesToScroll: 7,
-    },
-  },
-  {
-    breakpoint: 1900,
-    settings: {
-      slidesToShow: 8,
-      slidesToScroll: 8,
-    },
-  },
-  {
-    breakpoint: 2400,
+    breakpoint: 2200,
     settings: {
       slidesToShow: 9,
       slidesToScroll: 9,
     },
   },
   {
-    breakpoint: 2450,
-    settings: {
-      slidesToShow: 10,
-      slidesToScroll: 10,
-    },
-  },
-  {
-    breakpoint: 2600,
-    settings: {
-      slidesToShow: 11,
-      slidesToScroll: 11,
-    },
-  },
-  {
-    breakpoint: 2800,
-    settings: {
-      slidesToShow: 12,
-      slidesToScroll: 12,
-    },
-  },
-  {
-    breakpoint: 2900,
+    breakpoint: 3100,
     settings: {
       slidesToShow: 13,
       slidesToScroll: 13,
-    },
-  },
-  {
-    breakpoint: 3100,
-    settings: {
-      slidesToShow: 14,
-      slidesToScroll: 14,
     },
   },
 ]
@@ -162,7 +104,7 @@ let slickProps = {
   draggable: false,
   initialSlide: 0,
   swipeToSlide: false,
-  variableWidth: true,
+  variableWidth: false,
   responsive,
 }
 type movieCardSliderProps = {children: array<React.element>}
@@ -178,5 +120,4 @@ let make = (~children) => {
       ->React.array}
     </ReactSlick>
   </div>
-  // <div className={style}> {children->React.array} </div>
 }
