@@ -15,6 +15,10 @@
   }
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   background: var(--Grey-Grey-900, #141414);
   color: white;

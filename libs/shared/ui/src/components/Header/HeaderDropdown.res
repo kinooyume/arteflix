@@ -14,8 +14,7 @@ let panelInner = `
 let panel = `
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: -24px;
   padding-top: 12px;
   opacity: 0;
   pointer-events: none;

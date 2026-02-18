@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 ")
 
-let style = ReactDOM.Style.make(~paddingRight="6px", ())->css
+let slideGap = `padding: 0 4px;`->rawCss
 
 module Style = {
   let container = ReactDOM.Style.make(~width="100%", ())->css
@@ -21,6 +21,7 @@ let slickStyle = `
   }
   .slick-list {
     width: 100%;
+    margin: 0 -4px;
   }
   .slick-prev.slick-disabled, .slick-next.slick-disabled {
     display: none !important;
@@ -122,7 +123,7 @@ let make = (~children) => {
     <ReactSlick {...slickProps} className={slickStyle}>
       {children
       ->Array.mapWithIndex((slide, index) =>
-        <div key={index->Int.toString} className={style}> slide </div>
+        <div key={index->Int.toString} className={slideGap}> slide </div>
       )
       ->React.array}
     </ReactSlick>
