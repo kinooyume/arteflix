@@ -15,11 +15,13 @@ let make = (~params) => {
   <>
     {switch error {
     | Some(err) =>
+      let url = params->Urls.category
+      Console.error3("[CategoryPageClient]", url, err)
       switch err {
-      | ClientFetcher.FetchError(_) => <ServerError message="A fetch error occur" />
-      | ClientFetcher.ParseError(_) => <ServerError message="A parsing error occur" />
-      | Exn.Error(_) => <ServerError message="500 Error | Failed to fetch Arte error" />
-      | _ => <ServerError message="500 Error | Failed to fetch Arte error" />
+      | ClientFetcher.FetchError(e) => <ServerError message={`Fetch error on ${url}: ${e->Exn.message->Option.getOr("unknown")}`} />
+      | ClientFetcher.ParseError(e) => <ServerError message={`Parse error on ${url}: ${e.message}`} />
+      | Exn.Error(e) => <ServerError message={`Error on ${url}: ${e->Exn.message->Option.getOr("unknown")}`} />
+      | _ => <ServerError message={`Unknown error on ${url}`} />
       }
     | None => React.null
     }}

@@ -22,7 +22,19 @@ module Style = {
       (),
     )->css
 
-  let image = ReactDOM.Style.make(~borderRadius="2px", ~width="100%", ~height="100%", ())->css
+  let imageContainer = `position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 2px;`->rawCss
+
+  let image = (~loaded) =>
+    cx([
+      ReactDOM.Style.make(~width="100%", ~height="100%", ())->css,
+      `opacity: ${loaded ? "1" : "0"}; transition: opacity 0.2s ease, transform 0.15s ease-out;`->rawCss,
+    ])
+
+  let shimmerOverlay =
+    `position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 2px;`->rawCss
+
+  let overlay = (~loaded) =>
+    `opacity: ${loaded ? "1" : "0"}; transition: opacity 0.2s ease;`->rawCss
   let vertical = `width: 100%; aspect-ratio: 2 / 3;`->rawCss
 
   let horizontal = `width: 100%; aspect-ratio: 16 / 9;`->rawCss
@@ -83,7 +95,10 @@ let make = React.memo((
   // | Vertical => Style.vertical
   // }
   let defaultStyle = cx([Style.base, orientationStyle])
-  let onHover = cx([defaultStyle, ReactDOM.Style.make(~cursor="pointer", ())->css])
+  let onHover = cx([
+    defaultStyle,
+    `cursor: pointer; img { transform: scale(1.05); }`->rawCss,
+  ])
 
   let srcSized = srcBase->String.replace("__SIZE__", "325x183")
   let src = switch ensureText {
@@ -97,24 +112,33 @@ let make = React.memo((
   }
   let srcSet = makeSrcSet(srcBase)
 
+  let (loaded, setLoaded) = React.useState(() => false)
+
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle
   <Link className={Fn(className)} href>
-    <img
-      loading=#"lazy"
-      onError={e => {
-        open ReactEvent.Media
-        target(e)["onerror"] = Js.null
-        target(e)["src"] = srcSized
+    <div className={Style.imageContainer}>
+      {loaded ? React.null : <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />}
+      <img
+        loading=#"lazy"
+        onLoad={_ => setLoaded(_ => true)}
+        onError={e => {
+          open ReactEvent.Media
+          target(e)["onerror"] = Js.null
+          target(e)["src"] = srcSized
+          setLoaded(_ => true)
+        }}
+        className={Style.image(~loaded)}
+        src
+        srcSet
+        sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 17vw"
+        alt
+      />
+    </div>
+    <div className={Style.overlay(~loaded)}>
+      {switch children {
+      | Some(children) => children
+      | None => React.null
       }}
-      className={Style.image}
-      src
-      srcSet
-      sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 17vw"
-      alt
-    />
-    {switch children {
-    | Some(children) => children
-    | None => React.null
-    }}
+    </div>
   </Link>
 })

@@ -23,12 +23,6 @@ let style = imagePath =>
     (),
   )->css
 
-let ensureText = src =>
-  switch src->String.includes("?type=TEXT") {
-  | true => src
-  | false => src ++ "?type=TEXT"
-  }
-
 type previewImageProps = {
   srcBase: string,
   href: string,
@@ -37,7 +31,7 @@ type previewImageProps = {
 // NOTE: du coup ça peut etre preview card image. hehehehe
 @react.component(: previewImageProps)
 let make = (~srcBase, ~href) => {
-  let src = srcBase->String.replace("__SIZE__", "325x183")->ensureText
+  let src = srcBase->String.replace("__SIZE__", "400x225")
   <Link href>
     <div className={style(src)} />
   </Link>

@@ -35,6 +35,7 @@ let trigger = `
 
 let wrapper = `
   position: relative;
+  margin-top: 3px;
   ${Responsive.mobileDown} {
     display: none;
   }

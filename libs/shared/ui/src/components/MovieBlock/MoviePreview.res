@@ -52,14 +52,14 @@ let make = React.memo((
     <Motion.div
       key={href}
       initial={{width: "218px", height: "123px", margin: "0 0 123px 0"}}
-      animate={{width: "323px", height: "403px", margin: "0", transition: {duration: 0.2}}}
-      exit={{width: "218px", height: "123px", margin: "0 0 123px 0", transition: {duration: 0.1}}}>
+      animate={{width: "323px", height: "403px", margin: "0", transition: {duration: 0.15}}}
+      exit={{width: "218px", height: "123px", margin: "0 0 123px 0", transition: {duration: 0.08}}}>
       <Preview key={href}>
         <Motion.div
           key={href ++ "-img"}
           initial={{width: "218px", height: "123px"}}
-          animate={{width: "323px", height: "181px", transition: {duration: 0.2}}}
-          exit={{width: "218px", height: "123px", transition: {duration: 0.1}}}>
+          animate={{width: "323px", height: "181px", transition: {duration: 0.15}}}
+          exit={{width: "218px", height: "123px", transition: {duration: 0.08}}}>
           // <PlayerTransition urlOption=NoVideo>
           // NOTE: probably merge with movieCardImage
           <PreviewImage srcBase=img href />
@@ -68,8 +68,8 @@ let make = React.memo((
         <Motion.div
           key={href ++ "-description"}
           initial={{opacity: 0.0, height: "0"}}
-          animate={{opacity: 1.0, height: "222px", transition: {duration: 0.2}}}
-          exit={{opacity: 0.0, height: "0", transition: {duration: 0.1}}}>
+          animate={{opacity: 1.0, height: "222px", transition: {duration: 0.15}}}
+          exit={{opacity: 0.0, height: "0", transition: {duration: 0.08}}}>
           <PreviewDescription key={href ++ "-description"}>
             <PreviewDescriptionActions key={href ++ "-actions"}>
               <PlayButtonRounded href linkAlt />

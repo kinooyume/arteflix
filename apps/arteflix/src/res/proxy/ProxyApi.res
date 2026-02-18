@@ -48,6 +48,15 @@ let category = async (params: Params.categoryPage) => {
   }
 }
 
+let live = async (params: Params.live) => {
+  switch await ArteApi.Fetcher.live(params) {
+  | data => data->recordAsJson->Next.NextResponse.json
+  | exception e =>
+    Console.error2("[Proxy] live error:", e)
+    Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
+  }
+}
+
 let player = async (params: Params.player) => {
   switch await ArteApi.Fetcher.player(params) {
   | data => data->recordAsJson->Next.NextResponse.json

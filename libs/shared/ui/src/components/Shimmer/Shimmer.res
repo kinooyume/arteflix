@@ -28,8 +28,14 @@ type props_ = {
   width: string,
   height: string,
   borderRadius?: string,
+  className?: string,
 }
 
 @react.component(: props_)
-let make = (~width, ~height, ~borderRadius="4px") =>
-  <div className={Style.base(~width, ~height, ~borderRadius)} />
+let make = (~width, ~height, ~borderRadius="4px", ~className=?) =>
+  <div
+    className={switch className {
+    | Some(extra) => cx([Style.base(~width, ~height, ~borderRadius), extra])
+    | None => Style.base(~width, ~height, ~borderRadius)
+    }}
+  />

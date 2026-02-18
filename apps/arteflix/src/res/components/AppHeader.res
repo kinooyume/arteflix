@@ -35,14 +35,6 @@ let make = () => {
     ->Array.filter(c => navCodes->Array.includes(c.code))
     ->Array.map(c => {HeaderNav.text: c.text, href: c.href})
 
-  let directLink = switch lang {
-  | "fr" => [{HeaderNav.text: "Direct", href: "/fr/direct"}]
-  | "de" => [{text: "Direct", href: "/de/live"}]
-  | _ => []
-  }
-
-  let links = links->Array.concat(directLink)
-
   let categories =
     allCategories->Array.map(c => {HeaderNav.text: c.text, href: c.href})
 

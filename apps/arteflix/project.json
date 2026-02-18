@@ -45,6 +45,12 @@
         "{projectRoot}/src/res/**.gen.ts"
       ]
     },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf apps/arteflix/.next"
+      }
+    },
     "all:dev": {
       "executor": "nx:run-commands",
       "options": {
