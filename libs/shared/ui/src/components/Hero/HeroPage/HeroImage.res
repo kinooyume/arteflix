@@ -15,6 +15,13 @@ module Style = {
     display: block;
     width: 100%;
     height: auto;
+    ${Responsive.mobileDown} {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      object-fit: cover;
+    }
   `->rawCss
 
   let gradient = `
@@ -38,11 +45,18 @@ module Style = {
     margin-bottom: clamp(24px, 1rem + 1.5vw, 48px);
   `->rawCss
 
-  let contentExtraMargin = ReactDOM.Style.make(~marginBottom="clamp(60px, 3rem + 2.5vw, 100px)", ())->css
+  let contentExtraMargin = `
+    margin-bottom: clamp(60px, 3rem + 2.5vw, 100px);
+    ${Responsive.mobileDown} {
+      margin-bottom: 24px;
+    }
+  `->rawCss
 
   let mobileHero = `
     ${Responsive.mobileDown} {
       --hero-height: 50vh;
+      min-height: 90vw;
+      overflow: visible;
     }
   `->rawCss
 }

@@ -1,15 +1,16 @@
 open Emotion
 
 module Style = {
-  let container =
-    ReactDOM.Style.make(
-      ~display="flex",
-      ~flexDirection="column",
-      ~gap="clamp(12px, 0.5rem + 0.8vw, 22px)",
-      ~maxWidth="var(--hero-content-max-width)",
-      ~flexShrink="0",
-      (),
-    )->css
+  let container = `
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 0.5rem + 0.8vw, 22px);
+    max-width: var(--hero-content-max-width);
+    flex-shrink: 0;
+    ${Responsive.mobileDown} {
+      gap: 6px;
+    }
+  `->rawCss
   let small = ReactDOM.Style.make(~gap="36px", ())->css
   let buttonWrapper = ReactDOM.Style.make(~display="flex", ())->css
 }
