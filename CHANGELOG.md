@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.10.0 - 2026-02-18
+#### Features
+- (**ui**) live page, snappier hover cards + error handling - (953af8c) - Martin Kinoo
+- (**ui**) responsive srcSet for hero, card + episode images - (30096fc) - Martin Kinoo
+- (**ui**) shimmer skeleton, page skeleton + fade-in components - (95de680) - Martin Kinoo
+- (**ui**) category codegen, nav dropdown + lang selector - (caf4314) - Martin Kinoo
+- (**ux**) loading skeletons + fade-in page transitions - (0fe3595) - Martin Kinoo
+#### Bug Fixes
+- (**deploy**) cloudflare TLS + CI auto-deploy - (747767b) - Martin Kinoo
+- (**ui**) exhaustive pattern matching in movie block cards - (4a51743) - Martin Kinoo
+- (**ui**) netflix-like card density per viewport - (6da9d3c) - Martin Kinoo
+- (**ui**) correct emotion keyframes binding - (0b3b1d2) - Martin Kinoo
+- (**ui**) prevent hero text clipping on narrow viewports - (f5c7c39) - Martin Kinoo
+- (**ui**) card slider gap + dropdown alignment - (d5e2a2e) - Martin Kinoo
+- (**ui**) fluid responsive sizing across components - (fb7bd6a) - Martin Kinoo
+- (**ui**) use flow-based hero image for full horizontal visibility - (4b8f2d2) - Martin Kinoo
+- (**ui**) use fluid card sizing with fixed aspect ratio - (9dd9abf) - Martin Kinoo
+#### Documentation
+- add deploy guide - (5a40416) - Martin Kinoo
+
+- - -
+
 ## v0.9.1 - 2026-02-17
 #### Bug Fixes
 - resolve merge conflict when syncing main into develop - (4330494) - Martin Kinoo
