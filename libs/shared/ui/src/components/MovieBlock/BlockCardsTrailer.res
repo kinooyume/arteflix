@@ -10,7 +10,7 @@ let trailerOverlay = (cardProps: MovieCardImage.props) =>
   </MovieCardInnerOverlay>
 
 @react.component(: MovieBlockCards.props)
-let make = (~title, ~cards, ~showDuration) => {
+let make = (~title, ~cards, ~showDuration=false) => {
   let durationCached = React.useCallback(durationOverlay, (cards, showDuration))
   let trailerTitleCached = React.useCallback(trailerOverlay, cards)
 
@@ -32,7 +32,7 @@ let make = (~title, ~cards, ~showDuration) => {
     <MovieCardSlider>
       {cards->Array.map(cardData => {
         // On peut tres bien supprimer le mot props
-        let (cardProps, previewProps) = cardData
+        let (cardProps, _previewProps) = cardData
         <MovieCardImage {...cardProps} key={`${key}-${cardProps.id}-image`} ensureText=false>
           {overlays
           ->Array.mapWithIndex((overlay, index) =>

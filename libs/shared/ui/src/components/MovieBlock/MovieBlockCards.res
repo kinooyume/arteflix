@@ -35,7 +35,7 @@ let kindLabelOverlay = (cardProps: MovieCardImage.props) => {
 }
 
 @react.component(: props_)
-let make = (~title, ~cards, ~showDuration, ~showTrailer) => {
+let make = (~title, ~cards, ~showDuration=false, ~showTrailer=false) => {
   let durationCached = React.useCallback(durationOverlay, (cards, showDuration))
   let labelOverlayCached = React.useCallback(kindLabelOverlay, (cards, showTrailer))
   let overlays = []
