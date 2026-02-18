@@ -8,19 +8,22 @@ module Style = {
       ~right="0",
       ~top="0",
       ~zIndex="10",
-      ~height="68px",
-      ~padding="0 58px",
       ~display="flex",
       ~alignItems="center",
       ~justifyContent="center",
       ~background="linear-gradient(180deg, rgba(0, 0, 0, 0.70) 12.5%, rgba(0, 0, 0, 0.00) 100%)",
       (),
     )->css
+
+  let fluid = `
+    padding: 0 var(--side-padding);
+    height: clamp(48px, 2.5rem + 1.3vw, 68px);
+  `->rawCss
+
   let containt =
     ReactDOM.Style.make(
       ~display="flex",
       ~width="100%",
-      ~height="25px",
       ~justifyContent="space-between",
       ~alignItems="center",
       ~flexShrink="0",
@@ -28,27 +31,19 @@ module Style = {
     )->css
 }
 
-@react.component(: HeaderNav.headerNavProps)
-let make = (~logo, ~links) =>
-  <header
-    style={{
-      padding: "0 58px",
-      height: "68px",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-    className={Style.wrapper}>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        height: "25px",
+type headerProps = {
+  ...HeaderNav.headerNavProps,
+  right?: React.element,
+}
+
+@react.component(: headerProps)
+let make = (~logo, ~links, ~categories=?, ~categoriesLabel=?, ~right=?) =>
+  <header className={[Style.wrapper, Style.fluid]->cx}>
+    <div className={Style.containt}>
+      <HeaderNav logo links ?categories ?categoriesLabel />
+      {switch right {
+      | Some(el) => el
+      | None => React.null
       }}
-      className={Style.containt}>
-      <HeaderNav logo links />
     </div>
   </header>

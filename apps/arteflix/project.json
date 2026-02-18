@@ -4,10 +4,26 @@
   "sourceRoot": "apps/arteflix",
   "projectType": "application",
   "tags": [],
-  "// targets": "make target for rescript",
   "targets": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/arteflix/scripts/generate-categories.mjs"
+      },
+      "inputs": [
+        "{projectRoot}/arteRoutes/fr.json",
+        "{projectRoot}/arteRoutes/de.json",
+        "{projectRoot}/arteRoutes/en.json",
+        "{projectRoot}/arteRoutes/es.json",
+        "{projectRoot}/arteRoutes/pl.json",
+        "{projectRoot}/arteRoutes/it.json",
+        "{projectRoot}/scripts/generate-categories.mjs"
+      ],
+      "outputs": ["{projectRoot}/arteRoutes/categories.json"]
+    },
     "res:dev": {
       "executor": "nx:run-commands",
+      "dependsOn": ["codegen"],
       "options": {
         "command": "bun run rescript -w"
       },
@@ -19,6 +35,7 @@
     },
     "res:build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["codegen"],
       "options": {
         "command": "bun run rescript build"
       },
