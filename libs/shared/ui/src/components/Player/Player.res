@@ -5,7 +5,7 @@ open Emotion
 
 module Style = {
   let wrapper =
-    ReactDOM.Style.make(~width="100%", ~height="calc(100vh)", ~borderRadius="4px", ())->css
+    ReactDOM.Style.make(~width="100%", ~height="100dvh", ~borderRadius="4px", ())->css
 
   let player = `
     color:  ${Colors.primaryWhite};
@@ -34,6 +34,17 @@ padding: 0 32px;
     left: -180px;
     border-radius: 4px;
     border: 1px solid transparent;
+    }
+
+    ${Responsive.mobileDown} {
+      .vjs-menu {
+        left: auto;
+        right: 0;
+        width: min(256px, 90vw) !important;
+      }
+      .vjs-button {
+        padding: 0 12px;
+      }
     }
 
     .vjs-menu .vjs-menu-content {

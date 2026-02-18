@@ -1,5 +1,5 @@
 open Emotion
-let style = ReactDOM.Style.make(~maxWidth="518px", ~maxHeight="810px", ~flexShrink="0", ())->css
+let style = ReactDOM.Style.make(~maxWidth="var(--hero-content-max-width)", ~maxHeight="810px", ~flexShrink="0", ())->css
 
 type heroTitleProps = {
   title: string,

@@ -1,12 +1,12 @@
-import DirectRes from '../../../res/Redirect.bs.mjs';
+import LiveRes from '../../../res/pages/LivePage.bs.mjs';
 
 export const revalidate = 60;
 export const dynamicParams = true;
 
 export let metadata = {
-  title: "Arteflix",
-  description: "Arte with Netflix UI",
+  title: "Arteflix - Direct",
+  description: "Arte Live",
 }
 export default async function Page({ params }: { params: any }) {
-  return DirectRes(params);
+  return await LiveRes(params);
 }

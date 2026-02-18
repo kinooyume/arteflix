@@ -4,7 +4,6 @@ open ReactAria
 module Style = {
   let container = ReactDOM.Style.make(~position="relative", ())->css
 
-  // en fait ca va dependre d'horizontal ou vertical
   let previewWrapper = ReactDOM.Style.make(~position="relative", ~zIndex="80", ())->css
 
   let dialog = ReactDOM.Style.make(~outline="none !important", ())->css
@@ -27,6 +26,7 @@ module LazyPreview = {
 @react.component(: movieCardProps)
 let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
   let triggerRef = React.useRef(Nullable.null)
+  let isTouch = Responsive.useTouchDevice()
 
   let (cardHovered, setCardHovered) = React.useState(() => false)
   let (previewHovered, setPreviewHovered) = React.useState(() => false)
@@ -57,9 +57,6 @@ let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
       let timeOutId = setTimeout(_ => setIsOpen(_ => true), 300)
       Some(() => clearTimeout(timeOutId))
     } else {
-      // if isOpen {
-      //   setIsOpen(_ => false)
-      // }
       None
     }
   }, [cardHovered])
@@ -68,14 +65,18 @@ let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
     <div {...card.hoverProps} ref={ReactDOM.Ref.domRef(triggerRef)}>
       <MovieCardImage {...cardProps}> {children} </MovieCardImage>
     </div>
-    <Popover isOpen triggerRef placement=#top offset={-246}>
-      <Dialog ariaLabel={cardProps.title} className={Style.dialog} ariaLabelledBy="MovieCard">
-        <div {...preview.hoverProps} className={Style.previewWrapper}>
-          <MoviePreview
-            {...previewProps} isVisible onExit={_ => setIsOpen(_ => false)}
-          />
-        </div>
-      </Dialog>
-    </Popover>
+    {switch isTouch {
+    | true => React.null
+    | false =>
+      <Popover isOpen triggerRef placement=#top offset={-246}>
+        <Dialog ariaLabel={cardProps.title} className={Style.dialog} ariaLabelledBy="MovieCard">
+          <div {...preview.hoverProps} className={Style.previewWrapper}>
+            <MoviePreview
+              {...previewProps} isVisible onExit={_ => setIsOpen(_ => false)}
+            />
+          </div>
+        </Dialog>
+      </Popover>
+    }}
   </div>
 }

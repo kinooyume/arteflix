@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 ")
 
-let style = ReactDOM.Style.make(~paddingRight="6px", ())->css
+let slideGap = `padding: 0 4px;`->rawCss
 
 module Style = {
   let container = ReactDOM.Style.make(~width="100%", ())->css
@@ -21,15 +21,17 @@ let slickStyle = `
   }
   .slick-list {
     width: 100%;
+    margin: 0 -4px;
   }
   .slick-prev.slick-disabled, .slick-next.slick-disabled {
     display: none !important;
   }
   .slick-prev, .slick-next {
     z-index: 30;
-    top: 61px;
-    height: 123px;
+    top: 0;
+    height: 100%;
     width: 36px;
+    transform: none;
     background-color: ${Colors.transparentBlack_30};
   }
 
@@ -47,136 +49,83 @@ let slickStyle = `
   .slick-next {
   right: 0;
   }
-  `->rawCss
 
-// mes images, 218px + 6px = 224px
-// padding: 46px
+  ${Responsive.mobileDown} {
+    .slick-prev, .slick-next {
+      display: none !important;
+    }
+  }
+  `->rawCss
 
 let responsive = [
   {
-    breakpoint: 524,
-    settings: {
-      slidesToShow: 1,
-      slidesToScroll: 1,
-    },
-  },
-  {
-    breakpoint: 788,
+    breakpoint: 600,
     settings: {
       slidesToShow: 2,
       slidesToScroll: 2,
     },
   },
   {
-    breakpoint: 982,
+    breakpoint: 900,
     settings: {
       slidesToShow: 3,
       slidesToScroll: 3,
     },
   },
   {
-    breakpoint: 1146,
+    breakpoint: 1100,
     settings: {
       slidesToShow: 4,
       slidesToScroll: 4,
     },
   },
   {
-    breakpoint: 1360,
+    breakpoint: 1400,
     settings: {
       slidesToShow: 5,
       slidesToScroll: 5,
     },
   },
   {
-    breakpoint: 1500,
+    breakpoint: 2200,
     settings: {
       slidesToShow: 6,
       slidesToScroll: 6,
     },
   },
   {
-    breakpoint: 1700,
-    settings: {
-      slidesToShow: 7,
-      slidesToScroll: 7,
-    },
-  },
-  {
-    breakpoint: 1900,
+    breakpoint: 3100,
     settings: {
       slidesToShow: 8,
       slidesToScroll: 8,
     },
   },
-  {
-    breakpoint: 2400,
-    settings: {
-      slidesToShow: 9,
-      slidesToScroll: 9,
-    },
-  },
-  {
-    breakpoint: 2450,
-    settings: {
-      slidesToShow: 10,
-      slidesToScroll: 10,
-    },
-  },
-  {
-    breakpoint: 2600,
-    settings: {
-      slidesToShow: 11,
-      slidesToScroll: 11,
-    },
-  },
-  {
-    breakpoint: 2800,
-    settings: {
-      slidesToShow: 12,
-      slidesToScroll: 12,
-    },
-  },
-  {
-    breakpoint: 2900,
-    settings: {
-      slidesToShow: 13,
-      slidesToScroll: 13,
-    },
-  },
-  {
-    breakpoint: 3100,
-    settings: {
-      slidesToShow: 14,
-      slidesToScroll: 14,
-    },
-  },
 ]
 
-let slickProps = {
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 4,
-  draggable: false,
-  initialSlide: 0,
-  swipeToSlide: false,
-  variableWidth: true,
-  responsive,
-}
 type movieCardSliderProps = {children: array<React.element>}
 
 @react.component(: movieCardSliderProps)
 let make = (~children) => {
+  let isTouch = Responsive.useTouchDevice()
+  let slickProps = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 10,
+    slidesToScroll: 10,
+    draggable: isTouch,
+    initialSlide: 0,
+    swipeToSlide: isTouch,
+    variableWidth: false,
+    responsive,
+  }
   <div className={Style.container}>
     <ReactSlick {...slickProps} className={slickStyle}>
       {children
       ->Array.mapWithIndex((slide, index) =>
-        <div key={index->Int.toString} className={style}> slide </div>
+        <div key={index->Int.toString} className={slideGap}> slide </div>
       )
       ->React.array}
     </ReactSlick>
   </div>
-  // <div className={style}> {children->React.array} </div>
 }

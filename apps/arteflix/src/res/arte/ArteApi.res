@@ -57,7 +57,8 @@ module Fetcher = {
 
   let live = async (params: Params.live) => {
     let url = Urls.live(params)
-    ArteData.contentPlaceholder
+    let content = await Gateway.contentFetcher(url)
+    content.value
   }
 
   let program = async (params: Params.program) => {

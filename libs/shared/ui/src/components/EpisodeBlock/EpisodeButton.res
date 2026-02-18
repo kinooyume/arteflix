@@ -3,7 +3,11 @@ open Emotion
 
 module Picture = {
   module Style = {
-    let size = ReactDOM.Style.make(~width="128px", ~height="72px", ~borderRadius="2px", ())->css
+    let size = `
+      width: var(--episode-card-width);
+      aspect-ratio: 128 / 72;
+      border-radius: 2px;
+    `->rawCss
 
     let container = [ReactDOM.Style.make(~position="relative", ())->css, size]->cx
   }
@@ -52,7 +56,7 @@ module Style = {
       ~flexDirection="row",
       ~textDecoration="none",
       ~alignItems="center",
-      ~padding="16px  52px 16px 16px",
+      ~padding="16px clamp(16px, 0.5rem + 2.5vw, 52px) 16px 16px",
       ~transition="all 0.2s ease-out",
       ~borderRadius=" 4px",
       ~borderBottom=`1px solid ${Colors.greyGrey_450}`,
@@ -86,6 +90,7 @@ type t = {
   description: option<string>,
   duration: option<string>,
   imageSrc: string,
+  imageSrcSet?: string,
   imageAlt: string,
   selected: bool,
 }
@@ -95,7 +100,6 @@ type props_ = {
   index: int,
 }
 
-// peut etre faire un hoc pour éviter de racalculer le
 @react.component(: props_)
 let make = (
   ~index,
@@ -104,21 +108,22 @@ let make = (
   ~description,
   ~duration,
   ~imageSrc,
+  ~imageSrcSet=?,
   ~imageAlt,
   ~selected,
 ) => {
   let (hover, setHover) = React.useState(() => false)
+  let srcSet = imageSrcSet
 
   let className = switch selected {
   | true => [Style.default, Style.selected]->cx
   | false => Style.default
   }
-  // let className: Link.classNameFn = ({isHovered}) => isHovered ? Style.hover : Style.default
 
   <Link className={String(className)} onHoverChange={isHovering => setHover(_ => isHovering)} href>
     <Bullet index />
     <div className={Style.content}>
-      <EpisodeCard src=imageSrc alt=imageAlt hover />
+      <EpisodeCard src=imageSrc ?srcSet sizes="15vw" alt=imageAlt hover />
       <EpisodeButtonContent title description duration />
     </div>
   </Link>

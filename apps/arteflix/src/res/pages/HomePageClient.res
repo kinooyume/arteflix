@@ -13,18 +13,19 @@ let make = (~params) => {
   <>
     {switch error {
     | Some(err) =>
-      Js.log(err)
+      let url = params->Urls.home
+      Console.error3("[HomePageClient]", url, err)
       switch err {
-      | FetchError(_) => <ServerError message="A fetch error occur" />
-      | ParseError(_) => <ServerError message="A parsing error occur" />
-      | Exn.Error(_) => <ServerError message="500 Error | Failed to fetch Arte error" />
-      | _ => <ServerError message="500 Error | Failed to fetch Arte error" />
+      | FetchError(e) => <ServerError message={`Fetch error on ${url}: ${e->Exn.message->Option.getOr("unknown")}`} />
+      | ParseError(e) => <ServerError message={`Parse error on ${url}: ${e.message}`} />
+      | Exn.Error(e) => <ServerError message={`Error on ${url}: ${e->Exn.message->Option.getOr("unknown")}`} />
+      | _ => <ServerError message={`Unknown error on ${url}`} />
       }
     | None => React.null
     }}
     {switch data {
     | Some(arteData) =>
-      <>
+      <FadeIn>
         // {switch arteData.apiPlayerConfig {
         // | Some(playerConfig) => <p> {"Player"->React.string} </p>
         // | None => React.null
@@ -38,8 +39,8 @@ let make = (~params) => {
           )
           ->React.array}
         </div>
-      </>
-    | None => React.null
+      </FadeIn>
+    | None => <PageSkeleton />
     }}
   </>
 }

@@ -1,75 +1,92 @@
 open Emotion
 
-// NOTE: idéalement, on sépare container/content (hero home et hero collection)
-//
-// https://v0.dev/t/cma7x1zObqm
 module Style = {
-  let container =
-    ReactDOM.Style.make(
-      ~width="100%",
-      ~position="relative",
-      ~height="calc(80vh - 48px)",
-      ~display="flex",
-      ~flexShrink="0",
-      ~alignItems="flex-end",
-      (),
-    )->css
+  let container = `
+    width: 100%;
+    position: relative;
+    max-height: calc(var(--hero-height) - 48px);
+    overflow: hidden;
+    flex-shrink: 0;
+  `->rawCss
 
-  let containerOverflow = ReactDOM.Style.make(~height="calc(100vh - 202px)", ())->css
+  let containerOverflow = ReactDOM.Style.make(~maxHeight="calc(100vh - 202px)", ())->css
 
-  let img =
-    ReactDOM.Style.make(
-      ~position="absolute",
-      ~top="0",
-      ~left="0",
-      ~right="0",
-      ~bottom="0",
-      ~width="100%",
-      ~height="80vh",
-      ~objectFit="cover",
-      (),
-    )->css
+  let img = `
+    display: block;
+    width: 100%;
+    height: auto;
+    ${Responsive.mobileDown} {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      object-fit: cover;
+    }
+  `->rawCss
 
-  let fullHeight = ReactDOM.Style.make(~height="100vh", ())->css
+  let gradient = `
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(to top, rgb(20, 20, 20), rgba(0, 0, 0, 0));
+  `->rawCss
 
-  let gradient =
-    ReactDOM.Style.make(
-      ~position="absolute",
-      ~top="0",
-      ~left="0",
-      ~right="0",
-      ~bottom="0",
-      ~width="100%",
-      ~height="80vh",
-      ~background="linear-gradient(to top, rgb(20, 20, 20), rgba(0, 0, 0, 0))",
-      (),
-    )->css
+  let fullHeight = ReactDOM.Style.make(~height="100%", ())->css
 
-  let content =
-    ReactDOM.Style.make(~position="relative", ~padding="0 58px", ~marginBottom="48px", ())->css
+  let content = `
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 var(--side-padding);
+    margin-bottom: clamp(24px, 1rem + 1.5vw, 48px);
+  `->rawCss
 
-  let contentExtraMargin = ReactDOM.Style.make(~marginBottom="100px", ())->css
+  let contentExtraMargin = `
+    margin-bottom: clamp(60px, 3rem + 2.5vw, 100px);
+    ${Responsive.mobileDown} {
+      margin-bottom: 24px;
+    }
+  `->rawCss
+
+  let mobileHero = `
+    ${Responsive.mobileDown} {
+      --hero-height: 50vh;
+      min-height: 90vw;
+      overflow: visible;
+    }
+  `->rawCss
 }
 type props_ = {
   src: string,
+  srcSet?: string,
+  sizes?: string,
   alt: string,
   overflow?: bool,
   children: React.element,
 }
 
 @react.component(: props_)
-let make = (~src, ~alt, ~children, ~overflow=false) => {
+let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false) => {
   let (containerStyle, contentStyle, imgStyle, gradientStyle) = switch overflow {
   | true => (
-      [Style.container, Style.containerOverflow]->cx,
+      [Style.container, Style.containerOverflow, Style.mobileHero]->cx,
       [Style.content, Style.contentExtraMargin]->cx,
-      [Style.img, Style.fullHeight]->cx,
+      Style.img,
       [Style.gradient, Style.fullHeight]->cx,
     )
-  | false => (Style.container, Style.content, Style.img, Style.gradient)
+  | false => (
+      [Style.container, Style.mobileHero]->cx,
+      Style.content,
+      Style.img,
+      Style.gradient,
+    )
   }
   <section className={containerStyle}>
-    <img className={imgStyle} src={src} alt={alt} />
+    <img className={imgStyle} src={src} ?srcSet ?sizes alt={alt} />
     <div className={gradientStyle} />
     <div className={contentStyle}> children </div>
   </section>

@@ -1,10 +1,5 @@
 open Emotion
 
-//TODO: ça doit etre des components du coup !
-// On alors on en fait
-// <==> Equivalent en component
-
-// NOTE: en --Primary-White, du coup pas de culeur
 module Regular = {
   let headline1 =
     ReactDOM.Style.make(
@@ -26,28 +21,24 @@ module Regular = {
       ~textShadow="2px 2px 4px rgba(0,0,0,.45)",
       (),
     )->css
-  let headline2 =
-    ReactDOM.Style.make(
-      ~color="white",
-      ~fontFamily="Netflix Sans, Tahoma, Verdana, sans-serif",
-      ~fontSize="17px",
-      ~fontStyle="normal",
-      ~fontWeight="400",
-      ~lineHeight="normal",
-      ~textShadow="2px 2px 4px rgba(0,0,0,.45)",
-      (),
-    )->css
+  let headline2 = `
+    color: white;
+    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-size: clamp(13px, 0.65rem + 0.35vw, 17px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-shadow: 2px 2px 4px rgba(0,0,0,.45);
+  `->rawCss
 
-  let subtitle =
-    ReactDOM.Style.make(
-      ~fontFamily="Netflix Sans",
-      ~fontSize="20.856px",
-      ~fontStyle="normal",
-      ~fontWeight="500",
-      ~lineHeight="normal",
-      ~letterSpacing="-0.435px",
-      (),
-    )->css
+  let subtitle = `
+    font-family: Netflix Sans;
+    font-size: clamp(16px, 0.8rem + 0.6vw, 21px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.435px;
+  `->rawCss
 
   let caption2 =
     ReactDOM.Style.make(
@@ -58,18 +49,16 @@ module Regular = {
       ~lineHeight="normal",
       (),
     )->css
-  let title1 =
-    ReactDOM.Style.make(
-      ~fontFamily="Netflix Sans, Tahoma, Verdana, sans-serif",
-      ~fontSize="27px",
-      ~fontStyle="normal",
-      ~fontWeight="400",
-      ~lineHeight="36px",
-      ~margin="16px 0",
-      ~color="#FFF",
-      ~textShadow="2px 2px 4px rgba(0,0,0,.45)",
-      (),
-    )->css
+  let title1 = `
+    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-size: clamp(16px, 0.8rem + 0.7vw, 27px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    margin: 16px 0;
+    color: #FFF;
+    text-shadow: 2px 2px 4px rgba(0,0,0,.45);
+  `->rawCss
 
   let title2 =
     ReactDOM.Style.make(
@@ -114,25 +103,23 @@ module Medium = {
       ~lineHeight="normal",
       (),
     )->css
-  let headline2 =
-    ReactDOM.Style.make(
-      ~color="var(--Grey-Grey-10, #E5E5E5)",
-      ~fontFamily="Netflix Sans, Tahoma, Verdana, sans-serif",
-      ~fontSize="20px",
-      ~fontStyle="normal",
-      ~fontWeight="500",
-      ~lineHeight="18px",
-      (),
-    )->css
-  let title3 =
-    ReactDOM.Style.make(
-      ~fontFamily="Netflix Sans, Tahoma, Verdana, sans-serif",
-      ~fontSize="24px",
-      ~fontStyle="normal",
-      ~fontWeight="500",
-      ~lineHeight="normal",
-      (),
-    )->css
+  let headline2 = `
+    color: var(--Grey-Grey-10, #E5E5E5);
+    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-size: clamp(16px, 0.8rem + 0.5vw, 20px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+  `->rawCss
+
+  let title3 = `
+    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-size: clamp(18px, 0.9rem + 0.75vw, 24px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  `->rawCss
+
   let smallBody =
     ReactDOM.Style.make(
       ~fontFamily="Netflix Sans, Tahoma, Verdana, sans-serif",
@@ -175,17 +162,15 @@ module Medium = {
 }
 
 module Bold = {
-  let title1 =
-    ReactDOM.Style.make(
-      ~fontFamily="Netflix Sans, Tahoma, Verdana, sans-serif",
-      ~fontSize="48px",
-      ~fontStyle="normal",
-      ~fontWeight="700",
-      ~lineHeight="48px",
-      ~margin="0",
-      ~textShadow="2px 2px 4px rgba(0,0,0,.45)",
-      (),
-    )->css
+  let title1 = `
+    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-size: clamp(22px, 1rem + 2vw, 48px);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,.45);
+  `->rawCss
 
   let title2 =
     ReactDOM.Style.make(

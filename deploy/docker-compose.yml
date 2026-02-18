@@ -3,8 +3,6 @@ services:
     image: ghcr.io/kinooyume/arteflix:latest
     container_name: arteflix
     restart: unless-stopped
-    ports:
-      - "3000:3000"
 
   caddy:
     image: caddy:alpine
@@ -15,6 +13,7 @@ services:
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./certs:/etc/caddy/certs:ro
       - caddy_data:/data
       - caddy_config:/config
 

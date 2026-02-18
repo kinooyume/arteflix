@@ -84,11 +84,12 @@ let make = (~params: Params.program) => {
   <>
     {switch error {
     | Some(err) =>
+      Console.error3("[VideoPageClient]", params, err)
       switch err {
-      | ClientFetcher.FetchError(_) => <ServerError message="A fetch error occur" />
-      | ClientFetcher.ParseError(_) => <ServerError message="A parsing error occur" />
-      | Exn.Error(_) => <ServerError message="500 Error | Failed to fetch Arte error" />
-      | _ => <ServerError message="500 Error | Failed to fetch Arte error" />
+      | ClientFetcher.FetchError(e) => <ServerError message={`Fetch error: ${e->Exn.message->Option.getOr("unknown")}`} />
+      | ClientFetcher.ParseError(e) => <ServerError message={`Parse error: ${e.message}`} />
+      | Exn.Error(e) => <ServerError message={`Error: ${e->Exn.message->Option.getOr("unknown")}`} />
+      | _ => <ServerError message="Unknown error" />
       }
     | None => React.null
     }}
@@ -109,7 +110,7 @@ let make = (~params: Params.program) => {
           `${(i + 1)->Int.toString}. ${(z.displayOptions.template :> string)} - ${z.title}`
         ),
       )
-      <>
+      <FadeIn>
         <div>
           {sortedZones
           ->Array.mapWithIndex((zone, index) =>
@@ -126,8 +127,8 @@ let make = (~params: Params.program) => {
           )
           ->React.array}
         </div>
-      </>
-    | None => React.null
+      </FadeIn>
+    | None => <PageSkeleton />
     }}
   </>
 }

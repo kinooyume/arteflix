@@ -1,7 +1,7 @@
 open Emotion
 open ReactAria
 
-let style = ReactDOM.Style.make(~height="28px", ~outline="none !important", ())->css
+let style = ReactDOM.Style.make(~height="clamp(22px, 1.2rem + 0.5vw, 28px)", ~outline="none !important", ())->css
 
 type logoProps = {
   src: string,
@@ -11,5 +11,5 @@ type logoProps = {
 
 @react.component(: logoProps)
 let make = (~homeHref, ~alt, ~src) => <Link className={String(style)} href={homeHref}>
-  <img style={{height: "28px"}} className={style} src alt/>
+  <img className={style} src alt/>
 </Link>

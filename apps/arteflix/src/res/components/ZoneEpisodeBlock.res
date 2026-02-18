@@ -10,12 +10,16 @@ let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
     }
   }
 
+  let url = content.mainImage.url
+  let size = s => url->String.replace("__SIZE__", s)
+
   let episode: EpisodeButton.t = {
     href: content.url,
     title: content.title,
     id: content.id,
     selected: content.id == currentId,
-    imageSrc: content.mainImage.url->String.replace("__SIZE__", "265x149"),
+    imageSrc: size("265x149"),
+    imageSrcSet: `${size("210x118")} 210w, ${size("265x149")} 265w`,
     description,
     duration: content.durationLabel,
     imageAlt: switch content.mainImage.caption {

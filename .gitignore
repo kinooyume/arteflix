@@ -53,3 +53,9 @@ lib
 
 
 storybook-static
+
+# codegen
+apps/arteflix/arteRoutes/categories.json
+
+# deploy
+deploy/DEPLOY.private.md

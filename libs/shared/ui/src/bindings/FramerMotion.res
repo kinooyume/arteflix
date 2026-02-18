@@ -25,7 +25,7 @@ module Motion = {
 }
 
 module AnimatePresence = {
-  type props_ = {children: React.element}
+  type props_ = {children: React.element, mode?: [#wait | #sync | #popLayout]}
   @module("framer-motion") @react.component(: props_)
   external make: props_ => React.element = "AnimatePresence"
 }
