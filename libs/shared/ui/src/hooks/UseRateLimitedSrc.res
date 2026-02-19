@@ -31,13 +31,13 @@ let rec drain = limiter => {
 }
 
 let cdnLimiter: limiter = {
-  tokens: 100.0,
+  tokens: 1000.0,
   lastRefill: 0.0,
-  maxTokens: 100.0,
-  refillRate: 100.0,
+  maxTokens: 1000.0,
+  refillRate: 1000.0,
   queue: [],
   inflight: 0,
-  maxConcurrent: 30,
+  maxConcurrent: 100,
 }
 
 let acquire = () =>
