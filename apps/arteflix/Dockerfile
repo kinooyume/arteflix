@@ -14,7 +14,7 @@ COPY apps/arteflix/.next/standalone/apps/arteflix ./
 COPY apps/arteflix/.next/standalone/package.json ./
 COPY apps/arteflix/.next/standalone/node_modules ./node_modules
 COPY apps/arteflix/.next/static ./.next/static
-# RUN npm i sharp
+# sharp is installed via package.json dependencies
 RUN chown -R node:node .
 USER node
 EXPOSE 3000

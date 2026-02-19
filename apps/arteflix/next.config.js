@@ -31,8 +31,10 @@ const nextConfig = {
         pathname: '/img/**',
       },
     ],
+    formats: ['image/webp'],
     imageSizes: [265, 336, 380, 620],
     deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1920],
+    minimumCacheTTL: 2592000,
   },
   webpack: (config, options) => {
     const { isServer } = options;
