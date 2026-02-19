@@ -116,6 +116,7 @@ let make = (~children) => {
     draggable: isTouch,
     initialSlide: 0,
     swipeToSlide: isTouch,
+    touchThreshold: 15,
     variableWidth: false,
     responsive,
   }

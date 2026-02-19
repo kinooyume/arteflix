@@ -48,7 +48,7 @@ let otherHorizon = "265x149"
 
 let sizeByOrientation = orientation =>
   switch orientation {
-  | Horizontal => "325x183"
+  | Horizontal => "336x189"
   | Vertical => "265x397"
   }
 
@@ -100,7 +100,7 @@ let make = React.memo((
     `cursor: pointer; img { transform: scale(1.05); }`->rawCss,
   ])
 
-  let srcSized = srcBase->String.replace("__SIZE__", "325x183")
+  let srcSized = srcBase->String.replace("__SIZE__", "336x189")
   let src = switch ensureText {
   | true => srcSized->ensureTypeText
   | false => srcSized
@@ -108,7 +108,7 @@ let make = React.memo((
 
   let makeSrcSet = base => {
     let size = s => base->String.replace("__SIZE__", s)
-    `${size("210x118")} 210w, ${size("400x225")} 400w, ${size("720x406")} 720w`
+    `${size("265x149")} 265w, ${size("380x214")} 380w, ${size("620x350")} 620w`
   }
   let srcSet = makeSrcSet(srcBase)
 
@@ -130,7 +130,7 @@ let make = React.memo((
         className={Style.image(~loaded)}
         src
         srcSet
-        sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 17vw"
+        sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 336px"
         alt
       />
     </div>

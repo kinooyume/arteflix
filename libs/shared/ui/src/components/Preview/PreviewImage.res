@@ -31,7 +31,7 @@ type previewImageProps = {
 // NOTE: du coup ça peut etre preview card image. hehehehe
 @react.component(: previewImageProps)
 let make = (~srcBase, ~href) => {
-  let src = srcBase->String.replace("__SIZE__", "400x225")
+  let src = srcBase->String.replace("__SIZE__", "380x214")
   <Link href>
     <div className={style(src)} />
   </Link>

@@ -19,7 +19,7 @@ let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
     id: content.id,
     selected: content.id == currentId,
     imageSrc: size("265x149"),
-    imageSrcSet: `${size("210x118")} 210w, ${size("265x149")} 265w`,
+    imageSrcSet: `${size("265x149")} 265w, ${size("336x189")} 336w`,
     description,
     duration: content.durationLabel,
     imageAlt: switch content.mainImage.caption {

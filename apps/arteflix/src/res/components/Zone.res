@@ -1,6 +1,6 @@
 let makeHeroSrcSet = (url: string) => {
   let size = s => url->String.replace("__SIZE__", s)
-  `${size("940x530")} 940w, ${size("1400x787")} 1400w, ${size("1920x1080")} 1920w`
+  `${size("1121x632")} 1121w, ${size("1400x788")} 1400w, ${size("1920x1080")} 1920w`
 }
 
 let makeHero = (zone: ArteZone.t) => {

@@ -167,3 +167,6 @@ module Fetcher = {
 // https://github.com/mediathekview/MServer/blob/7e9ed640f06394b2f0cae518e047d31ae4bccfb1/src/main/java/mServer/crawler/sender/arte/MediathekArte.java#L21
 //
 // https://github.com/yt-dlp/yt-dlp/issues/1059#issuecomment-1784161057
+//
+// OPA v3 (HbbTV) — programs by date
+// https://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/programs/19-02-2026/fr
