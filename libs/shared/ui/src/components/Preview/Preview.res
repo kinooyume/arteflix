@@ -3,8 +3,6 @@ open Emotion
 let style =
   ReactDOM.Style.make(
     ~display="flex",
-    ~maxWidth="323px",
-    ~maxHeight="403px",
     ~width="100%",
     ~height="100%",
     ~flexDirection="column",

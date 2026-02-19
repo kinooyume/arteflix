@@ -26,9 +26,24 @@ docker compose up -d
 
 ## Auto-deploy
 
-The release workflow builds the image, pushes to `ghcr.io`, and SSHs into the VPS to pull + restart.
+On merge to `main`, the release workflow:
 
-Needs these repo secrets: `VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_SSH_KEY`.
+1. Bumps version + changelog (cocogitto)
+2. Builds the Docker image and pushes it to `ghcr.io`
+3. SSHs into the VPS to pull the new image and restart
+
+The SSH key is locked down — it can only trigger a single deploy script on the server, nothing else. The deploy user has no shell, no docker access, and the key has `command=` forcing it to run the script via sudoers. Even if the key leaks, the worst that happens is an extra redeploy.
+
+### Deploy script (`/usr/local/bin/arteflix-deploy`)
+
+```bash
+#!/bin/bash
+cd /home/<user>/arteflix && docker compose pull && docker compose up -d
+```
+
+### Repo secrets needed
+
+`VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_SSH_KEY`
 
 ## Manual update
 

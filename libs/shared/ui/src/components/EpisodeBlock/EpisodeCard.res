@@ -10,8 +10,14 @@ module Style = {
 
   let container = [ReactDOM.Style.make(~position="relative", ())->css, size]->cx
 
-  let image = [ReactDOM.Style.make()->css, size]->cx
+  let image = [ReactDOM.Style.make(~height="auto", ())->css, size]->cx
 }
+
+type renderImage = (
+  ~src: string,
+  ~alt: string,
+  ~className: string=?,
+) => React.element
 
 type props_ = {
   src: string,
@@ -19,12 +25,16 @@ type props_ = {
   sizes?: string,
   alt: string,
   hover?: bool,
+  renderImage?: renderImage,
 }
 
 @react.component(: props_)
-let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false) => {
+let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false, ~renderImage=?) => {
   <div className={Style.container}>
-    <img loading=#"lazy" className={Style.image} src ?srcSet ?sizes alt />
+    {switch renderImage {
+    | Some(render) => render(~src, ~alt, ~className=Style.image)
+    | None => <img loading=#"lazy" className={Style.image} src ?srcSet ?sizes alt />
+    }}
     {switch hover {
     | true => <CardOverlayPlay />
     | false => React.null

@@ -1,6 +1,8 @@
 open Emotion
 open ReactAria
 
+@get external offsetWidth: Dom.element => float = "offsetWidth"
+
 module Style = {
   let container = ReactDOM.Style.make(~position="relative", ())->css
 
@@ -61,6 +63,12 @@ let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
     }
   }, [cardHovered])
 
+  let cardWidth = switch triggerRef.current->Nullable.toOption {
+  | Some(el) => el->offsetWidth
+  | None => 218.0
+  }
+  let popoverOffset = Float.toInt(cardWidth *. 9.0 /. 16.0 *. -2.0)
+
   <div key={cardProps.id}>
     <div {...card.hoverProps} ref={ReactDOM.Ref.domRef(triggerRef)}>
       <MovieCardImage {...cardProps}> {children} </MovieCardImage>
@@ -68,11 +76,11 @@ let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
     {switch isTouch {
     | true => React.null
     | false =>
-      <Popover isOpen triggerRef placement=#top offset={-246}>
+      <Popover isOpen triggerRef placement=#top offset=popoverOffset>
         <Dialog ariaLabel={cardProps.title} className={Style.dialog} ariaLabelledBy="MovieCard">
           <div {...preview.hoverProps} className={Style.previewWrapper}>
             <MoviePreview
-              {...previewProps} isVisible onExit={_ => setIsOpen(_ => false)}
+              {...previewProps} isVisible cardWidth onExit={_ => setIsOpen(_ => false)}
             />
           </div>
         </Dialog>

@@ -29,13 +29,13 @@ module Gateway = {
   let validateArteData = text => text->S.parseJsonStringOrThrow(ArteDataApi.contentSchema)
   let validatePlayerData = text => text->S.parseJsonStringOrThrow(ArteDataApi.playerSchema)
 
+  @val external cachedFetch: (string, {..}) => promise<Response.t> = "fetch"
+
   let fetcher = async (validate, url) => {
     try {
-      let resp = await fetch(
+      let resp = await cachedFetch(
         url,
-        {
-          method: #GET,
-        },
+        {"method": "GET", "next": {"revalidate": 60}},
       )
       let stringData = await Response.text(resp)
       stringData->validate

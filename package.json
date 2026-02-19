@@ -28,6 +28,7 @@
     "rescript-schema-ppx": "^9.0.1",
     "rescript-swr": "^2.0.0",
     "rescript-webapi": "^0.10.0",
+    "sharp": "^0.34.5",
     "slick-carousel": "^1.8.1",
     "sury": "^10.0.4",
     "sury-ppx": "^10.0.0",

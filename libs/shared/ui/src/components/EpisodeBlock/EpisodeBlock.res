@@ -26,16 +26,17 @@ module Style = {
 type props_ = {
   title: string,
   episodes: array<EpisodeButton.t>,
+  renderImage?: EpisodeCard.renderImage,
 }
 
 open Text
 @react.component(: props_)
-let make = (~episodes, ~title) => {
+let make = (~episodes, ~title, ~renderImage=?) => {
   <div className=Style.container>
     <div className=Style.title>
       <Medium.Title3> {"Episodes"->React.string} </Medium.Title3>
       <Regular.Headline1> {title->React.string} </Regular.Headline1>
     </div>
-    <EpisodeList episodes />
+    <EpisodeList episodes ?renderImage />
   </div>
 }

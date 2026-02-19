@@ -5,5 +5,7 @@ type segmentData ={
 }
 export async function GET(_, segmentData: segmentData) {
   const params = await segmentData.params;
-  return await live(params);
+  const res = await live(params);
+  res.headers.set('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
+  return res;
 }

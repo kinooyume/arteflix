@@ -1,19 +1,18 @@
 type heroTemplateProps = {
   imageSrc: string,
-  imageSrcSet?: string,
   imageAlt: string,
   title: string,
   subtitle: option<string>,
   description: option<string>,
   url: string,
   extra?: array<string>,
+  renderImage?: HeroImage.renderImage,
 }
 
 @react.component(: heroTemplateProps)
-let make = (~imageSrc, ~imageSrcSet=?, ~imageAlt, ~title, ~subtitle, ~description, ~url, ~extra=[]) => {
-  let srcSet = imageSrcSet
+let make = (~imageSrc, ~imageAlt, ~title, ~subtitle, ~description, ~url, ~extra=[], ~renderImage=?) => {
   <>
-    <HeroImage src={imageSrc} ?srcSet sizes="100vw" alt={imageAlt}>
+    <HeroImage src={imageSrc} sizes="100vw" alt={imageAlt} ?renderImage>
       <HeroContent title subtitle=None description=None href={url} small=true />
     </HeroImage>
     <CollectionInfo.Container extra={<CollectionInfo.Extra list={extra} />}>

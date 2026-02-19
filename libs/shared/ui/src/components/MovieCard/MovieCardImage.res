@@ -24,11 +24,16 @@ module Style = {
 
   let imageContainer = `position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 2px;`->rawCss
 
-  let image = (~loaded) =>
-    cx([
-      ReactDOM.Style.make(~width="100%", ~height="100%", ())->css,
-      `opacity: ${loaded ? "1" : "0"}; transition: opacity 0.2s ease, transform 0.15s ease-out;`->rawCss,
-    ])
+  let imageBase = ReactDOM.Style.make(~width="100%", ~height="100%", ())->css
+  let imageLoaded = cx([
+    imageBase,
+    `opacity: 1; transition: opacity 0.2s ease, transform 0.15s ease-out;`->rawCss,
+  ])
+  let imageUnloaded = cx([
+    imageBase,
+    `opacity: 0; transition: opacity 0.2s ease, transform 0.15s ease-out;`->rawCss,
+  ])
+  let image = (~loaded) => loaded ? imageLoaded : imageUnloaded
 
   let shimmerOverlay =
     `position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 2px;`->rawCss
@@ -58,13 +63,19 @@ let ensureTypeText = src =>
   | false => src ++ "?type=TEXT"
   }
 
+type renderImage = (
+  ~src: string,
+  ~alt: string,
+  ~className: string=?,
+  ~onLoad: unit => unit=?,
+) => React.element
+
 type t = {
   id: string,
   srcBase: string,
   alt: string,
   href: string,
   orientation: orientation,
-  // Overlay. Doesn't belong to Card image but card
   duration: option<int>,
   durationLabel: option<string>,
   title: string,
@@ -77,6 +88,7 @@ type props_ = {
   ensureText?: bool,
   onHoverStart?: HoverEvent.t => unit,
   children?: React.element,
+  renderImage?: renderImage,
 }
 
 @react.component(: props_)
@@ -87,30 +99,20 @@ let make = React.memo((
   ~ensureText=true,
   ~children=?,
   ~onHoverStart=_ => (),
+  ~renderImage=?,
 ) => {
   let orientationStyle = Style.horizontal
-
-  // let orientationStyle = switch orientation {
-  // | Horizontal => Style.horizontal
-  // | Vertical => Style.vertical
-  // }
   let defaultStyle = cx([Style.base, orientationStyle])
   let onHover = cx([
     defaultStyle,
     `cursor: pointer; img { transform: scale(1.05); }`->rawCss,
   ])
 
-  let srcSized = srcBase->String.replace("__SIZE__", "336x189")
+  let srcSized = srcBase->String.replace("__SIZE__", "620x350")
   let src = switch ensureText {
   | true => srcSized->ensureTypeText
   | false => srcSized
   }
-
-  let makeSrcSet = base => {
-    let size = s => base->String.replace("__SIZE__", s)
-    `${size("265x149")} 265w, ${size("380x214")} 380w, ${size("620x350")} 620w`
-  }
-  let srcSet = makeSrcSet(srcBase)
 
   let (loaded, setLoaded) = React.useState(() => false)
 
@@ -118,21 +120,23 @@ let make = React.memo((
   <Link className={Fn(className)} href>
     <div className={Style.imageContainer}>
       {loaded ? React.null : <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />}
-      <img
-        loading=#"lazy"
-        onLoad={_ => setLoaded(_ => true)}
-        onError={e => {
-          open ReactEvent.Media
-          target(e)["onerror"] = Js.null
-          target(e)["src"] = srcSized
-          setLoaded(_ => true)
-        }}
-        className={Style.image(~loaded)}
-        src
-        srcSet
-        sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 336px"
-        alt
-      />
+      {switch renderImage {
+      | Some(render) =>
+        render(
+          ~src,
+          ~alt,
+          ~className=Style.image(~loaded),
+          ~onLoad=() => setLoaded(_ => true),
+        )
+      | None =>
+        <img
+          loading=#"lazy"
+          onLoad={_ => setLoaded(_ => true)}
+          className={Style.image(~loaded)}
+          src
+          alt
+        />
+      }}
     </div>
     <div className={Style.overlay(~loaded)}>
       {switch children {
