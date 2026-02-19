@@ -11,7 +11,7 @@ let panelInner = `
   min-width: 160px;
 `->rawCss
 
-let panel = `
+let panelOpen = `
   position: absolute;
   top: 100%;
   left: -24px;
@@ -19,6 +19,16 @@ let panel = `
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s;
+`->rawCss
+
+let panelClosed = `
+  position: absolute;
+  top: 100%;
+  left: -24px;
+  padding-top: 12px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 `->rawCss
 
 let trigger = `
@@ -39,17 +49,23 @@ let wrapper = `
   ${Responsive.mobileDown} {
     display: none;
   }
-  &:hover .${panel} {
+  &:hover .${panelOpen} {
     opacity: 1;
     pointer-events: auto;
   }
 `->rawCss
 
 @react.component
-let make = (~label: string, ~children: React.element) =>
-  <div className={wrapper}>
+let make = (~label: string, ~children: React.element) => {
+  let (closed, setClosed) = React.useState(_ => false)
+
+  let onClick = _ => setClosed(_ => true)
+  let onMouseLeave = _ => setClosed(_ => false)
+
+  <div className={wrapper} onMouseLeave>
     <span className={trigger}> {`${label} \u25BE`->React.string} </span>
-    <div className={panel}>
+    <div className={closed ? panelClosed : panelOpen} onClick>
       <div className={panelInner}> {children} </div>
     </div>
   </div>
+}

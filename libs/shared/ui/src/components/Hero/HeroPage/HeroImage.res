@@ -9,7 +9,7 @@ module Style = {
     flex-shrink: 0;
   `->rawCss
 
-  let containerOverflow = ReactDOM.Style.make(~maxHeight="calc(100vh - 202px)", ())->css
+  let containerOverflow = ReactDOM.Style.make(~maxHeight="calc(100vh - 388px)", ())->css
 
   let img = `
     display: block;
