@@ -4,11 +4,8 @@ open ReactAria
 let bgStyle = imagePath =>
   ReactDOM.Style.make(
     ~display="flex",
-    ~maxWidth="323px",
-    ~maxHeight="181px",
     ~width="100%",
     ~height="100%",
-    ~minHeight="123px",
     ~flexShrink="0",
     ~backgroundImage=`url(${imagePath})`,
     ~backgroundColor="lightgray",
@@ -24,7 +21,6 @@ module Style = {
   let container = `
     width: 100%;
     height: 100%;
-    min-height: 123px;
     flex-shrink: 0;
     background-color: lightgray;
     border-radius: 4px 4px 0 0;

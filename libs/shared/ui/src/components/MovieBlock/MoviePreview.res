@@ -1,3 +1,7 @@
+let scale = 1.2
+let descH = 200.0
+let px = v => v->Float.toFixed(~digits=0) ++ "px"
+
 type moviePreviewProps = {
   img: string,
   href: string,
@@ -5,10 +9,11 @@ type moviePreviewProps = {
   audios: option<array<string>>,
   url?: PlayerTransition.url,
   description: option<string>,
-  linkAlt?: option<LinkAlt.make>, // NOTE: to call Next.link, react-aria mess with button inside tooltip content
+  linkAlt?: option<LinkAlt.make>,
   onExit?: unit => unit,
   isVisible?: bool,
   renderImage?: PreviewImage.renderImage,
+  cardWidth?: float,
 }
 
 @react.component(: moviePreviewProps)
@@ -23,7 +28,13 @@ let make = React.memo((
   ~isVisible=false,
   ~onExit=_ => (),
   ~renderImage=?,
+  ~cardWidth=218.0,
 ) => {
+  let cardH = cardWidth *. 9.0 /. 16.0
+  let expW = cardWidth *. scale
+  let expImgH = cardH *. scale
+  let totalH = expImgH +. descH
+
   let meta = []
   switch ageRestriction {
   | Some(restriction) =>
@@ -53,24 +64,21 @@ let make = React.memo((
   <MoviePreviewPresence isVisible>
     <Motion.div
       key={href}
-      initial={{width: "218px", height: "123px", margin: "0 0 123px 0"}}
-      animate={{width: "323px", height: "403px", margin: "0", transition: {duration: 0.15}}}
-      exit={{width: "218px", height: "123px", margin: "0 0 123px 0", transition: {duration: 0.08}}}>
+      initial={{width: px(cardWidth), height: px(cardH), margin: `0 0 ${px(cardH)} 0`}}
+      animate={{width: px(expW), height: px(totalH), margin: "0", transition: {duration: 0.15}}}
+      exit={{width: px(cardWidth), height: px(cardH), margin: `0 0 ${px(cardH)} 0`, transition: {duration: 0.08}}}>
       <Preview key={href}>
         <Motion.div
           key={href ++ "-img"}
-          initial={{width: "218px", height: "123px"}}
-          animate={{width: "323px", height: "181px", transition: {duration: 0.15}}}
-          exit={{width: "218px", height: "123px", transition: {duration: 0.08}}}>
-          // <PlayerTransition urlOption=NoVideo>
-          // NOTE: probably merge with movieCardImage
+          initial={{width: px(cardWidth), height: px(cardH)}}
+          animate={{width: px(expW), height: px(expImgH), transition: {duration: 0.15}}}
+          exit={{width: px(cardWidth), height: px(cardH), transition: {duration: 0.08}}}>
           <PreviewImage srcBase=img href ?renderImage />
-          // </PlayerTransition>
         </Motion.div>
         <Motion.div
           key={href ++ "-description"}
           initial={{opacity: 0.0, height: "0"}}
-          animate={{opacity: 1.0, height: "222px", transition: {duration: 0.15}}}
+          animate={{opacity: 1.0, height: px(descH), transition: {duration: 0.15}}}
           exit={{opacity: 0.0, height: "0", transition: {duration: 0.08}}}>
           <PreviewDescription key={href ++ "-description"}>
             <PreviewDescriptionActions key={href ++ "-actions"}>
