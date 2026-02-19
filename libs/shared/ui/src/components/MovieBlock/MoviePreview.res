@@ -1,4 +1,4 @@
-let scale = 1.2
+let scale = 1.5
 let descH = 200.0
 let px = v => v->Float.toFixed(~digits=0) ++ "px"
 
