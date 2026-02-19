@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.12.0 - 2026-02-19
+#### Features
+- (**api**) add trailer proxy endpoint and player fixes - (7b43f0b) - Martin Kinoo
+- (**images**) client-side CDN rate limiter, server-side API cache - (196d25c) - Martin Kinoo
+#### Bug Fixes
+- (**ui**) remove focus outline on links, close dropdown on click, reduce hero height - (bea7b77) - Martin Kinoo
+#### Performance Improvements
+- (**images**) bump CDN rate limit to 1000 req/s - (39540f0) - Martin Kinoo
+- (**images**) bump CDN rate limit to 100 req/s - (485bb1f) - Martin Kinoo
+- (**images**) direct Arte CDN loading, add server-side rate limiter - (513a516) - Martin Kinoo
+- add lazy loading to ImageControlled - (82ba021) - Martin Kinoo
+#### Revert
+- remove server-side API cache - (2a68c0d) - Martin Kinoo
+- remove client-side CDN rate limiter - (33f2af1) - Martin Kinoo
+
+- - -
+
 ## v0.11.0 - 2026-02-19
 #### Features
 - (**deploy**) enable compression and static asset caching in Caddy - (49b7de4) - Martin Kinoo
