@@ -7,7 +7,7 @@ let default: meta<MoviePreview.props> = {
 
 let live: storyObj<MoviePreview.props> = {
   args: {
-    img: "https://api-cdn.arte.tv/img/v2/image/QN26R4nPzmumvCfKFcQJNc/325x183?type=TEXT",
+    img: "https://api-cdn.arte.tv/img/v2/image/QN26R4nPzmumvCfKFcQJNc/336x189?type=TEXT",
     href: "https://kinoo.dev",
     description: Some(
       "The recent national security law continues to brutally restrict freedoms as China tightens its grip on the territory.",

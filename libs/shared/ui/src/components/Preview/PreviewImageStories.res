@@ -8,6 +8,6 @@ let default: meta<PreviewImage.props> = {
 let hello: storyObj<PreviewImage.props> = {
   args: {
     href: "#",
-    srcBase: "https://api-cdn.arte.tv/img/v2/image/NL8zV8YeVTdS3ay4ihnf8b/325x183",
+    srcBase: "https://api-cdn.arte.tv/img/v2/image/NL8zV8YeVTdS3ay4ihnf8b/336x189",
   },
 }
