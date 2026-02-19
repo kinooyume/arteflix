@@ -25,6 +25,8 @@ module Urls = {
     `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/LIVE`
 }
 
+let limiter = RateLimiter.make(~maxPerSecond=15, ~maxConcurrent=8)
+
 module Gateway = {
   let validateArteData = text => text->S.parseJsonStringOrThrow(ArteDataApi.contentSchema)
   let validatePlayerData = text => text->S.parseJsonStringOrThrow(ArteDataApi.playerSchema)
@@ -32,16 +34,18 @@ module Gateway = {
   @val external cachedFetch: (string, {..}) => promise<Response.t> = "fetch"
 
   let fetcher = async (validate, url) => {
-    try {
-      let resp = await cachedFetch(
-        url,
-        {"method": "GET", "next": {"revalidate": 60}},
-      )
-      let stringData = await Response.text(resp)
-      stringData->validate
-    } catch {
-    | Exn.Error(err) => raise(FetchError(err))
-    }
+    await RateLimiter.withLimit(limiter, async () => {
+      try {
+        let resp = await cachedFetch(
+          url,
+          {"method": "GET", "next": {"revalidate": 60}},
+        )
+        let stringData = await Response.text(resp)
+        stringData->validate
+      } catch {
+      | Exn.Error(err) => raise(FetchError(err))
+      }
+    })
   }
 
   let contentFetcher = fetcher(validateArteData, ...)
