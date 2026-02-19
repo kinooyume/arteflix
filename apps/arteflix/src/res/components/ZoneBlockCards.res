@@ -40,10 +40,6 @@ let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
       renderImage: cardRenderImage,
     }
 
-    // let url = switch content.trailer {
-    //   | Some(trailer) => ToFetch(trailer.id)
-    //   | None => NoVideo
-    // }
     let previewProps: MoviePreview.props = {
       {
         img: content.mainImage.url,

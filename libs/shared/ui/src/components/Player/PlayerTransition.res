@@ -1,7 +1,7 @@
 open Emotion
 
 module Style = {
-  let container = ReactDOM.Style.make(~width="100%", ~height="100%", ~minHeight="123px", ())->css
+  let container = ReactDOM.Style.make(~width="100%", ~height="100%", ())->css
 
   let children =
     ReactDOM.Style.make(~position="absolute", ~top="0", ~left="0", ~right="0", ~bottom="0", ())->css

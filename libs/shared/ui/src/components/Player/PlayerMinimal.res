@@ -5,7 +5,7 @@ open Emotion
 
 module Style = {
   let wrapper =
-    ReactDOM.Style.make(~width="100%", ~height="calc(100vh)", ~borderRadius="4px", ())->css
+    ReactDOM.Style.make(~width="100%", ~height="100%", ~borderRadius="4px", ())->css
 }
 
 type videoProps = {
@@ -15,7 +15,7 @@ type videoProps = {
 }
 
 @react.component(: videoProps)
-let make = (~url, ~options) => {
+let make = (~url, ~onLoaded=?, ~options) => {
   let videoRef = React.useRef(Js.Nullable.null)
   let playerRef = React.useRef(Js.Nullable.null)
 
@@ -47,7 +47,13 @@ let make = (~url, ~options) => {
           // | Some(autoplay) => video->VideoJs.autoplay(~autoplay)
           // | None => ()
           // }
-          video->VideoJs.ready(~fn=() => VideoJs.src(video, url), ~sync=true)
+          video->VideoJs.ready(~fn=() => {
+            let _ = VideoJs.src(video, url)
+            switch onLoaded {
+            | Some(cb) => video->VideoJs.on(~event="canplay", ~fn=cb)
+            | None => ()
+            }
+          }, ~sync=true)
           None
         }
       | _ => None

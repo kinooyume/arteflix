@@ -97,17 +97,10 @@ module Fetcher = {
     content.data
   }
 
-  let trailer = async (params: ArteContract.Params.program) => {
-    // let playerUrl = params->Urls.trailer
-    let playerUrl = "TMP urls player"
-
-    // let playerConfig = await PlayerConfig.get(~url=playerUrl)
-
-    // {
-    //   content: ArteData.contentPlaceholder,
-    //   apiPlayerConfig: Some(playerConfig.data),
-    // }
-    ArteData.contentPlaceholder
+  let trailer = async (params: Params.player) => {
+    let contentUrl = params->Urls.trailer
+    let content = await Gateway.playerFetcher(contentUrl)
+    content.data
   }
 }
 
