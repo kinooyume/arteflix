@@ -22,6 +22,7 @@ type sliderProps = {
   initialSlide?: int,
   responsive?: array<responsive>,
   swipeToSlide?: bool,
+  touchThreshold?: int,
   draggable?: bool,
   variableWidth?: bool,
   children?: React.element,
