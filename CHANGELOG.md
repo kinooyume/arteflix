@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.10.1 - 2026-02-19
+#### Bug Fixes
+- (**ui**) use valid arte CDN image sizes to prevent 404 on mobile - (eb8fcd2) - Martin Kinoo
+- (**ux**) lower swipe threshold for mobile slider - (664f855) - Martin Kinoo
+
+- - -
+
 ## v0.10.0 - 2026-02-18
 #### Features
 - (**ui**) live page, snappier hover cards + error handling - (953af8c) - Martin Kinoo
