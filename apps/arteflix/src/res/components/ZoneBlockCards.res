@@ -1,13 +1,12 @@
 let cardSizes = "(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 336px"
 
 let cardRenderImage: MovieCardImage.renderImage = (~src, ~alt, ~className=?, ~onLoad=?) => {
-  let onLoad = onLoad->Option.map(f => (_): unit => f())
-  <Next.Image src alt ?className ?onLoad width=620 height=350 sizes=cardSizes />
+  <RateLimitedImage src alt ?className ?onLoad width=620 height=350 sizes=cardSizes />
 }
 
 let previewRenderImage: PreviewImage.renderImage = (~src, ~alt, ~className=?) => {
   let src = src->MovieCardImage.ensureTypeText
-  <Next.Image src alt ?className width=620 height=350 sizes=cardSizes loading=#eager />
+  <RateLimitedImage src alt ?className width=620 height=350 sizes=cardSizes loading=#eager />
 }
 
 let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
