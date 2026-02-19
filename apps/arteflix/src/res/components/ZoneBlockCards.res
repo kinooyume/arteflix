@@ -7,7 +7,7 @@ let cardRenderImage: MovieCardImage.renderImage = (~src, ~alt, ~className=?, ~on
 
 let previewRenderImage: PreviewImage.renderImage = (~src, ~alt, ~className=?) => {
   let src = src->MovieCardImage.ensureTypeText
-  <Next.Image src alt ?className width=620 height=350 sizes=cardSizes />
+  <Next.Image src alt ?className width=620 height=350 sizes=cardSizes loading=#eager />
 }
 
 let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
