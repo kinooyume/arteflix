@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.11.0 - 2026-02-19
+#### Features
+- (**deploy**) enable compression and static asset caching in Caddy - (49b7de4) - Martin Kinoo
+- (**images**) migrate Arte images to next/image - (517657e) - Martin Kinoo
+- (**preview**) increase hover scale to 1.5x - (629478c) - Martin Kinoo
+#### Bug Fixes
+- (**images**) eager load preview image to prevent flash - (9dfdc6c) - Martin Kinoo
+- (**images**) use next/image in preview popup for cache sharing - (b471739) - Martin Kinoo
+- (**preview**) dynamic sizing based on actual card width - (aba945f) - Martin Kinoo
+- (**ui**) episode card image height with next/image - (1c34518) - Martin Kinoo
+#### Performance Improvements
+- (**api**) enable Next.js fetch cache on upstream Arte calls - (1a105a7) - Martin Kinoo
+- (**images**) add sharp, explicit webp format and 30-day cache TTL - (e0466d9) - Martin Kinoo
+- (**proxy**) add Cache-Control headers to API route handlers - (e66b37e) - Martin Kinoo
+- (**swr**) disable revalidateOnFocus and bump deduping interval - (5581580) - Martin Kinoo
+#### Miscellaneous Chores
+- (**deploy**) locked-down deploy user with forced command - (06a4d1f) - Martin Kinoo
+
+- - -
+
 ## v0.10.1 - 2026-02-19
 #### Bug Fixes
 - (**ui**) use valid arte CDN image sizes to prevent 404 on mobile - (eb8fcd2) - Martin Kinoo
