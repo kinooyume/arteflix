@@ -11,10 +11,13 @@ module Style = {
     )->css
 }
 
-type props_ = {episodes: array<EpisodeButton.t>}
+type props_ = {
+  episodes: array<EpisodeButton.t>,
+  renderImage?: EpisodeCard.renderImage,
+}
 
 @react.component(: props_)
-let make = (~episodes) => {
+let make = (~episodes, ~renderImage=?) => {
   <ul className={Style.container}>
     {episodes
     ->Array.mapWithIndex((episode, index) => {
@@ -31,6 +34,7 @@ let make = (~episodes) => {
           imageSrc=episode.imageSrc
           ?imageSrcSet
           imageAlt=episode.imageAlt
+          ?renderImage
         />
       </li>
     })

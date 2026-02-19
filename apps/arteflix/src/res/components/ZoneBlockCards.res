@@ -1,9 +1,17 @@
-// NOTE: Memoify ?
-//
-// zone.content.data
+let cardRenderImage: MovieCardImage.renderImage = (~src, ~alt, ~className=?, ~onLoad=?) => {
+  let onLoad = onLoad->Option.map(f => (_): unit => f())
+  <Next.Image
+    src
+    alt
+    ?className
+    ?onLoad
+    width=620
+    height=350
+    sizes="(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 336px"
+  />
+}
 
 let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
-
   zoneContents->Array.map((content): MovieCard.t => {
     let kindLabel = switch content.kind.label {
     | Some(label) => Some(label)
@@ -30,6 +38,7 @@ let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
       alt: content.title,
       href: content.url,
       forceLabel: liveLabel,
+      renderImage: cardRenderImage,
     }
 
     // let url = switch content.trailer {

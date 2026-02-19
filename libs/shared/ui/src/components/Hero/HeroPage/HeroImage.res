@@ -60,6 +60,12 @@ module Style = {
     }
   `->rawCss
 }
+type renderImage = (
+  ~src: string,
+  ~alt: string,
+  ~className: string=?,
+) => React.element
+
 type props_ = {
   src: string,
   srcSet?: string,
@@ -67,10 +73,11 @@ type props_ = {
   alt: string,
   overflow?: bool,
   children: React.element,
+  renderImage?: renderImage,
 }
 
 @react.component(: props_)
-let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false) => {
+let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~renderImage=?) => {
   let (containerStyle, contentStyle, imgStyle, gradientStyle) = switch overflow {
   | true => (
       [Style.container, Style.containerOverflow, Style.mobileHero]->cx,
@@ -86,7 +93,15 @@ let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false) => {
     )
   }
   <section className={containerStyle}>
-    <img className={imgStyle} src={src} ?srcSet ?sizes alt={alt} />
+    {switch renderImage {
+    | Some(render) => render(~src, ~alt, ~className=imgStyle)
+    | None =>
+      ReactDOM.createElement(
+        "img",
+        ~props=Obj.magic({"className": imgStyle, "src": src, "srcSet": srcSet, "sizes": sizes, "alt": alt, "fetchPriority": "high"}),
+        [],
+      )
+    }}
     <div className={gradientStyle} />
     <div className={contentStyle}> children </div>
   </section>

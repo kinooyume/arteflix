@@ -1,5 +1,8 @@
 type props_ = {zone: ArteZone.t, id: string}
 
+let episodeRenderImage: EpisodeCard.renderImage = (~src, ~alt, ~className=?) =>
+  <Next.Image src alt ?className width=336 height=189 sizes="15vw" />
+
 let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
   let description = switch content.fullDescription {
   | Some(description) => Some(description)
@@ -10,16 +13,12 @@ let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
     }
   }
 
-  let url = content.mainImage.url
-  let size = s => url->String.replace("__SIZE__", s)
-
   let episode: EpisodeButton.t = {
     href: content.url,
     title: content.title,
     id: content.id,
     selected: content.id == currentId,
-    imageSrc: size("265x149"),
-    imageSrcSet: `${size("265x149")} 265w, ${size("336x189")} 336w`,
+    imageSrc: ArteImage.resolveUrl(content.mainImage.url, "336x189"),
     description,
     duration: content.durationLabel,
     imageAlt: switch content.mainImage.caption {
@@ -34,5 +33,5 @@ let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
 let make = (~zone, ~id) => {
   let episodes: array<EpisodeButton.t> =
     zone.content.data->Array.map(content => makeEpisode(content, id))
-  <EpisodeBlock title=zone.title episodes />
+  <EpisodeBlock title=zone.title episodes renderImage=episodeRenderImage />
 }

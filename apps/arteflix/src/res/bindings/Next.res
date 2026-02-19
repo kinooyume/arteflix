@@ -170,12 +170,15 @@ module Image = {
     ~sizes: string=?,
     ~quality: int=?,
     ~priority: bool=?,
-    ~placholder: [#blur | #empty]=?,
+    ~placeholder: [#blur | #empty]=?,
     ~loading: [#eager | #"lazy"]=?,
     ~blurDataURL: string=?,
     ~unoptimized: bool=?,
     ~overrideSrc: string=?,
     ~className: string=?,
+    ~onLoad: JsxEvent.Image.t => unit=?,
+    ~onError: JsxEvent.Image.t => unit=?,
+    ~style: ReactDOM.style=?,
   ) => React.element = "default"
 }
 

@@ -1,6 +1,5 @@
 type heroTemplateProps = {
   imageSrc: string,
-  imageSrcSet?: string,
   imageAlt: string,
   title: string,
   subtitle: option<string>,
@@ -8,12 +7,12 @@ type heroTemplateProps = {
   description: option<string>,
   url: string,
   callToAction?: option<string>,
+  renderImage?: HeroImage.renderImage,
 }
 
 @react.component(: heroTemplateProps)
 let make = (
   ~imageSrc,
-  ~imageSrcSet=?,
   ~imageAlt,
   ~title,
   ~subtitle,
@@ -21,9 +20,9 @@ let make = (
   ~url,
   ~overflow=true,
   ~callToAction=None,
+  ~renderImage=?,
 ) => {
-  let srcSet = imageSrcSet
-  <HeroImage src={imageSrc} ?srcSet sizes="100vw" alt={imageAlt} overflow>
+  <HeroImage src={imageSrc} sizes="100vw" alt={imageAlt} overflow ?renderImage>
     <HeroContent title subtitle description callToAction href={url} />
   </HeroImage>
 }

@@ -98,6 +98,7 @@ type t = {
 type props_ = {
   ...t,
   index: int,
+  renderImage?: EpisodeCard.renderImage,
 }
 
 @react.component(: props_)
@@ -111,6 +112,7 @@ let make = (
   ~imageSrcSet=?,
   ~imageAlt,
   ~selected,
+  ~renderImage=?,
 ) => {
   let (hover, setHover) = React.useState(() => false)
   let srcSet = imageSrcSet
@@ -123,7 +125,7 @@ let make = (
   <Link className={String(className)} onHoverChange={isHovering => setHover(_ => isHovering)} href>
     <Bullet index />
     <div className={Style.content}>
-      <EpisodeCard src=imageSrc ?srcSet sizes="15vw" alt=imageAlt hover />
+      <EpisodeCard src=imageSrc ?srcSet sizes="15vw" alt=imageAlt hover ?renderImage />
       <EpisodeButtonContent title description duration />
     </div>
   </Link>
