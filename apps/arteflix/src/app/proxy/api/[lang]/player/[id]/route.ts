@@ -2,6 +2,8 @@ import { player } from '../../../../../../res/proxy/ProxyApi.bs.mjs';
 
 export async function GET(_, segmentData) {
   const params = await segmentData.params;
-  return await player(params);
+  const res = await player(params);
+  res.headers.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=7200');
+  return res;
 }
 
