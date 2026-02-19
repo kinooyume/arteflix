@@ -29,10 +29,12 @@ let default = ({children}: props) => {
     </head>
     <body>
       <div>
-        <RouterProvider>
-          <AppHeader />
-          <main> children </main>
-        </RouterProvider>
+        <SwrProvider>
+          <RouterProvider>
+            <AppHeader />
+            <main> children </main>
+          </RouterProvider>
+        </SwrProvider>
       </div>
     </body>
   </html>
