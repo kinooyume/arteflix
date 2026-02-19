@@ -19,6 +19,14 @@
   box-sizing: border-box;
 }
 
+a:focus-visible {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: none;
+}
+
 body {
   background: var(--Grey-Grey-900, #141414);
   color: white;

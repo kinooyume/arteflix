@@ -24,17 +24,8 @@ const nextConfig = {
   transpilePackages: transpileModules,
   output: 'standalone',
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'api-cdn.arte.tv',
-        pathname: '/img/**',
-      },
-    ],
-    formats: ['image/webp'],
-    imageSizes: [265, 336, 380, 620],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1920],
-    minimumCacheTTL: 2592000,
+    loader: 'custom',
+    loaderFile: './src/imageLoader.ts',
   },
   webpack: (config, options) => {
     const { isServer } = options;

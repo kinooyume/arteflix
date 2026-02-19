@@ -65,3 +65,12 @@ let player = async (params: Params.player) => {
     Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
   }
 }
+
+let trailer = async (params: Params.player) => {
+  switch await ArteApi.Fetcher.trailer(params) {
+  | data => data->recordAsJson->Next.NextResponse.json
+  | exception e =>
+    Console.error2("[Proxy] trailer error:", e)
+    Js.Json.null->Next.NextResponse.json(~options={status: ServerError})
+  }
+}
