@@ -1,7 +1,7 @@
 type props_ = {zone: ArteZone.t, id: string}
 
 let episodeRenderImage: EpisodeCard.renderImage = (~src, ~alt, ~className=?) =>
-  <RateLimitedImage src alt ?className width=336 height=189 sizes="15vw" />
+  <Next.Image src alt ?className width=336 height=189 sizes="15vw" />
 
 let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
   let description = switch content.fullDescription {
