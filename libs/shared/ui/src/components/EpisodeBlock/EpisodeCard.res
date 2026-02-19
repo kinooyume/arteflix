@@ -10,7 +10,7 @@ module Style = {
 
   let container = [ReactDOM.Style.make(~position="relative", ())->css, size]->cx
 
-  let image = [ReactDOM.Style.make()->css, size]->cx
+  let image = [ReactDOM.Style.make(~height="auto", ())->css, size]->cx
 }
 
 type renderImage = (
