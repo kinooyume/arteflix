@@ -8,6 +8,7 @@ type moviePreviewProps = {
   linkAlt?: option<LinkAlt.make>, // NOTE: to call Next.link, react-aria mess with button inside tooltip content
   onExit?: unit => unit,
   isVisible?: bool,
+  renderImage?: PreviewImage.renderImage,
 }
 
 @react.component(: moviePreviewProps)
@@ -21,6 +22,7 @@ let make = React.memo((
   ~linkAlt=None,
   ~isVisible=false,
   ~onExit=_ => (),
+  ~renderImage=?,
 ) => {
   let meta = []
   switch ageRestriction {
@@ -62,7 +64,7 @@ let make = React.memo((
           exit={{width: "218px", height: "123px", transition: {duration: 0.08}}}>
           // <PlayerTransition urlOption=NoVideo>
           // NOTE: probably merge with movieCardImage
-          <PreviewImage srcBase=img href />
+          <PreviewImage srcBase=img href ?renderImage />
           // </PlayerTransition>
         </Motion.div>
         <Motion.div
