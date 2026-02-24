@@ -87,6 +87,17 @@ font-weight: 400 !important;
 line-height: 16px !important;
     }
 
+.vjs-episodes-button .vjs-icon-placeholder:before {
+    content: '\\f10b';
+    }
+.vjs-episodes-button .vjs-menu {
+    max-height: 400px;
+    }
+.vjs-episodes-button .vjs-menu .vjs-menu-content {
+    max-height: 380px;
+    overflow-y: auto;
+    }
+
 .vjs-fullscreen-control  {
     }
  .vjs-audio-button {
@@ -149,10 +160,11 @@ type videoProps = {
   options: VideoJs.playerOptions,
   onPlayer?: VideoJs.t => unit,
   title?: string,
+  episodes?: array<NetflixMode.episode>,
 }
 
 @react.component(: videoProps)
-let make = (~url, ~options, ~onPlayer=?, ~title=?) => {
+let make = (~url, ~options, ~onPlayer=?, ~title=?, ~episodes=?) => {
   let videoRef = React.useRef(Js.Nullable.null)
   let playerRef = React.useRef(Js.Nullable.null)
 
@@ -198,6 +210,15 @@ let make = (~url, ~options, ~onPlayer=?, ~title=?) => {
       }
     }
   }, [videoRef])
+
+  React.useEffect1(() => {
+    switch (playerRef.current, episodes) {
+    | (Value(video), Some(eps)) if eps->Array.length > 0 =>
+      NetflixMode.registerEpisodeMenu(video, eps)
+    | _ => ()
+    }
+    None
+  }, [episodes])
 
   React.useEffect(() => {
     Some(

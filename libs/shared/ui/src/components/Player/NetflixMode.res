@@ -31,6 +31,52 @@ let setInactivityTimeout: (VideoJs.t, int) => unit = %raw(`
   function(p, t) { p.options_.inactivityTimeout = t }
 `)
 
+type episode = {title: string, subtitle: option<string>, href: string, selected: bool}
+
+let registerEpisodeMenu: (VideoJs.t, array<episode>) => unit = %raw(`
+  function(player, episodes) {
+    var videojs = require('video.js').default;
+    var MenuButton = videojs.getComponent('MenuButton');
+    var MenuItem = videojs.getComponent('MenuItem');
+
+    class EpisodeMenuItem extends MenuItem {
+      constructor(pl, options) {
+        super(pl, options);
+        if (options.selected) this.addClass('vjs-selected');
+        this.addClass('vjs-episode-item');
+      }
+      handleClick() {
+        window.location.href = this.options_.href;
+      }
+    }
+
+    class EpisodeMenuButton extends MenuButton {
+      constructor(pl, options) {
+        super(pl, options);
+        this.controlText('Episodes');
+        this.addClass('vjs-episodes-button');
+      }
+      createItems() {
+        return episodes.map(function(ep) {
+          var label = ep.title;
+          if (ep.subtitle) label = ep.subtitle + ' \u2014 ' + ep.title;
+          return new EpisodeMenuItem(player, {
+            label: label,
+            href: ep.href,
+            selected: ep.selected
+          });
+        });
+      }
+    }
+
+    videojs.registerComponent('EpisodeMenuButton', EpisodeMenuButton);
+    var controlBar = player.getChild('controlBar');
+    if (controlBar) {
+      controlBar.addChild('EpisodeMenuButton', {}, controlBar.children().length - 1);
+    }
+  }
+`)
+
 let setup = (player, ~title=?) => {
   setInactivityTimeout(player, 3000)
 

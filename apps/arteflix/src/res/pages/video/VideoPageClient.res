@@ -103,6 +103,20 @@ let make = (~params: Params.program) => {
         z.displayOptions.template != #"single-programContent"
       )
       let sortedZones = Array.concat(videoZones, otherZones)
+      let episodes =
+        arteData.zones
+        ->Array.find(z => {
+          let t = z.displayOptions.template
+          t == #"tableview-playnext" || t == #"verticalFirstHighlighted-landscape"
+        })
+        ->Option.map(z =>
+          z.content.data->Array.map((item): NetflixMode.episode => {
+            title: item.title,
+            subtitle: item.subtitle,
+            href: item.url,
+            selected: item.id == params.id,
+          })
+        )
       Console.log3(
         "[VideoPage] Zones:",
         sortedZones->Array.length,
@@ -122,6 +136,7 @@ let make = (~params: Params.program) => {
                 zone
                 metadata={arteData.metadata}
                 parent={arteData.parent}
+                ?episodes
               />
             </Lazyload>
           )

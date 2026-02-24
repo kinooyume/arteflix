@@ -25,10 +25,11 @@ let makeHero = (zone: ArteZone.t, ~metadata as _metadata, ~parent as _parent) =>
 
 type props_ = {
   zone: ArteZone.t,
-  metadata: option<ArteMetadata.t>, // dans la collection uniquement, pour l'instant
+  metadata: option<ArteMetadata.t>,
   parent: option<ArteCollection.parent>,
   id: string,
   lang: string,
+  episodes?: array<NetflixMode.episode>,
 }
 
 module StreamPlayerMemo = {
@@ -36,9 +37,9 @@ let make = React.memo(StreamPlayer.make)
 }
 
 @react.component(: props_)
-let make = (~id, ~lang, ~zone, ~metadata, ~parent) => {
+let make = (~id, ~lang, ~zone, ~metadata, ~parent, ~episodes=?) => {
   switch zone.displayOptions.template {
-  | #"single-programContent" => <StreamPlayerMemo id lang />
+  | #"single-programContent" => <StreamPlayerMemo id lang ?episodes />
   | #"single-collectionContent" => zone->makeHero(~metadata, ~parent)
   | #"tableview-playnext" => <ZoneEpisodeBlock zone id />
   | #"verticalFirstHighlighted-landscape" => <ZoneEpisodeBlock zone id />

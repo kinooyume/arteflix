@@ -15,5 +15,10 @@ let live: storyObj<Player.props> = {
       fluid: false,
     },
     title: "Kaizen",
+    episodes: [
+      {title: "Le Chemin", subtitle: Some("S1 E1"), href: "#ep1", selected: true},
+      {title: "La Montagne", subtitle: Some("S1 E2"), href: "#ep2", selected: false},
+      {title: "Le Sommet", subtitle: Some("S1 E3"), href: "#ep3", selected: false},
+    ],
   },
 }

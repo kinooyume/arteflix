@@ -8,9 +8,9 @@ let defaultOptions: VideoJs.playerOptions = {
   fluid: false,
 }
 
-type props_ = Params.player
+type props_ = {id: string, lang: string, episodes?: array<NetflixMode.episode>}
 @react.component(: props_)
-let make = (~id, ~lang) => {
+let make = (~id, ~lang, ~episodes=?) => {
   let {data, error} = Swr.useSWR(Urls.player({id, lang}), fetcher(validatePlayerData, ...))
   let (player, setPlayer) = React.useState(() => Js.Nullable.null)
   <>
@@ -32,16 +32,24 @@ let make = (~id, ~lang) => {
           | true => {...defaultOptions, autoplay: #any}
           | false => defaultOptions
           }
+          let currentEpisode =
+            episodes->Option.flatMap(eps => eps->Array.find(e => e.selected))
+          let title = switch currentEpisode {
+          | Some({subtitle: Some(sub), title}) => `${sub} \u2014 ${title}`
+          | Some({title}) => title
+          | None => playerConfig.attributes.metadata.title
+          }
           <div style={ReactDOM.Style.make(~position="relative", ~width="100%", ~height="100dvh", ())}>
             <Player
               url={stream.url}
               options
               onPlayer={p => setPlayer(_ => Js.Nullable.Value(p))}
-              title={playerConfig.attributes.metadata.title}
+              title
+              ?episodes
             />
             <PlayerOverlay
               player
-              title={playerConfig.attributes.metadata.title}
+              title
               subtitle={playerConfig.attributes.metadata.description}
             />
           </div>
