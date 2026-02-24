@@ -2,223 +2,41 @@ open Webapi.Dom
 open Emotion
 
 %%raw("import 'video.js/dist/video-js.css'")
+%%raw("import './netflixMode.mjs'")
 
 module Style = {
   let wrapper =
     ReactDOM.Style.make(~width="100%", ~height="100dvh", ~borderRadius="4px", ())->css
 
   let player = `
-    color: ${Colors.primaryWhite};
-    position: relative;
+    color:  ${Colors.primaryWhite};
 
-    /* bottom gradient */
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 20%;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.35));
-      pointer-events: none;
-      z-index: 1;
-      opacity: 1;
-      transition: opacity 0.3s;
+.vjs-button {
+    width: 34px;
+    height: 42px;
+    align-items: center;
+padding: 0 32px;
     }
 
-    /* top gradient */
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 20%;
-      background: linear-gradient(rgba(0, 0, 0, 0.35), transparent);
-      pointer-events: none;
-      z-index: 1;
-      opacity: 1;
-      transition: opacity 0.3s;
+.vjs-button > .vjs-icon-placeholder:before {
+    font-size: 2.3em;
     }
 
-    /* auto-hide controls */
-    &.vjs-user-inactive.vjs-playing .vjs-control-bar {
-      opacity: 0;
-      visibility: visible;
-      transition: opacity 0.3s;
-    }
-    &.vjs-user-inactive.vjs-playing::after,
-    &.vjs-user-inactive.vjs-playing::before {
-      opacity: 0;
-    }
-    &.vjs-user-inactive.vjs-playing {
-      cursor: none;
-    }
-    &.vjs-user-active .vjs-control-bar {
-      opacity: 1;
-      transition: opacity 0.3s;
+.vjs-time-control {
+ position: absolute !important;
+  right: 0 !important;
+  top: -25px !important;
     }
 
-    /* big play button */
-    .vjs-big-play-button {
-      display: none !important;
-    }
-
-    /* control bar */
-    .vjs-control-bar {
-      background: transparent !important;
-      height: auto !important;
-      padding: 0 4% 20px !important;
-      z-index: 2;
-      display: flex !important;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* buttons */
-    .vjs-button {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-    }
-    .vjs-button > .vjs-icon-placeholder:before {
-      font-size: 1.8em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* push right-side buttons */
-    .vjs-volume-panel {
-      margin-right: auto !important;
-    }
-    .vjs-volume-control {
-      padding-top: 6px !important;
-    }
-
-    /* time display */
-    .vjs-time-control {
-      position: static !important;
-      font-size: 13px;
-      font-family: "Netflix Sans", Helvetica, Arial, sans-serif;
-      line-height: 40px;
-      padding: 0 4px;
-      min-width: auto;
-    }
-
-    /* progress bar */
-    .vjs-progress-control {
-      position: absolute !important;
-      bottom: 100%;
-      left: 0;
-      right: 0;
-      width: 100% !important;
-      height: 20px !important;
-      display: flex;
-      align-items: flex-end;
-    }
-    .vjs-progress-control .vjs-progress-holder {
-      height: 4px;
-      margin: 0;
-      border-radius: 2px;
-      transition: height 0.1s;
-      flex: 1;
-    }
-    .vjs-progress-control:hover .vjs-progress-holder {
-      height: 6px;
-    }
-
-    /* track colors */
-    .vjs-slider {
-      background-color: rgba(255, 255, 255, 0.2) !important;
-    }
-    .vjs-play-progress {
-      background-color: ${Colors.secondaryRed_300} !important;
-    }
-    .vjs-load-progress,
-    .vjs-load-progress div {
-      background-color: rgba(255, 255, 255, 0.4) !important;
-    }
-
-    /* playhead dot */
-    .vjs-play-progress:before {
-      font-size: 0;
-      content: "" !important;
-      display: block;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: ${Colors.secondaryRed_300};
-      position: absolute;
-      right: -6px;
-      top: 50%;
-      transform: translateY(-50%) scale(0);
-      transition: transform 0.1s;
-    }
-    .vjs-progress-control:hover .vjs-play-progress:before {
-      transform: translateY(-50%) scale(1);
-    }
-
-    /* hide mouse-display tooltip circle */
-    .vjs-mouse-display {
-      width: 0 !important;
-      height: 0 !important;
-      background: transparent !important;
-    }
-    .vjs-mouse-display .vjs-time-tooltip {
-      font-size: 12px;
-      padding: 4px 8px;
-    }
-
-    /* menus */
     .vjs-menu {
-      width: 256px !important;
-      border: none !important;
-      bottom: -12px;
-      left: -180px;
-      border-radius: 4px;
-    }
-    .vjs-menu .vjs-menu-content {
-      background-color: ${Colors.greyGrey_750} !important;
-      justify-content: flex-start !important;
-      font-family: "Netflix Sans", Helvetica, Arial, sans-serif !important;
-    }
-    .vjs-menu .vjs-menu-content .vjs-menu-item {
-      display: flex !important;
-      padding: 15px 20px !important;
-      gap: 10px !important;
-    }
-    .vjs-menu-item.vjs-selected {
-      background-color: ${Colors.greyGrey_750} !important;
-      color: #FFF !important;
-    }
-    .vjs-menu .vjs-menu-content .vjs-menu-item.vjs-selected span {
-      color: #FFF !important;
-    }
-    .vjs-menu .vjs-menu-content .vjs-menu-item:hover {
-      background-color: ${Colors.greyGrey_750} !important;
-    }
-    .vjs-menu .vjs-menu-content .vjs-menu-item:hover span {
-      color: #FFF !important;
-    }
-    .vjs-menu li {
-      justify-content: flex-start !important;
-    }
-    .vjs-menu .vjs-menu-content .vjs-menu-item span {
-      text-align: left !important;
-      color: ${Colors.greyGrey_100} !important;
-      font-family: "Netflix Sans", Helvetica, Arial, sans-serif !important;
-      font-size: 14px !important;
-      font-style: normal !important;
-      font-weight: 400 !important;
-      line-height: 16px !important;
+    width: 256px !important;
+    border: none !important;
+    bottom: -12px;
+    left: -180px;
+    border-radius: 4px;
+    border: 1px solid transparent;
     }
 
-    /* mobile */
     ${Responsive.mobileDown} {
       .vjs-menu {
         left: auto;
@@ -226,20 +44,102 @@ module Style = {
         width: min(256px, 90vw) !important;
       }
       .vjs-button {
-        padding: 0;
-        width: 36px;
-        height: 36px;
+        padding: 0 12px;
       }
-      .vjs-control-bar {
-        padding: 0 3% 12px !important;
-        gap: 4px;
-      }
-      .vjs-progress-control:hover .vjs-progress-holder {
-        height: 4px;
-      }
-      .vjs-progress-control:hover .vjs-play-progress:before {
-        transform: translateY(-50%) scale(0);
-      }
+    }
+
+    .vjs-menu .vjs-menu-content {
+    background-color: ${Colors.greyGrey_750} !important;
+    }
+.vjs-menu .vjs-menu-content .vjs-menu-item {
+display: flex !important;
+padding: 15px 20px !important;
+gap: 10px  !important;
+
+    }
+.vjs-menu-item.vjs-selected {
+    background-color: ${Colors.greyGrey_750} !important;
+color: #FFF !important;
+    }
+.vjs-menu .vjs-menu-content .vjs-menu-item.vjs-selected span {
+color: #FFF !important;
+    }
+.vjs-menu .vjs-menu-content .vjs-menu-item:hover {
+    background-color: ${Colors.greyGrey_750} !important;
+    }
+
+    .vjs-menu .vjs-menu-content .vjs-menu-item:hover span {
+color: #FFF !important;
+    }
+.vjs-menu .vjs-menu-content {
+justify-content: flex-start !important;
+font-family: "Netflix Sans" !important ;
+    }
+.vjs-menu li {
+    justify-content: flex-start !important;
+    }
+    .vjs-menu .vjs-menu-content .vjs-menu-item span {
+    text-align: left !important;
+color: var(--Grey-Grey-100, #B3B3B3) !important;
+font-family: "Netflix Sans" !important ;
+font-size: 14px !important ;
+font-style: normal !important ;
+font-weight: 400 !important;
+line-height: 16px !important;
+    }
+
+.vjs-fullscreen-control  {
+    }
+ .vjs-audio-button {
+    }
+.vjs-subs-caps-button  {
+    }
+    .vjs-play-control, .vjs-volume-panel, .vjs-remaining-time {
+    }
+
+    .vjs-volume-panel  {
+    margin-right: auto !important;
+    }
+    .vjs-volume-control {
+    padding-top: 6px !important;
+    }
+    .vjs-control-bar {
+      background-color: ${Colors.primaryBlack} !important;
+      background-color: transparent !important;
+      height: 92px !important;
+    padding: 16px 20px !important;
+    }
+
+    .vjs-progress-control {
+      height: 6px !important;
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: calc(100% - 92px) !important;
+    }
+.vjs-progress-control .vjs-progress-holder {
+    height: 6px;
+    }
+    .vjs-mouse-display {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background-color: ${Colors.secondaryRed_300};
+    }
+    .vjs-slider {
+    background-color: ${Colors.greyGrey_200} !important;
+    }
+    .vjs-play-progress {
+      background-color: ${Colors.secondaryRed_300} !important;
+    }
+    .vjs-play-progress:before {
+    font-size: 1.2em;
+      color: ${Colors.secondaryRed_300} !important;
+    }
+    .vjs-load-progress, .vjs-load-progress div {
+      background-color: ${Colors.greyGrey_25} !important;
     }
 
     `->rawCss
@@ -286,6 +186,7 @@ let make = (~url, ~options) => {
           | None => ()
           }
           video->VideoJs.ready(~fn=() => VideoJs.src(video, url), ~sync=true)
+          VideoJs.netflixMode(video)
           None
         }
       | _ => None

@@ -35,3 +35,7 @@ external videojs: (
 @send external ready: (t, ~fn: unit => 'a, ~sync: bool=?) => unit = "ready"
 @send external autoplay: (t, ~autoplay: autoplay) => unit = "autoplay"
 @send external on: (t, ~event: string, ~fn: unit => unit) => unit = "on"
+
+type netflixModeOptions = {inactivityTimeout?: int}
+
+@send external netflixMode: (t, ~options: netflixModeOptions=?) => unit = "netflixMode"
