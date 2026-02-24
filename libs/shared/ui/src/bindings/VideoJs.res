@@ -36,6 +36,26 @@ external videojs: (
 @send external autoplay: (t, ~autoplay: autoplay) => unit = "autoplay"
 @send external on: (t, ~event: string, ~fn: unit => unit) => unit = "on"
 
-type netflixModeOptions = {inactivityTimeout?: int}
+@send external el: t => Dom.element = "el"
+@send external paused: t => bool = "paused"
+@send external off: (t, ~event: string, ~fn: unit => unit) => unit = "off"
 
-@send external netflixMode: (t, ~options: netflixModeOptions=?) => unit = "netflixMode"
+type component
+@send @return(nullable) external getChild: (t, string) => option<component> = "getChild"
+@send external hideComponent: component => unit = "hide"
+
+@send external play: t => unit = "play"
+@send external pause: t => unit = "pause"
+@send external muted: t => bool = "muted"
+@send external setMuted: (t, bool) => unit = "muted"
+@send external isFullscreen: t => bool = "isFullscreen"
+@send external requestFullscreen: t => unit = "requestFullscreen"
+@send external exitFullscreen: t => unit = "exitFullscreen"
+@send external currentTime: t => float = "currentTime"
+@send external setCurrentTime: (t, float) => unit = "currentTime"
+@send external duration: t => float = "duration"
+@send external volume: t => float = "volume"
+@send external setVolume: (t, float) => unit = "volume"
+
+@send @return(nullable)
+external querySelector: (Dom.element, string) => option<Dom.element> = "querySelector"

@@ -2,7 +2,6 @@ open Webapi.Dom
 open Emotion
 
 %%raw("import 'video.js/dist/video-js.css'")
-%%raw("import './netflixMode.mjs'")
 
 module Style = {
   let wrapper =
@@ -148,10 +147,12 @@ line-height: 16px !important;
 type videoProps = {
   url: string,
   options: VideoJs.playerOptions,
+  onPlayer?: VideoJs.t => unit,
+  title?: string,
 }
 
 @react.component(: videoProps)
-let make = (~url, ~options) => {
+let make = (~url, ~options, ~onPlayer=?, ~title=?) => {
   let videoRef = React.useRef(Js.Nullable.null)
   let playerRef = React.useRef(Js.Nullable.null)
 
@@ -186,7 +187,11 @@ let make = (~url, ~options) => {
           | None => ()
           }
           video->VideoJs.ready(~fn=() => VideoJs.src(video, url), ~sync=true)
-          VideoJs.netflixMode(video)
+          NetflixMode.setup(video, ~title?)
+          switch onPlayer {
+          | Some(cb) => cb(video)
+          | None => ()
+          }
           None
         }
       | _ => None

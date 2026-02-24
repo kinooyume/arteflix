@@ -12,6 +12,7 @@ type props_ = Params.player
 @react.component(: props_)
 let make = (~id, ~lang) => {
   let {data, error} = Swr.useSWR(Urls.player({id, lang}), fetcher(validatePlayerData, ...))
+  let (player, setPlayer) = React.useState(() => Js.Nullable.null)
   <>
     {switch error {
     | Some(err) =>
@@ -31,9 +32,21 @@ let make = (~id, ~lang) => {
           | true => {...defaultOptions, autoplay: #any}
           | false => defaultOptions
           }
-          <Player url={stream.url} options />
+          <div style={ReactDOM.Style.make(~position="relative", ~width="100%", ~height="100dvh", ())}>
+            <Player
+              url={stream.url}
+              options
+              onPlayer={p => setPlayer(_ => Js.Nullable.Value(p))}
+              title={playerConfig.attributes.metadata.title}
+            />
+            <PlayerOverlay
+              player
+              title={playerConfig.attributes.metadata.title}
+              subtitle={playerConfig.attributes.metadata.description}
+            />
+          </div>
         }
-      | None => <p> {"No Stream"->React.string} </p> // TODO: Handler Error no Stream
+      | None => <p> {"No Stream"->React.string} </p>
       }
     | None => React.null
     }}
