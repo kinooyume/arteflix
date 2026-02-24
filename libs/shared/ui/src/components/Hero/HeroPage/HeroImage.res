@@ -9,7 +9,12 @@ module Style = {
     flex-shrink: 0;
   `->rawCss
 
-  let containerOverflow = ReactDOM.Style.make(~maxHeight="calc(100vh - 388px)", ())->css
+  let containerFullscreen = `
+    display: grid;
+    grid-template-rows: minmax(clamp(48px, 2.5rem + 1.3vw, 68px), 1fr) auto minmax(0, 35%);
+    height: 56.25vw;
+    max-height: calc(100vh - 68px);
+  `->rawCss
 
   let img = `
     display: block;
@@ -24,17 +29,58 @@ module Style = {
     }
   `->rawCss
 
-  let gradient = `
+  let imgCover = `
+    grid-row: 1 / -1;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  `->rawCss
+
+  let gradientBase = `
+    width: 100%;
+    height: 14.7vw;
+    background: linear-gradient(
+      180deg,
+      hsla(0, 0%, 8%, 0) 0,
+      hsla(0, 0%, 8%, 0.15) 15%,
+      hsla(0, 0%, 8%, 0.35) 29%,
+      hsla(0, 0%, 8%, 0.58) 44%,
+      #141414 68%,
+      #141414
+    );
+  `->rawCss
+
+  let gradientAbsolute = `
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 70%;
-    background: linear-gradient(to top, rgb(20, 20, 20), rgba(0, 0, 0, 0));
+    bottom: -1px;
   `->rawCss
 
-  let fullHeight = ReactDOM.Style.make(~height="100%", ())->css
+  let gradientGrid = `
+    grid-row: 1 / -1;
+    grid-column: 1;
+    align-self: end;
+  `->rawCss
+
+  let lateralVignetteBase = `
+    background: linear-gradient(77deg, rgba(0, 0, 0, 0.6), transparent 85%);
+  `->rawCss
+
+  let lateralVignetteAbsolute = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  `->rawCss
+
+  let lateralVignetteGrid = `
+    grid-row: 1 / -1;
+    grid-column: 1;
+  `->rawCss
 
   let content = `
     position: absolute;
@@ -45,11 +91,11 @@ module Style = {
     margin-bottom: clamp(24px, 1rem + 1.5vw, 48px);
   `->rawCss
 
-  let contentExtraMargin = `
-    margin-bottom: clamp(60px, 3rem + 2.5vw, 100px);
-    ${Responsive.mobileDown} {
-      margin-bottom: 24px;
-    }
+  let contentGrid = `
+    grid-row: 2;
+    grid-column: 1;
+    padding: 0 var(--side-padding);
+    z-index: 1;
   `->rawCss
 
   let mobileHero = `
@@ -78,18 +124,20 @@ type props_ = {
 
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~renderImage=?) => {
-  let (containerStyle, contentStyle, imgStyle, gradientStyle) = switch overflow {
+  let (containerStyle, contentStyle, imgStyle, gradientStyle, vignetteStyle) = switch overflow {
   | true => (
-      [Style.container, Style.containerOverflow, Style.mobileHero]->cx,
-      [Style.content, Style.contentExtraMargin]->cx,
-      Style.img,
-      [Style.gradient, Style.fullHeight]->cx,
+      [Style.container, Style.containerFullscreen, Style.mobileHero]->cx,
+      Style.contentGrid,
+      Style.imgCover,
+      [Style.gradientBase, Style.gradientGrid]->cx,
+      [Style.lateralVignetteBase, Style.lateralVignetteGrid]->cx,
     )
   | false => (
       [Style.container, Style.mobileHero]->cx,
       Style.content,
       Style.img,
-      Style.gradient,
+      [Style.gradientBase, Style.gradientAbsolute]->cx,
+      [Style.lateralVignetteBase, Style.lateralVignetteAbsolute]->cx,
     )
   }
   <section className={containerStyle}>
@@ -102,6 +150,7 @@ let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~render
         [],
       )
     }}
+    <div className={vignetteStyle} />
     <div className={gradientStyle} />
     <div className={contentStyle}> children </div>
   </section>

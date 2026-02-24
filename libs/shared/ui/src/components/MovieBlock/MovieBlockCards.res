@@ -1,6 +1,7 @@
 type props_ = {
   key?: string,
   title: option<string>,
+  link?: option<string>,
   cards: array<MovieCard.t>,
   linkAlt?: option<LinkAlt.make>,
   sticker?: option<string>,
@@ -35,7 +36,7 @@ let kindLabelOverlay = (cardProps: MovieCardImage.props) => {
 }
 
 @react.component(: props_)
-let make = (~title, ~cards, ~showDuration=false, ~showTrailer=false) => {
+let make = (~title, ~link=None, ~cards, ~showDuration=false, ~showTrailer=false) => {
   let durationCached = React.useCallback(durationOverlay, (cards, showDuration))
   let labelOverlayCached = React.useCallback(kindLabelOverlay, (cards, showTrailer))
   let overlays = []
@@ -49,7 +50,7 @@ let make = (~title, ~cards, ~showDuration=false, ~showTrailer=false) => {
     overlays->Array.push(labelOverlayCached)
   }
 
-  <MovieBlock title>
+  <MovieBlock title link>
     <MovieCardSlider>
       {cards->Array.map(cardData => {
         // On peut tres bien supprimer le mot props

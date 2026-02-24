@@ -5,9 +5,10 @@ let default: meta<MovieBlockCards.props> = {
   component: MovieBlockCards.make,
 }
 
-let noTitle: storyObj<MovieBlockCards.props> = {
+let withSeeAll: storyObj<MovieBlockCards.props> = {
   args: {
     title: Some("Recently Added"),
+    link: Some("/fr/videos/RC-024031/recently-added"),
     cards: [
       (
         {
