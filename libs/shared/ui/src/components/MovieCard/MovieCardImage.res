@@ -115,6 +115,7 @@ let make = React.memo((
   }
 
   let (loaded, setLoaded) = React.useState(() => false)
+  let (retrySrc, onRetryError) = UseRetryImage.useRetryImage(~src)
 
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle
   <Link className={Fn(className)} href>
@@ -123,7 +124,7 @@ let make = React.memo((
       {switch renderImage {
       | Some(render) =>
         render(
-          ~src,
+          ~src=retrySrc,
           ~alt,
           ~className=Style.image(~loaded),
           ~onLoad=() => setLoaded(_ => true),
@@ -132,8 +133,9 @@ let make = React.memo((
         <img
           loading=#"lazy"
           onLoad={_ => setLoaded(_ => true)}
+          onError=onRetryError
           className={Style.image(~loaded)}
-          src
+          src=retrySrc
           alt
         />
       }}
