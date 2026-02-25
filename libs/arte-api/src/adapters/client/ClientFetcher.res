@@ -17,6 +17,7 @@ let fetcher = async (validate, url) => {
     let stringData = await Response.text(resp)
     stringData->validate
   } catch {
+  | S.Error(e) => raise(ParseError(e))
   | Exn.Error(err) => raise(FetchError(err))
   }
 }
