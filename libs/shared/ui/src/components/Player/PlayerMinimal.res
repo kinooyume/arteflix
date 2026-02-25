@@ -1,5 +1,7 @@
-open Webapi.Dom
 open Emotion
+let document = Webapi.Dom.document
+module Document = Webapi.Dom.Document
+module Element = Webapi.Dom.Element
 
 %%raw("import 'video.js/dist/video-js.css'")
 

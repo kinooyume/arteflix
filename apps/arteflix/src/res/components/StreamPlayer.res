@@ -1,4 +1,3 @@
-open ArteContract
 open ClientFetcher
 open ArteApiProxy
 

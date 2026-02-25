@@ -23,7 +23,7 @@ type template = [
   | #unknown
 ]
 
-let templateSchema = S.string->S.transform(s => {
+let templateSchema = S.string->S.transform(_ => {
   parser: str =>
     switch str {
     | "slider-square" => #"slider-square"

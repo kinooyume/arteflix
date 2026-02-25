@@ -1,4 +1,6 @@
-open Webapi.Dom
+let document = Webapi.Dom.document
+module Document = Webapi.Dom.Document
+module Element = Webapi.Dom.Element
 
 module Css = {
   @get external style: Dom.element => Dom.cssStyleDeclaration = "style"
