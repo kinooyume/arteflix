@@ -1,22 +1,9 @@
-jest.mock('next/server', () => ({
-  NextResponse: { redirect: jest.fn() },
-}));
-
-jest.mock('../../arteRoutes/ArteRoutesData.bs.mjs', () => ({
-  routes: {},
-  findPage: jest.fn(),
-}));
-
-jest.mock('../res/arte/schemas/ArteData.bs.mjs', () => ({
-  contentPlaceholder: {},
-}));
-
-jest.mock('../res/arte/schemas/ArteDataApi.bs.mjs', () => ({
+jest.mock('../domain/ArteDataApi.bs.mjs', () => ({
   contentSchema: {},
   playerSchema: {},
 }));
 
-import { Urls } from '../res/arte/ArteApi.bs.mjs';
+import { Urls } from '../adapters/server/ArteApi.bs.mjs';
 
 describe('ArteApi.Urls', () => {
   describe('home', () => {

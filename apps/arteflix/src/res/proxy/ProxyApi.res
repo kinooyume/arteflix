@@ -2,6 +2,14 @@ open ArteContract
 
 external recordAsJson: 'a => Js.Json.t = "%identity"
 
+let resolveCategory = (lang, slug) => {
+  let slugList = slug->String.split("/")->List.fromArray
+  ArteRoutesData.routes
+  ->Dict.get(lang)
+  ->Option.flatMap(data => ArteRoutesData.findPage(data, slugList))
+  ->Option.map(page => page.code)
+}
+
 let home = async (params: Params.home) => {
   switch await ArteApi.Fetcher.home(params) {
   | data => data->recordAsJson->Next.NextResponse.json
@@ -40,7 +48,7 @@ let category = async (params: Params.categoryPage) => {
     lang: params.lang,
     slug,
   }
-  switch await ArteApi.Fetcher.category(p) {
+  switch await ArteApi.Fetcher.category(~resolveCategory, p) {
   | data => data->recordAsJson->Next.NextResponse.json
   | exception e =>
     Console.error2("[Proxy] category error:", e)
