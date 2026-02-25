@@ -3,7 +3,7 @@ open ArteContract
 
 exception NextDataError(string)
 exception FetchError(Exn.t)
-
+exception ParseError(S.error)
 
 module Urls = {
   let home = ({lang}: Params.home) =>
@@ -39,6 +39,7 @@ module Gateway = {
       let stringData = await Response.text(resp)
       stringData->validate
     } catch {
+    | S.Error(e) => raise(ParseError(e))
     | Exn.Error(err) => raise(FetchError(err))
     }
   }
