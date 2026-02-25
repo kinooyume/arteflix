@@ -3,7 +3,6 @@ open ArteContract
 
 exception NextDataError(string)
 exception FetchError(Exn.t)
-exception ParseError(S.error)
 
 
 module Urls = {
