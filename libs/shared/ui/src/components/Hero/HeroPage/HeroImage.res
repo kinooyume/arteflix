@@ -13,7 +13,21 @@ module Style = {
     display: grid;
     grid-template-rows: minmax(clamp(48px, 2.5rem + 1.3vw, 68px), 1fr) auto minmax(0, 35%);
     height: 56.25vw;
-    max-height: calc(100vh - 68px);
+    max-height: calc(100vh - 400px);
+    overflow: visible;
+  `->rawCss
+
+  let imgWrapper = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: min(56.25vw, calc(100vh - 68px));
+    overflow: hidden;
+    z-index: -1;
+    ${Responsive.mobileDown} {
+      height: 100%;
+    }
   `->rawCss
 
   let img = `
@@ -124,34 +138,38 @@ type props_ = {
 
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~renderImage=?) => {
-  let (containerStyle, contentStyle, imgStyle, gradientStyle, vignetteStyle) = switch overflow {
-  | true => (
-      [Style.container, Style.containerFullscreen, Style.mobileHero]->cx,
-      Style.contentGrid,
-      Style.imgCover,
-      [Style.gradientBase, Style.gradientGrid]->cx,
-      [Style.lateralVignetteBase, Style.lateralVignetteGrid]->cx,
-    )
-  | false => (
-      [Style.container, Style.mobileHero]->cx,
-      Style.content,
-      Style.img,
-      [Style.gradientBase, Style.gradientAbsolute]->cx,
-      [Style.lateralVignetteBase, Style.lateralVignetteAbsolute]->cx,
-    )
+  switch overflow {
+  | true =>
+    <section className={[Style.container, Style.containerFullscreen, Style.mobileHero]->cx}>
+      <div className={Style.imgWrapper}>
+        {switch renderImage {
+        | Some(render) => render(~src, ~alt, ~className=Style.imgCover)
+        | None =>
+          ReactDOM.createElement(
+            "img",
+            ~props=Obj.magic({"className": Style.imgCover, "src": src, "srcSet": srcSet, "sizes": sizes, "alt": alt, "fetchPriority": "high"}),
+            [],
+          )
+        }}
+        <div className={[Style.lateralVignetteBase, Style.lateralVignetteAbsolute]->cx} />
+        <div className={[Style.gradientBase, Style.gradientAbsolute]->cx} />
+      </div>
+      <div className={Style.contentGrid}> children </div>
+    </section>
+  | false =>
+    <section className={[Style.container, Style.mobileHero]->cx}>
+      {switch renderImage {
+      | Some(render) => render(~src, ~alt, ~className=Style.img)
+      | None =>
+        ReactDOM.createElement(
+          "img",
+          ~props=Obj.magic({"className": Style.img, "src": src, "srcSet": srcSet, "sizes": sizes, "alt": alt, "fetchPriority": "high"}),
+          [],
+        )
+      }}
+      <div className={[Style.lateralVignetteBase, Style.lateralVignetteAbsolute]->cx} />
+      <div className={[Style.gradientBase, Style.gradientAbsolute]->cx} />
+      <div className={Style.content}> children </div>
+    </section>
   }
-  <section className={containerStyle}>
-    {switch renderImage {
-    | Some(render) => render(~src, ~alt, ~className=imgStyle)
-    | None =>
-      ReactDOM.createElement(
-        "img",
-        ~props=Obj.magic({"className": imgStyle, "src": src, "srcSet": srcSet, "sizes": sizes, "alt": alt, "fetchPriority": "high"}),
-        [],
-      )
-    }}
-    <div className={vignetteStyle} />
-    <div className={gradientStyle} />
-    <div className={contentStyle}> children </div>
-  </section>
 }
