@@ -8,7 +8,7 @@ module Style = {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 2;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,22 +23,36 @@ module Style = {
 
   let title =
     `
-    margin: 0 0 6px;
+    margin: 0 0 4px;
     font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
-    font-size: clamp(18px, 0.9rem + 0.75vw, 28px);
+    font-size: clamp(24px, 1.2rem + 1.5vw, 48px);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
     color: #fff;
   `->rawCss
 
   let subtitle =
     `
     display: block;
+    margin-bottom: 12px;
+    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-size: clamp(16px, 0.8rem + 0.6vw, 24px);
+    font-weight: 500;
+    line-height: 1.3;
+    color: rgba(255,255,255,.9);
+  `->rawCss
+
+  let description =
+    `
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
     font-size: clamp(13px, 0.65rem + 0.35vw, 17px);
     font-weight: 400;
-    line-height: 1.4;
-    color: rgba(255,255,255,.8);
+    line-height: 1.5;
+    color: rgba(255,255,255,.7);
   `->rawCss
 }
 
@@ -46,10 +60,11 @@ type overlayProps = {
   player: Js.Nullable.t<VideoJs.t>,
   title: string,
   subtitle?: string,
+  description?: string,
 }
 
 @react.component(: overlayProps)
-let make = (~player, ~title, ~subtitle=?) => {
+let make = (~player, ~title, ~subtitle=?, ~description=?) => {
   let (visible, setVisible) = React.useState(() => false)
   let timerRef = React.useRef(None)
 
@@ -94,6 +109,10 @@ let make = (~player, ~title, ~subtitle=?) => {
     <h4 className={Style.title}> {title->React.string} </h4>
     {switch subtitle {
     | Some(sub) => <span className={Style.subtitle}> {sub->React.string} </span>
+    | None => React.null
+    }}
+    {switch description {
+    | Some(desc) => <p className={Style.description}> {desc->React.string} </p>
     | None => React.null
     }}
   </div>

@@ -99,6 +99,7 @@ type props_ = {
   ...t,
   index: int,
   renderImage?: EpisodeCard.renderImage,
+  onPress?: unit => unit,
 }
 
 @react.component(: props_)
@@ -113,6 +114,7 @@ let make = (
   ~imageAlt,
   ~selected,
   ~renderImage=?,
+  ~onPress=?,
 ) => {
   let (hover, setHover) = React.useState(() => false)
   let srcSet = imageSrcSet
@@ -122,11 +124,30 @@ let make = (
   | false => Style.default
   }
 
-  <Link className={String(className)} onHoverChange={isHovering => setHover(_ => isHovering)} href>
-    <Bullet index />
-    <div className={Style.content}>
-      <EpisodeCard src=imageSrc ?srcSet sizes="15vw" alt=imageAlt hover ?renderImage />
-      <EpisodeButtonContent title description duration />
+  let content =
+    <>
+      <Bullet index />
+      <div className={Style.content}>
+        <EpisodeCard src=imageSrc ?srcSet sizes="15vw" alt=imageAlt hover ?renderImage />
+        <EpisodeButtonContent title description duration />
+      </div>
+    </>
+
+  switch onPress {
+  | Some(handler) =>
+    <div
+      className
+      role="button"
+      tabIndex=0
+      style={ReactDOM.Style.make(~cursor="pointer", ())}
+      onMouseEnter={_ => setHover(_ => true)}
+      onMouseLeave={_ => setHover(_ => false)}
+      onClick={_ => handler()}>
+      content
     </div>
-  </Link>
+  | None =>
+    <Link className={String(className)} onHoverChange={isHovering => setHover(_ => isHovering)} href>
+      content
+    </Link>
+  }
 }

@@ -227,7 +227,22 @@ let make = (~url, ~options, ~onPlayer=?, ~title=?, ~subtitle=?, ~episodes=?, ~on
           | Some(autoplay) => video->VideoJs.autoplay(~autoplay)
           | None => ()
           }
-          video->VideoJs.ready(~fn=() => VideoJs.src(video, url), ~sync=true)
+          video->VideoJs.ready(~fn=() => {
+            let _ = VideoJs.src(video, url)
+            switch episodes {
+            | Some(eps) if eps->Array.length > 0 =>
+              NetflixMode.updateEpisodeMenu(video, eps)
+              switch title {
+              | Some(t) => NetflixMode.updateTitle(video, ~title=t, ~subtitle?)
+              | None => ()
+              }
+              switch onEpisodeSelect {
+              | Some(cb) => NetflixMode.setOnEpisodeSelect(video, cb)
+              | None => ()
+              }
+            | _ => ()
+            }
+          }, ~sync=true)
           NetflixMode.setup(video, ~title?)
           switch onPlayer {
           | Some(cb) => cb(video)
@@ -254,7 +269,7 @@ let make = (~url, ~options, ~onPlayer=?, ~title=?, ~subtitle=?, ~episodes=?, ~on
     None
   }, [url])
 
-  React.useEffect1(() => {
+  React.useEffect2(() => {
     switch (playerRef.current, episodes) {
     | (Value(video), Some(eps)) if eps->Array.length > 0 =>
       NetflixMode.updateEpisodeMenu(video, eps)
@@ -266,10 +281,15 @@ let make = (~url, ~options, ~onPlayer=?, ~title=?, ~subtitle=?, ~episodes=?, ~on
       | Some(cb) => NetflixMode.setOnEpisodeSelect(video, cb)
       | None => ()
       }
+    | (Value(video), _) =>
+      switch onEpisodeSelect {
+      | Some(cb) => NetflixMode.setOnEpisodeSelect(video, cb)
+      | None => ()
+      }
     | _ => ()
     }
     None
-  }, [episodes])
+  }, (episodes, onEpisodeSelect))
 
   React.useEffect(() => {
     Some(

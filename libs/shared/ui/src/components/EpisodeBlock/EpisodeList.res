@@ -14,14 +14,16 @@ module Style = {
 type props_ = {
   episodes: array<EpisodeButton.t>,
   renderImage?: EpisodeCard.renderImage,
+  onSelect?: EpisodeButton.t => unit,
 }
 
 @react.component(: props_)
-let make = (~episodes, ~renderImage=?) => {
+let make = (~episodes, ~renderImage=?, ~onSelect=?) => {
   <ul className={Style.container}>
     {episodes
     ->Array.mapWithIndex((episode, index) => {
       let imageSrcSet = episode.imageSrcSet
+      let onPress = onSelect->Option.map(cb => () => cb(episode))
       <li key={index->Int.toString}>
         <EpisodeButton
           index={index + 1}
@@ -35,6 +37,7 @@ let make = (~episodes, ~renderImage=?) => {
           ?imageSrcSet
           imageAlt=episode.imageAlt
           ?renderImage
+          ?onPress
         />
       </li>
     })

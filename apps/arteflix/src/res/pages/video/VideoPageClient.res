@@ -4,6 +4,20 @@ open ArteContract
 open ArteApiProxy
 open ClientFetcher
 
+@val @module("swr")
+external useSWRNullable: (
+  Js.Nullable.t<string>,
+  SwrCommon.fetcher1<string, 'data>,
+) => Swr.swrResponse<'data> = "default"
+
+let extractSeriesId: string => option<string> = %raw(`
+  function(url) {
+    var matches = url.match(/\/(RC-\d+)\//g);
+    if (matches && matches.length >= 2) return matches[0].replace(/\//g, '');
+    return undefined;
+  }
+`)
+
 // let defaultOptions: VideoJs.playerOptions = {
 //   controls: true,
 //   preload: #auto,
@@ -47,6 +61,142 @@ let emptySingleProgramContent: ArteZone.t = {
   displayTeaserGenre: Some(false),
 }
 
+let buildEpisodeGroups = (
+  collectionData: option<ArteData.t>,
+  programData: option<ArteData.t>,
+  currentId: string,
+  ~lang: string,
+) => {
+  switch collectionData {
+  | Some(collection) =>
+    let groups =
+      collection.zones
+      ->Array.filter(z => {
+        let items = z.content.data
+        items->Array.length > 0 &&
+          items
+          ->Array.get(0)
+          ->Option.map(i => !i.kind.isCollection)
+          ->Option.getOr(false) &&
+          z.displayOptions.template == #"horizontal-landscape"
+      })
+      ->Array.map((z): NetflixMode.episodeGroup => {
+        season: z.title,
+        episodes: z.content.data->Array.map((item): NetflixMode.episode => {
+          title: item.title,
+          subtitle: item.subtitle,
+          href: item.url,
+          selected: item.id == currentId,
+          programId: ArteUtils.extractProgramId(item, ~lang),
+        }),
+      })
+    if groups->Array.length > 0 {
+      Some(groups)
+    } else {
+      None
+    }
+  | None => None
+  }->Option.getOr(
+    switch programData {
+    | Some(arteData) =>
+      arteData.zones
+      ->Array.find(z => {
+        let t = z.displayOptions.template
+        t == #"tableview-playnext" || t == #"verticalFirstHighlighted-landscape"
+      })
+      ->Option.map(z => [
+        (
+          {
+            season: z.title,
+            episodes: z.content.data->Array.map((item): NetflixMode.episode => {
+              title: item.title,
+              subtitle: item.subtitle,
+              href: item.url,
+              selected: item.id == currentId,
+              programId: ArteUtils.extractProgramId(item, ~lang),
+            }),
+          }: NetflixMode.episodeGroup
+        ),
+      ])
+      ->Option.getOr([])
+    | None => []
+    },
+  )
+}
+
+let replaceUrl: string => unit = %raw(`function(url) { window.history.replaceState(null, "", url) }`)
+
+module VideoPageZones = {
+  type props_ = {
+    params: Params.program,
+    arteData: ArteData.t,
+    episodes: array<NetflixMode.episodeGroup>,
+  }
+
+  @react.component(: props_)
+  let make = (~params, ~arteData, ~episodes) => {
+    let (currentProgramId, setCurrentProgramId) = React.useState(() => params.id)
+
+    let currentId = `${currentProgramId}_${params.lang}`
+    let remappedEpisodes =
+      episodes->Array.map((g): NetflixMode.episodeGroup => {
+        ...g,
+        episodes: g.episodes->Array.map(
+          (e): NetflixMode.episode => {...e, selected: e.programId ++ "_" ++ params.lang == currentId},
+        ),
+      })
+    let episodes = if remappedEpisodes->Array.length > 0 {
+      Some(remappedEpisodes)
+    } else {
+      None
+    }
+
+    let onEpisodeSelectHandler = React.useCallback0((ep: NetflixMode.episode) => {
+      setCurrentProgramId(_ => ep.programId)
+      replaceUrl(ep.href)
+      Webapi.Dom.window->Webapi.Dom.Window.scrollToWithOptions({"top": 0.0, "left": 0.0, "behavior": "smooth"})
+    })
+
+    let videoZones = arteData.zones->Array.filter(z =>
+      z.displayOptions.template == #"single-programContent"
+    )
+    let otherZones = arteData.zones->Array.filter(z =>
+      z.displayOptions.template != #"single-programContent"
+    )
+    let sortedZones = Array.concat(videoZones, otherZones)
+    let hasPlayer = videoZones->Array.some(z => z.content.data->Array.length > 0)
+    let onEpisodeSelect = if hasPlayer { Some(onEpisodeSelectHandler) } else { None }
+
+    Console.log3(
+      "[VideoPage] Zones:",
+      sortedZones->Array.length,
+      sortedZones->Array.mapWithIndex((z, i) =>
+        `${(i + 1)->Int.toString}. ${(z.displayOptions.template :> string)} - ${z.title}`
+      ),
+    )
+    <FadeIn>
+      <div>
+        {sortedZones
+        ->Array.mapWithIndex((zone, index) =>
+          <Lazyload key={index->Int.toString} once=true height=300 offset=200>
+            <ZoneVideo
+              id={currentProgramId}
+              key={index->Int.toString}
+              lang={params.lang}
+              zone
+              metadata={arteData.metadata}
+              parent={arteData.parent}
+              ?episodes
+              onEpisodeSelect=?onEpisodeSelect
+            />
+          </Lazyload>
+        )
+        ->React.array}
+      </div>
+    </FadeIn>
+  }
+}
+
 @react.component
 let make = (~params: Params.program) => {
   // program
@@ -81,6 +231,25 @@ let make = (~params: Params.program) => {
     Swr.useSWR(categoryParams->Urls.category, fetcher(validateArteData, ...))
   }
 
+  let seriesCollectionId =
+    data
+    ->Option.flatMap(d =>
+      d.zones->Array.find(z => {
+        let t = z.displayOptions.template
+        t == #"tableview-playnext" || t == #"verticalFirstHighlighted-landscape"
+      })
+    )
+    ->Option.flatMap(z => z.link)
+    ->Option.flatMap(l => l.url)
+    ->Option.flatMap(extractSeriesId)
+
+  let collectionUrl =
+    seriesCollectionId
+    ->Option.map(id => Urls.collection({id, lang: params.lang}))
+    ->Js.Nullable.fromOption
+
+  let {data: collectionData} = useSWRNullable(collectionUrl, fetcher(validateArteData, ...))
+
   <>
     {switch error {
     | Some(err) =>
@@ -95,54 +264,12 @@ let make = (~params: Params.program) => {
     }}
     {switch data {
     | Some(arteData) =>
-      // Move video player to top, keep API order for the rest
-      let videoZones = arteData.zones->Array.filter(z =>
-        z.displayOptions.template == #"single-programContent"
-      )
-      let otherZones = arteData.zones->Array.filter(z =>
-        z.displayOptions.template != #"single-programContent"
-      )
-      let sortedZones = Array.concat(videoZones, otherZones)
-      let episodes =
-        arteData.zones
-        ->Array.find(z => {
-          let t = z.displayOptions.template
-          t == #"tableview-playnext" || t == #"verticalFirstHighlighted-landscape"
-        })
-        ->Option.map(z =>
-          z.content.data->Array.map((item): NetflixMode.episode => {
-            title: item.title,
-            subtitle: item.subtitle,
-            href: item.url,
-            selected: item.id == params.id,
-          })
-        )
-      Console.log3(
-        "[VideoPage] Zones:",
-        sortedZones->Array.length,
-        sortedZones->Array.mapWithIndex((z, i) =>
-          `${(i + 1)->Int.toString}. ${(z.displayOptions.template :> string)} - ${z.title}`
-        ),
-      )
-      <FadeIn>
-        <div>
-          {sortedZones
-          ->Array.mapWithIndex((zone, index) =>
-            <Lazyload key={index->Int.toString} once=true height=300 offset=200>
-              <ZoneVideo
-                id={params.id}
-                key={index->Int.toString}
-                lang={params.lang}
-                zone
-                metadata={arteData.metadata}
-                parent={arteData.parent}
-                ?episodes
-              />
-            </Lazyload>
-          )
-          ->React.array}
-        </div>
-      </FadeIn>
+      <VideoPageZones
+        key={`${params.id}_${params.lang}`}
+        params
+        arteData
+        episodes={buildEpisodeGroups(collectionData, data, `${params.id}_${params.lang}`, ~lang=params.lang)}
+      />
     | None => <PageSkeleton />
     }}
   </>
