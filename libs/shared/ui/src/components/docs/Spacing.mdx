@@ -4,31 +4,54 @@ import { Meta } from '@storybook/blocks';
 
 # Spacing
 
+Defined in `Spacing.res` as raw pixel strings.
+
 <div style={{ color: 'white', backgroundColor: '#141414', padding: '2rem' }}>
 
-| Size | px |
-|------|-----|
-| xs | 4 |
-| sm | 8 |
-| md | 16 |
-| lg | 24 |
-| xl | 32 |
-| 2xl | 48 |
-| 3xl | 64 |
+| Token | Value |
+|-------|-------|
+| `Spacing.xs` | 4px |
+| `Spacing.sm` | 8px |
+| `Spacing.md` | 16px |
+| `Spacing.lg` | 24px |
+| `Spacing.xl` | 32px |
+| `Spacing.xxl` | 48px |
+| `Spacing.xxxl` | 64px |
+| `Spacing.section` | 80px |
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '2rem' }}>
+  {['4px', '8px', '16px', '24px', '32px', '48px', '64px', '80px'].map((size) => (
+    <div key={size} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ width: size, height: '16px', backgroundColor: 'rgb(229, 9, 20)', flexShrink: 0 }} />
+      <span style={{ fontSize: '12px', opacity: 0.7 }}>{size}</span>
+    </div>
+  ))}
+</div>
 
 </div>
 
 ## Layout
 
 - Side padding: 4% viewport
-- Section gap: 48px
-- Card gap: 8px
+- Section gap: 48px (`Spacing.xxl`)
+- Card gap: 8px (`Spacing.sm`)
+
+## Border Radius
+
+Defined in `Radius.res`.
+
+| Token | Value |
+|-------|-------|
+| `Radius.sm` | 4px |
+| `Radius.md` | 8px |
+| `Radius.lg` | 16px |
+| `Radius.full` | 9999px |
 
 ## Breakpoints
 
 | | |
 |---|---|
 | Mobile | < 600px |
-| Tablet | 600-1024px |
-| Desktop | 1024-1440px |
+| Tablet | 600–1024px |
+| Desktop | 1024–1440px |
 | TV | > 1440px |

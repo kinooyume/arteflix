@@ -4,41 +4,134 @@ import { Meta } from '@storybook/blocks';
 
 # Typography
 
-Netflix Sans font, fallback to Helvetica/Arial.
+Netflix Sans font family with system fallbacks.
 
-```css
-font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+```
+font-family: Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
 ```
 
-## Sizes
+Defined in `Typo.res`. All styles are Emotion class names.
 
-<div style={{ color: 'white', backgroundColor: '#141414', padding: '2rem' }}>
+## Regular (weight 400)
 
-<p style={{ fontSize: '3.5rem', fontWeight: 700, lineHeight: 1.1 }}>
-  Hero (3.5rem/700)
+<div style={{ color: 'white', backgroundColor: '#141414', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '50px', fontWeight: 400, lineHeight: '1.277em' }}>
+  largeTitle — 50px / 1.277em
 </p>
 
-<p style={{ fontSize: '1.5rem', fontWeight: 700 }}>
-  Section title (1.5rem/700)
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '27px', fontWeight: 400, lineHeight: '1.333em' }}>
+  title1 — clamp(16→27px) / 1.333em
 </p>
 
-<p style={{ fontSize: '1rem', fontWeight: 600 }}>
-  Card title (1rem/600)
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '24px', fontWeight: 400, lineHeight: '1.25em' }}>
+  title2 — 24px / 1.25em
 </p>
 
-<p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)' }}>
-  Body (0.875rem/400)
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '21px', fontWeight: 400, lineHeight: '1.19em' }}>
+  title3 — 21px / 1.19em
 </p>
 
-<p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>
-  Small/meta (0.75rem)
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '20px', fontWeight: 400, lineHeight: '1.5em' }}>
+  title4 — 20px / 1.5em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '18px', fontWeight: 400, lineHeight: '1.222em' }}>
+  headline1 — 18px / 1.222em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '17px', fontWeight: 400, lineHeight: '1.277em' }}>
+  headline2 — clamp(13→17px) / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '16px', fontWeight: 400, lineHeight: '1.277em' }}>
+  body — 16px / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '1.429em' }}>
+  smallBody — 14px / 1.429em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, lineHeight: '1.231em' }}>
+  caption1 — 13px / 1.231em / LS +1.92%
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '11px', fontWeight: 400, lineHeight: '1.277em' }}>
+  caption2 — 11px / 1.277em
+</p>
+
+</div>
+
+## Medium (weight 500)
+
+<div style={{ color: 'white', backgroundColor: '#141414', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '33px', fontWeight: 500, lineHeight: '1.277em' }}>
+  largeTitle — 33px / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '30px', fontWeight: 500, lineHeight: '1.5em' }}>
+  title1 — 30px / 1.5em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '28px', fontWeight: 500, lineHeight: '1.607em' }}>
+  title2 — 28px / 1.607em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '24px', fontWeight: 500, lineHeight: '1.277em' }}>
+  title3 — clamp(18→24px) / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '22px', fontWeight: 500, lineHeight: '1em' }}>
+  title4 — 22px / 1em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '21px', fontWeight: 500, lineHeight: '1.19em' }}>
+  headline1 — 21px / 1.19em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '20px', fontWeight: 500, lineHeight: '1.5em' }}>
+  headline2 — clamp(16→20px) / 1.5em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '16px', fontWeight: 500, lineHeight: '1.5em' }}>
+  body — 16px / 1.5em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 500, lineHeight: '1.277em' }}>
+  smallBody — 14px / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 500, lineHeight: '1.277em' }}>
+  caption1 — 13px / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 500, lineHeight: '1.277em' }}>
+  caption2 — 12px / 1.277em / LS -2.08%
+</p>
+
+</div>
+
+## Bold (weight 700)
+
+<div style={{ color: 'white', backgroundColor: '#141414', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '55px', fontWeight: 700, lineHeight: '1.277em' }}>
+  largeTitle — 55px / 1.277em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '48px', fontWeight: 700, lineHeight: '1.292em' }}>
+  title1 — clamp(22→48px) / 1.292em
+</p>
+
+<p style={{ fontFamily: 'Netflix Sans, Helvetica Neue, Helvetica, Arial, sans-serif', fontSize: '20px', fontWeight: 700, lineHeight: '1.5em' }}>
+  title2 — 20px / 1.5em
 </p>
 
 </div>
 
 ## Weights
 
-- 400 — body
-- 500 — buttons
-- 600 — card titles
-- 700 — headings
+- **400** — Regular: body, captions, headlines
+- **500** — Medium: buttons, subtitles, emphasized text
+- **700** — Bold: hero titles, section headers

@@ -4,25 +4,53 @@ import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
 
 # Colors
 
-Dark theme with red accent. You know the vibe.
+Dark theme with red accent. Defined in `Colors.res` as raw values, `Colors.Text.*` class names, and `Colors.Background.*` class names.
 
-## Main
+## Primary
 
 <ColorPalette>
   <ColorItem
     title="Black"
-    subtitle="bg"
-    colors={{ black: '#000' }}
+    subtitle="primaryBlack"
+    colors={{ black: 'rgb(0, 0, 0)' }}
   />
   <ColorItem
     title="Red"
-    subtitle="accent"
-    colors={{ red: '#e50914' }}
+    subtitle="primaryRed"
+    colors={{ red: 'rgb(229, 9, 20)' }}
   />
   <ColorItem
     title="White"
-    subtitle="text"
-    colors={{ white: '#fff' }}
+    subtitle="primaryWhite"
+    colors={{ white: 'rgb(255, 255, 255)' }}
+  />
+</ColorPalette>
+
+## Secondary
+
+<ColorPalette>
+  <ColorItem
+    title="Red"
+    subtitle="secondaryRed"
+    colors={{
+      '100': 'rgb(235, 57, 66)',
+      '200': 'rgb(193, 17, 25)',
+      '300': 'rgb(245, 7, 35)',
+    }}
+  />
+  <ColorItem
+    title="Blue"
+    subtitle="secondaryBlue"
+    colors={{
+      '100': 'rgb(0, 113, 235)',
+      '200': 'rgb(68, 142, 244)',
+      '300': 'rgb(84, 185, 197)',
+    }}
+  />
+  <ColorItem
+    title="Green"
+    subtitle="secondaryGreen"
+    colors={{ green: 'rgb(70, 211, 105)' }}
   />
 </ColorPalette>
 
@@ -32,25 +60,41 @@ Dark theme with red accent. You know the vibe.
   <ColorItem
     title="Light"
     colors={{
-      'grey-10': '#e5e5e5',
-      'grey-50': '#bcbcbc',
-      'grey-100': '#b3b3b3',
+      '10': 'rgb(229, 229, 229)',
+      '20': 'rgb(220, 220, 220)',
+      '25': 'rgb(210, 210, 210)',
+      '50': 'rgb(188, 188, 188)',
+      '100': 'rgb(179, 179, 179)',
     }}
   />
   <ColorItem
-    title="Mid"
+    title="Mid-light"
     colors={{
-      'grey-200': '#808080',
-      'grey-300': '#6d6d6e',
-      'grey-400': '#414141',
+      '150': 'rgb(151, 151, 151)',
+      '200': 'rgb(128, 128, 128)',
+      '250': 'rgb(119, 119, 119)',
+      '350': 'rgb(84, 84, 84)',
+      '400': 'rgb(65, 65, 65)',
+    }}
+  />
+  <ColorItem
+    title="Mid-dark"
+    colors={{
+      '450': 'rgb(64, 64, 64)',
+      '500': 'rgb(58, 58, 58)',
+      '550': 'rgb(54, 54, 54)',
+      '600': 'rgb(51, 51, 51)',
+      '650': 'rgb(47, 47, 47)',
     }}
   />
   <ColorItem
     title="Dark"
     colors={{
-      'grey-600': '#333',
-      'grey-800': '#232323',
-      'grey-900': '#141414',
+      '700': 'rgb(42, 42, 42)',
+      '750': 'rgb(38, 38, 38)',
+      '800': 'rgb(35, 35, 35)',
+      '850': 'rgb(24, 24, 24)',
+      '900': 'rgb(20, 20, 20)',
     }}
   />
 </ColorPalette>
@@ -61,17 +105,28 @@ Dark theme with red accent. You know the vibe.
   <ColorItem
     title="White alpha"
     colors={{
-      '15%': 'rgba(255,255,255,0.15)',
-      '50%': 'rgba(255,255,255,0.5)',
-      '70%': 'rgba(255,255,255,0.7)',
+      '15%': 'rgba(255, 255, 255, 0.15)',
+      '20%': 'rgba(255, 255, 255, 0.2)',
+      '30%': 'rgba(255, 255, 255, 0.3)',
+      '35%': 'rgba(255, 255, 255, 0.35)',
+      '50%': 'rgba(255, 255, 255, 0.5)',
+      '70%': 'rgba(255, 255, 255, 0.7)',
     }}
   />
   <ColorItem
     title="Black alpha"
     colors={{
-      '30%': 'rgba(0,0,0,0.3)',
-      '60%': 'rgba(0,0,0,0.6)',
-      '90%': 'rgba(0,0,0,0.9)',
+      '30%': 'rgba(0, 0, 0, 0.3)',
+      '60%': 'rgba(0, 0, 0, 0.6)',
+      '90%': 'rgba(0, 0, 0, 0.9)',
+    }}
+  />
+  <ColorItem
+    title="Grey alpha"
+    colors={{
+      '300 @ 70%': 'rgba(109, 109, 110, 0.7)',
+      '300 @ 40%': 'rgba(109, 109, 110, 0.4)',
+      '600 @ 60%': 'rgba(51, 51, 51, 0.6)',
     }}
   />
 </ColorPalette>

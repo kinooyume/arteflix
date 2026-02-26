@@ -7,7 +7,7 @@ module Element = Webapi.Dom.Element
 
 module Style = {
   let wrapper =
-    ReactDOM.Style.make(~width="100%", ~height="100%", ~borderRadius="4px", ())->css
+    ReactDOM.Style.make(~width="100%", ~height="100%", ~borderRadius=Radius.sm, ())->css
 }
 
 type videoProps = {
