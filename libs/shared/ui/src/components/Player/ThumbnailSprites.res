@@ -1,6 +1,7 @@
 let setup: (VideoJs.t, string) => unit = %raw(`
   function(player, manifestUrl) {
     var tooltip = null;
+    var thumbImg = null;
     var timeLabel = null;
     var cues = [];
     var sheetSizes = {};
@@ -50,6 +51,38 @@ let setup: (VideoJs.t, string) => unit = %raw(`
     var THUMB_W = 160;
     var THUMB_H = 90;
 
+    player.ready(function() {
+      var playerEl = player.el();
+      progressHolder = playerEl.querySelector('.vjs-progress-holder');
+      if (!progressHolder) return;
+
+      tooltip = document.createElement('div');
+      tooltip.className = 'vjs-sprite-thumbnail';
+
+      thumbImg = document.createElement('div');
+      thumbImg.className = 'vjs-sprite-thumbnail-img';
+      thumbImg.style.width = THUMB_W + 'px';
+      thumbImg.style.height = THUMB_H + 'px';
+      thumbImg.style.display = 'none';
+      tooltip.appendChild(thumbImg);
+
+      timeLabel = document.createElement('div');
+      timeLabel.className = 'vjs-sprite-thumbnail-time';
+      tooltip.appendChild(timeLabel);
+
+      progressHolder.appendChild(tooltip);
+      progressHolder.addEventListener('mousemove', onMove);
+      progressHolder.addEventListener('mouseleave', onLeave);
+
+      player.on('dispose', function() {
+        if (tooltip && tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+        if (progressHolder) {
+          progressHolder.removeEventListener('mousemove', onMove);
+          progressHolder.removeEventListener('mouseleave', onLeave);
+        }
+      });
+    });
+
     fetch(manifestUrl).then(function(r) { return r.text(); }).then(function(manifest) {
       var match = manifest.match(/#SPRITES:\s*(.+)$/m);
       if (!match) return;
@@ -73,64 +106,35 @@ let setup: (VideoJs.t, string) => unit = %raw(`
             }
           }
         }
-        if (!cues.length) return;
-
-        tooltip = document.createElement('div');
-        tooltip.className = 'vjs-sprite-thumbnail';
-        tooltip.style.width = THUMB_W + 'px';
-
-        var thumbImg = document.createElement('div');
-        thumbImg.className = 'vjs-sprite-thumbnail-img';
-        thumbImg.style.width = THUMB_W + 'px';
-        thumbImg.style.height = THUMB_H + 'px';
-        tooltip.appendChild(thumbImg);
-
-        timeLabel = document.createElement('div');
-        timeLabel.className = 'vjs-sprite-thumbnail-time';
-        tooltip.appendChild(timeLabel);
-
-        var playerEl = player.el();
-        progressHolder = playerEl.querySelector('.vjs-progress-holder');
-        if (!progressHolder) return;
-        progressHolder.appendChild(tooltip);
-
-        progressHolder.addEventListener('mousemove', onMove);
-        progressHolder.addEventListener('mouseleave', onLeave);
-
-        player.on('dispose', function() {
-          if (tooltip && tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
-          if (progressHolder) {
-            progressHolder.removeEventListener('mousemove', onMove);
-            progressHolder.removeEventListener('mouseleave', onLeave);
-          }
-        });
       });
     }).catch(function(e) { console.warn('[sprites]', e); });
 
     function onMove(e) {
-      if (!tooltip || !cues.length) return;
+      if (!tooltip) return;
       var rect = this.getBoundingClientRect();
       var ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
       var time = ratio * player.duration();
-      var cue = findCue(time);
 
       timeLabel.textContent = formatTime(time);
 
-      var img = tooltip.querySelector('.vjs-sprite-thumbnail-img');
-      if (cue) {
+      var cue = findCue(time);
+      if (cue && thumbImg) {
         var scaleX = THUMB_W / cue.w;
         var scaleY = THUMB_H / cue.h;
         var sheet = sheetSizes[cue.url];
-        img.style.backgroundImage = 'url(' + cue.url + ')';
-        img.style.backgroundPosition = (-cue.x * scaleX) + 'px ' + (-cue.y * scaleY) + 'px';
-        img.style.backgroundSize = (sheet.w * scaleX) + 'px ' + (sheet.h * scaleY) + 'px';
-        img.style.display = 'block';
-      } else {
-        img.style.display = 'none';
+        thumbImg.style.backgroundImage = 'url(' + cue.url + ')';
+        thumbImg.style.backgroundPosition = (-cue.x * scaleX) + 'px ' + (-cue.y * scaleY) + 'px';
+        thumbImg.style.backgroundSize = (sheet.w * scaleX) + 'px ' + (sheet.h * scaleY) + 'px';
+        thumbImg.style.display = 'block';
+        tooltip.style.width = THUMB_W + 'px';
+      } else if (thumbImg) {
+        thumbImg.style.display = 'none';
+        tooltip.style.width = 'auto';
       }
 
-      var left = e.clientX - rect.left - THUMB_W / 2;
-      left = Math.max(0, Math.min(left, rect.width - THUMB_W));
+      var tooltipW = tooltip.offsetWidth;
+      var left = e.clientX - rect.left - tooltipW / 2;
+      left = Math.max(0, Math.min(left, rect.width - tooltipW));
       tooltip.style.left = left + 'px';
       tooltip.style.display = 'block';
     }

@@ -201,6 +201,9 @@ ${Responsive.mobileDown} {
   overflow: hidden;
   background-color: #141414;
 }
+.vjs-sprite-thumbnail-img {
+  display: block;
+}
 .vjs-sprite-thumbnail-time {
   font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
   font-size: 12px;
@@ -208,7 +211,6 @@ ${Responsive.mobileDown} {
   color: #fff;
   text-align: center;
   padding: 4px 0;
-  background: #141414;
 }
 
     `->rawCss
