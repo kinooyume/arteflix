@@ -64,6 +64,9 @@ module Style = {
 .vjs-volume-control {
   padding-top: 6px !important;
 }
+.vjs-mute-control.vjs-vol-0 ~ .vjs-volume-control {
+  display: none !important;
+}
 
 /* Menu */
 .vjs-menu {
@@ -122,7 +125,7 @@ ${Responsive.mobileDown} {
 
 /* Episodes menu */
 .vjs-episodes-button .vjs-icon-placeholder:before {
-  content: '\\f10b';
+  content: '\\f10e';
 }
 .vjs-episodes-button .vjs-menu {
   max-height: 60vh;

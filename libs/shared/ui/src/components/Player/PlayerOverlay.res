@@ -24,7 +24,7 @@ module Style = {
   let title =
     `
     margin: 0 0 4px;
-    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-family: ${Typo.fontFamily};
     font-size: clamp(24px, 1.2rem + 1.5vw, 48px);
     font-weight: 700;
     line-height: 1.1;
@@ -35,7 +35,7 @@ module Style = {
     `
     display: block;
     margin-bottom: 12px;
-    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-family: ${Typo.fontFamily};
     font-size: clamp(16px, 0.8rem + 0.6vw, 24px);
     font-weight: 500;
     line-height: 1.3;
@@ -48,7 +48,7 @@ module Style = {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+    font-family: ${Typo.fontFamily};
     font-size: clamp(13px, 0.65rem + 0.35vw, 17px);
     font-weight: 400;
     line-height: 1.5;
