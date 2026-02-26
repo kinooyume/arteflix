@@ -123,9 +123,9 @@ ${Responsive.mobileDown} {
   color: #FFF !important;
 }
 
-/* Episodes menu */
-.vjs-episodes-button .vjs-icon-placeholder:before {
-  content: '\\f10e';
+/* Episodes menu — hidden for now */
+.vjs-episodes-button {
+  display: none !important;
 }
 .vjs-episodes-button .vjs-menu {
   max-height: 60vh;
@@ -167,6 +167,9 @@ ${Responsive.mobileDown} {
   border-radius: ${Radius.md};
   background-color: ${Colors.secondaryRed_300};
 }
+.vjs-time-tooltip {
+  display: none !important;
+}
 .vjs-slider {
   background-color: ${Colors.greyGrey_200} !important;
 }
@@ -179,6 +182,33 @@ ${Responsive.mobileDown} {
 }
 .vjs-load-progress, .vjs-load-progress div {
   background-color: ${Colors.greyGrey_25} !important;
+}
+
+.vjs-progress-control,
+.vjs-progress-holder {
+  overflow: visible !important;
+}
+
+.vjs-sprite-thumbnail {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 8px;
+  pointer-events: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.6);
+  display: none;
+  z-index: 2;
+  overflow: hidden;
+  background-color: #141414;
+}
+.vjs-sprite-thumbnail-time {
+  font-family: Netflix Sans, Tahoma, Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  padding: 4px 0;
+  background: #141414;
 }
 
     `->rawCss
@@ -247,6 +277,7 @@ let make = (~url, ~options, ~onPlayer=?, ~title=?, ~subtitle=?, ~episodes=?, ~on
             }
           }, ~sync=true)
           NetflixMode.setup(video, ~title?)
+          ThumbnailSprites.setup(video, url)
           switch onPlayer {
           | Some(cb) => cb(video)
           | None => ()
