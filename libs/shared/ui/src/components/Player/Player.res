@@ -1,5 +1,4 @@
 open Emotion
-let document = Webapi.Dom.document
 module Document = Webapi.Dom.Document
 module Element = Webapi.Dom.Element
 
@@ -245,7 +244,7 @@ let make = (~url, ~options, ~onPlayer=?, ~title=?, ~subtitle=?, ~episodes=?, ~on
     | _ =>
       switch videoRef.current {
       | Value(ref) => {
-          let videoElement = document->Document.createElement("video-js")
+          let videoElement = Webapi.Dom.document->Document.createElement("video-js")
           let class =
             " video-js vjs-big-play-centered vjs-fill " ++
             Style.player ++

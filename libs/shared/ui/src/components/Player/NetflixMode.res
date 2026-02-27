@@ -1,4 +1,3 @@
-let document = Webapi.Dom.document
 module Document = Webapi.Dom.Document
 module Element = Webapi.Dom.Element
 
@@ -167,13 +166,13 @@ let setup = (player, ~title=?) => {
 
   let gradientBase = "position:absolute;left:0;right:0;pointer-events:none;z-index:1;"
 
-  let topGradient = document->Document.createElement("div")
+  let topGradient = Webapi.Dom.document->Document.createElement("div")
   topGradient->Element.setClassName("netflix-gradient")
   topGradient->Element.setAttribute("style",
     gradientBase ++ "top:0;height:120px;background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);",
   )
 
-  let bottomGradient = document->Document.createElement("div")
+  let bottomGradient = Webapi.Dom.document->Document.createElement("div")
   bottomGradient->Element.setClassName("netflix-gradient")
   bottomGradient->Element.setAttribute("style",
     gradientBase ++ "bottom:0;height:160px;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);",
@@ -201,7 +200,7 @@ let setup = (player, ~title=?) => {
 
   switch playerEl->VideoJs.querySelector(".vjs-control-bar") {
   | Some(controlBar) => {
-      let titleEl = document->Document.createElement("div")
+      let titleEl = Webapi.Dom.document->Document.createElement("div")
       titleEl->Element.setClassName("vjs-netflix-title")
       titleEl->Element.setAttribute("style",
         "position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:50%;font-family:Netflix Sans,Tahoma,Verdana,sans-serif;font-size:14px;font-weight:600;color:#fff;display:flex;align-items:baseline;gap:0;",
