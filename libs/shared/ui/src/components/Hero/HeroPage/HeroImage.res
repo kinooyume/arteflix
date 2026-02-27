@@ -11,9 +11,9 @@ module Style = {
 
   let containerFullscreen = `
     display: grid;
-    grid-template-rows: minmax(clamp(48px, 2.5rem + 1.3vw, 68px), 1fr) auto minmax(0, 35%);
+    grid-template-rows: minmax(clamp(48px, 2.5rem + 1.3vw, 68px), 1fr) auto minmax(0, 18%);
     height: 56.25vw;
-    max-height: calc(100vh - 400px);
+    max-height: calc(100vh - 260px);
     overflow: visible;
   `->rawCss
 
