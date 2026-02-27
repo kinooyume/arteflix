@@ -8,7 +8,7 @@ let style =
     ~justifyContent="center",
     ~alignItems="center",
     ~gap="10px",
-    ~borderRadius="4px",
+    ~borderRadius=Radius.sm,
     ~border=`1px solid ${Colors.greyGrey_200}`,
     ~color=Colors.greyGrey_10,
     (),

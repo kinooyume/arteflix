@@ -87,12 +87,14 @@ let make = (~zone, ~orientation, ~children, ~forceTitle=false,  ~showKind=false)
       }
 
       let showTrailer = showKind || zone.displayTeaserGenre->Option.getOr(false)
+      let link = zone.link->Option.flatMap(l => l.url)
 
       let cards = zone.content.data->cardsCached(~orientation)
 
       {
         children({
           title,
+          link,
           key: zone.id ++ "-cards",
           showDuration: zone.displayOptions.showItemTitle,
           cards,

@@ -1,5 +1,5 @@
 module Motion = {
-  type transition = {duration?: float}
+  type transition = {duration?: float, delay?: float}
 
   type animate = {
     opacity?: float,

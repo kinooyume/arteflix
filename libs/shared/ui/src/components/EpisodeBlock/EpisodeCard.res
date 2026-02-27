@@ -30,10 +30,12 @@ type props_ = {
 
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false, ~renderImage=?) => {
+  let (retrySrc, onRetryError) = UseRetryImage.useRetryImage(~src)
+
   <div className={Style.container}>
     {switch renderImage {
-    | Some(render) => render(~src, ~alt, ~className=Style.image)
-    | None => <img loading=#"lazy" className={Style.image} src ?srcSet ?sizes alt />
+    | Some(render) => render(~src=retrySrc, ~alt, ~className=Style.image)
+    | None => <img loading=#"lazy" onError=onRetryError className={Style.image} src=retrySrc ?srcSet ?sizes alt />
     }}
     {switch hover {
     | true => <CardOverlayPlay />

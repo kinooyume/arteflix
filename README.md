@@ -3,13 +3,13 @@
 [![CI](https://github.com/kinooyume/arteflix/actions/workflows/ci.yml/badge.svg)](https://github.com/kinooyume/arteflix/actions/workflows/ci.yml)
 [![Release](https://github.com/kinooyume/arteflix/actions/workflows/release.yml/badge.svg)](https://github.com/kinooyume/arteflix/actions/workflows/release.yml)
 
-A Netflix-like interface for Arte.tv.
 
 [![ReScript](https://img.shields.io/badge/ReScript-11-E84F4F?logo=rescript&logoColor=white)](https://rescript-lang.org)
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=next.js&logoColor=white)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Bun](https://img.shields.io/badge/Bun-latest-FBF0DF?logo=bun&logoColor=black)](https://bun.sh)
 
+A Netflix-like interface for Arte.tv.
 Built almost entirely in ReScript — this started as an experiment to see how far I could push ReScript in a real project with minimal JS/TS escape hatches. Turns out, pretty far.
 
 

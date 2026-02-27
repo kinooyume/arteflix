@@ -3,6 +3,13 @@
 open ArteContract
 open ArteApiProxy
 open ClientFetcher
+open Emotion
+
+let rowsContainer = `
+  position: relative;
+  z-index: 2;
+  margin-top: -6vw;
+`->rawCss
 
 type props_ = {params: Params.home}
 
@@ -26,12 +33,13 @@ let make = (~params) => {
     {switch data {
     | Some(arteData) =>
       <FadeIn>
-        // {switch arteData.apiPlayerConfig {
-        // | Some(playerConfig) => <p> {"Player"->React.string} </p>
-        // | None => React.null
-        // }}
-        <div>
+        {switch arteData.zones->Array.get(0) {
+        | Some(heroZone) => <Zone key={heroZone.id} zone=heroZone />
+        | None => React.null
+        }}
+        <div className=rowsContainer>
           {arteData.zones
+          ->Array.sliceToEnd(~start=1)
           ->Array.map(zone =>
             <Lazyload key={zone.id} once=true height=300 offset=200>
               <Zone zone />

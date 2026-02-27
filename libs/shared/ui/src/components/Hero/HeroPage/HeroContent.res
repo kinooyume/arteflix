@@ -12,7 +12,8 @@ module Style = {
     }
   `->rawCss
   let small = ReactDOM.Style.make(~gap="36px", ())->css
-  let buttonWrapper = ReactDOM.Style.make(~display="flex", ())->css
+  let buttonWrapper = ReactDOM.Style.make(~display="flex", ~gap="12px", ())->css
+  let infoInner = ReactDOM.Style.make(~display="flex", ~alignItems="center", ~gap="12px", ())->css
 }
 type props_ = {
   title: string,
@@ -39,6 +40,12 @@ let make = (~title, ~subtitle, ~description, ~small=false, ~href, ~callToAction=
     | Some(text) =>
       <div className={Style.buttonWrapper}>
         <ButtonPlay href text />
+        <Button variant={Button.Tertiary} size={Button.Medium} href>
+          <div className={Style.infoInner}>
+            <Svg.InfoCircle />
+            {"Plus d'infos"->React.string}
+          </div>
+        </Button>
       </div>
     | None => React.null
     }}

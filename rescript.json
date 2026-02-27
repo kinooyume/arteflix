@@ -30,6 +30,10 @@
       "subdirs": true
     },
     {
+      "dir": "libs/arte-api/src",
+      "subdirs": true
+    },
+    {
       "dir": "libs/prefetch-arte/src"
     }
   ],

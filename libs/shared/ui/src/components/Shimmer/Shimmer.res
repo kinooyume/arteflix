@@ -32,7 +32,7 @@ type props_ = {
 }
 
 @react.component(: props_)
-let make = (~width, ~height, ~borderRadius="4px", ~className=?) =>
+let make = (~width, ~height, ~borderRadius=Radius.sm, ~className=?) =>
   <div
     className={switch className {
     | Some(extra) => cx([Style.base(~width, ~height, ~borderRadius), extra])

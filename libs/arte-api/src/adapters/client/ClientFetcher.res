@@ -1,4 +1,3 @@
-// Fetcher and validation on front side
 open Fetch
 
 exception FetchError(Exn.t)
@@ -7,7 +6,7 @@ exception ParseError(S.error)
 let validateArteData = text => text->S.parseJsonStringOrThrow(ArteData.schema)
 let validatePlayerData = text => text->S.parseJsonStringOrThrow(ArtePlayerConfig.schema)
 
-let fetcher = async (validateArteData, url) => {
+let fetcher = async (validate, url) => {
   try {
     let resp = await fetch(
       url,
@@ -16,8 +15,9 @@ let fetcher = async (validateArteData, url) => {
       },
     )
     let stringData = await Response.text(resp)
-    stringData->validateArteData
+    stringData->validate
   } catch {
+  | S.Error(e) => raise(ParseError(e))
   | Exn.Error(err) => raise(FetchError(err))
   }
 }

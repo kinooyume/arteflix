@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@arteflix/prefetch-arte": ["libs/prefetch-arte/src/index.ts"],
+      "@arteflix/arte-api": ["libs/arte-api/src/"],
       "@arteflix/ui": ["libs/shared/ui/src/"]
     }
   },

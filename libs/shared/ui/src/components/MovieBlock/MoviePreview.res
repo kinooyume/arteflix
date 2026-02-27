@@ -78,8 +78,8 @@ let make = React.memo((
         <Motion.div
           key={href ++ "-description"}
           initial={{opacity: 0.0, height: "0"}}
-          animate={{opacity: 1.0, height: px(descH), transition: {duration: 0.15}}}
-          exit={{opacity: 0.0, height: "0", transition: {duration: 0.08}}}>
+          animate={{opacity: 1.0, height: px(descH), transition: {duration: 0.1, delay: 0.12}}}
+          exit={{opacity: 0.0, height: "0", transition: {duration: 0.06}}}>
           <PreviewDescription key={href ++ "-description"}>
             <PreviewDescriptionActions key={href ++ "-actions"}>
               <PlayButtonRounded href linkAlt />

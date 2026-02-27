@@ -5,7 +5,7 @@ module Style = {
     ReactDOM.Style.make(
       ~display="flex",
       ~flexDirection="column",
-      ~gap="8px",
+      ~gap=Spacing.sm,
       ~width="100%",
       ~padding="16px 14px",
       (),

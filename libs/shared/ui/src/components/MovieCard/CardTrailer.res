@@ -6,7 +6,7 @@ module Style = {
       ~display="inline-flex",
       ~flexDirection="column",
       ~alignItems="flex-start",
-      ~borderRadius="4px",
+      ~borderRadius=Radius.sm,
       (),
     )->css
 }

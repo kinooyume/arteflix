@@ -19,3 +19,8 @@ module Dot = {
   @module("./Dot.jsx") @react.component(: props_)
   external make: unit => React.element = "default"
 }
+
+module InfoCircle = {
+  @module("./InfoCircle.jsx") @react.component
+  external make: unit => React.element = "default"
+}

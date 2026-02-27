@@ -1,5 +1,4 @@
 open GreenfinityNext_Errors
-open Belt
 
 type method = [#get | #post | #put]
 
@@ -29,14 +28,14 @@ module FetchResponse = {
   }
   let jsonResult = async response => {
     let text = await response.text(.)
-    try Js.Json.parseExn(text)->Result.Ok catch {
+    try Ok(Js.Json.parseExn(text)) catch {
     | Js.Exn.Error(obj) =>
       switch Js.Exn.name(obj) {
-      | Some("SyntaxError") => Result.Error(text)
-      | Some(_) => raise(JsonDecodeError(obj->Js.Exn.message->Option.getWithDefault("")))
+      | Some("SyntaxError") => Error(text)
+      | Some(_) => raise(JsonDecodeError(obj->Js.Exn.message->Option.getOr("")))
       | None => raise(JsonDecodeError(""))
       }
-    | _ => Result.Error(text)
+    | _ => Error(text)
     }
   }
   let json = async response => await response.json(.)

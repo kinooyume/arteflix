@@ -1,11 +1,12 @@
-open Webapi.Dom
 open Emotion
+module Document = Webapi.Dom.Document
+module Element = Webapi.Dom.Element
 
 %%raw("import 'video.js/dist/video-js.css'")
 
 module Style = {
   let wrapper =
-    ReactDOM.Style.make(~width="100%", ~height="100%", ~borderRadius="4px", ())->css
+    ReactDOM.Style.make(~width="100%", ~height="100%", ~borderRadius=Radius.sm, ())->css
 }
 
 type videoProps = {
@@ -32,7 +33,7 @@ let make = (~url, ~onLoaded=?, ~options) => {
     | _ =>
       switch videoRef.current {
       | Value(ref) => {
-          let videoElement = document->Document.createElement("video-js")
+          let videoElement = Webapi.Dom.document->Document.createElement("video-js")
           let class =
             " video-js vjs-big-play-centered vjs-fill " ++ " " ++ Typo.Regular.headline2Force
 

@@ -4,7 +4,6 @@ open ArteContract
 exception NextDataError(string)
 exception FetchError(Exn.t)
 exception ParseError(S.error)
-exception MockupError(Exn.t)
 
 module Urls = {
   let home = ({lang}: Params.home) =>
@@ -40,6 +39,7 @@ module Gateway = {
       let stringData = await Response.text(resp)
       stringData->validate
     } catch {
+    | S.Error(e) => raise(ParseError(e))
     | Exn.Error(err) => raise(FetchError(err))
     }
   }
@@ -75,15 +75,10 @@ module Fetcher = {
     content.value
   }
 
-  let category = async ({lang, slug}: Params.category) => {
-    let slugList = slug->String.split("/")->List.fromArray
-    let code = switch ArteRoutesData.routes->Dict.get(lang) {
-    | Some(data) =>
-      switch data->ArteRoutesData.findPage(slugList) {
-      | Some(page) => page.code
-      | None => ""
-      }
-    | None => raise(NextDataError("No routes found for the given language"))
+  let category = async (~resolveCategory, {lang, slug}: Params.category) => {
+    let code = switch resolveCategory(lang, slug) {
+    | Some(code) => code
+    | None => raise(NextDataError("No routes found for the given language and slug"))
     }
     let contentUrl = Urls.category(lang, code)
     let content = await Gateway.contentFetcher(contentUrl)
@@ -103,63 +98,3 @@ module Fetcher = {
     content.data
   }
 }
-
-// Source pour Arte
-
-// https://api.arte.tv/api/player/v2/config/en/PNE0226
-
-// Playlist
-// https://api-internal.arte.tv/api/player/v2/playlist/en/111699-001-A
-
-//
-// Global stuff ? to check
-// NOTE: Ouai donc on va avoir besoins de ça coté back, pour faire le liens avec les category
-// ==> Donc "malheureusement", on va le garder en fix
-// ==> Sinon, ça va etre long de faire double requete
-//
-// https://www.arte.tv/api/rproxy/emac/v4/en/web/
-//
-// +++ ==>
-// PAGES
-// https://www.arte.tv/api/rproxy/emac/v4/fr/web/pages/HOME
-
-// Category
-
-// https://www.arte.tv/api/rproxy/emac/v4/en/web/pages/CIN
-// --> CIN for cinema
-// Page content I think, zones quoi
-// https://www.arte.tv/api/rproxy/emac/v4/en/web/programs/106711-000-A/
-
-// RC-023234
-//fr/videos/106711-000-A/tax-wars/
-//
-// Api Player
-// https://api.arte.tv/api/player/v2/config/fr/112907-091-A
-//
-
-// Videos
-// https://www.arte.tv/api/rproxy/emac/v4/en/web/programs/106711-000-A/
-
-// Collection ·
-// https://www.arte.tv/api/rproxy/emac/v4/fr/web/collections/RC-023234/
-//
-
-// DIRECT
-// https://api.arte.tv/api/player/v2/config/fr/LIVE
-//
-
-//
-//
-//
-//
-// PAS FOU:
-//
-// https://www.arte.tv/api/rproxy/emac/v4/fr/web/zones/bee2e20c-9485-47b6-bbfc-51fd248d265a
-// pas bcp d'info
-//
-// https://github.com/mediathekview/MServer/blob/7e9ed640f06394b2f0cae518e047d31ae4bccfb1/src/main/java/mServer/crawler/sender/arte/MediathekArte.java#L21
-//
-// https://github.com/yt-dlp/yt-dlp/issues/1059#issuecomment-1784161057
-//
-// OPA v3 (HbbTV) — programs by date
-// https://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/programs/19-02-2026/fr

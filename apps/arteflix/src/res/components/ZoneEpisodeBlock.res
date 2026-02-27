@@ -1,4 +1,9 @@
-type props_ = {zone: ArteZone.t, id: string}
+type props_ = {
+  zone: ArteZone.t,
+  id: string,
+  lang: string,
+  onEpisodeSelect?: NetflixMode.episode => unit,
+}
 
 let episodeRenderImage: EpisodeCard.renderImage = (~src, ~alt, ~className=?) =>
   <Next.Image src alt ?className width=336 height=189 sizes="15vw" />
@@ -30,8 +35,25 @@ let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
 }
 
 @react.component(: props_)
-let make = (~zone, ~id) => {
+let make = (~zone, ~id, ~lang, ~onEpisodeSelect=?) => {
+  let currentId = `${id}_${lang}`
   let episodes: array<EpisodeButton.t> =
-    zone.content.data->Array.map(content => makeEpisode(content, id))
-  <EpisodeBlock title=zone.title episodes renderImage=episodeRenderImage />
+    zone.content.data->Array.map(content => makeEpisode(content, currentId))
+
+  let onSelect = onEpisodeSelect->Option.map(cb => (ep: EpisodeButton.t) => {
+    let item = zone.content.data->Array.find(c => c.id == ep.id)
+    switch item {
+    | Some(content) =>
+      cb({
+        title: content.title,
+        subtitle: content.subtitle,
+        href: content.url,
+        selected: false,
+        programId: ArteUtils.extractProgramId(content, ~lang),
+      })
+    | None => ()
+    }
+  })
+
+  <EpisodeBlock title=zone.title episodes renderImage=episodeRenderImage ?onSelect />
 }

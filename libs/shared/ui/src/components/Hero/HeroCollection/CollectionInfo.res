@@ -9,7 +9,7 @@ module Main = {
         ~position="relative",
         ~maxWidth="881px",
         ~alignItems="flex-start",
-        ~gap="16px",
+        ~gap=Spacing.md,
         ~color=Colors.primaryWhite,
         (),
       )->css
@@ -67,7 +67,7 @@ module Container = {
       flex-direction: row;
       width: 100%;
       align-items: space-between;
-      gap: 32px;
+      gap: ${Spacing.xl};
       padding: 20px var(--side-padding) var(--section-gap) var(--side-padding);
 
       ${Responsive.tabletDown} {

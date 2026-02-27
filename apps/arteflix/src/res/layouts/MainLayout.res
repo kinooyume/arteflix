@@ -32,7 +32,7 @@ let default = ({children}: props) => {
         <SwrProvider>
           <RouterProvider>
             <AppHeader />
-            <main> children </main>
+            <main> <PageTransition> children </PageTransition> </main>
           </RouterProvider>
         </SwrProvider>
       </div>

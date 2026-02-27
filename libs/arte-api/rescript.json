@@ -1,0 +1,14 @@
+{
+  "name": "arte-api",
+  "sources": [{ "dir": "src", "subdirs": true }],
+  "package-specs": [{ "module": "esmodule", "in-source": true }],
+  "bs-dependencies": [
+    "@rescript/core",
+    "sury",
+    "@glennsl/rescript-fetch",
+    "rescript-nodejs"
+  ],
+  "suffix": ".bs.mjs",
+  "jsx": { "version": 4 },
+  "bsc-flags": ["-open RescriptCore"]
+}

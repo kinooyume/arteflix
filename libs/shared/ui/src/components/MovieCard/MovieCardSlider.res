@@ -9,7 +9,7 @@ import 'slick-carousel/slick/slick-theme.css';
 let slideGap = `padding: 0 4px;`->rawCss
 
 module Style = {
-  let container = ReactDOM.Style.make(~width="100%", ())->css
+  let container = ReactDOM.Style.make(~width="100%", ~overflow="hidden", ())->css
 }
 
 let slickStyle = `
@@ -22,6 +22,7 @@ let slickStyle = `
   .slick-list {
     width: 100%;
     margin: 0 -4px;
+    overflow: visible;
   }
   .slick-prev.slick-disabled, .slick-next.slick-disabled {
     display: none !important;

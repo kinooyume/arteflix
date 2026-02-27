@@ -10,7 +10,7 @@ let style =
     ~alignItems="flex-start",
     ~flexShrink="0",
     ~overflow="hidden",
-    ~borderRadius="4px",
+    ~borderRadius=Radius.sm,
     ~boxShadow="0px 0px 20px 0px rgba(0, 0, 0, 0.50)",
     ~backgroundColor=Colors.greyGrey_900,
     (),
