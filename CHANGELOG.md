@@ -2,6 +2,33 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.13.0 - 2026-02-27
+#### Features
+- (**player**) thumbnail sprites on progress bar hover - (09fe105) - Martin Kinoo
+- (**player**) episode menu with collection fetch and in-player switching - (28d6cdd) - Martin Kinoo
+- (**player**) episode list menu button and current episode title - (4f7a7f6) - Martin Kinoo
+- (**player**) overlay 5s delay, control bar title, Netflix-style layout - (65e98e0) - Martin Kinoo
+- (**player**) add Netflix-mode video.js plugin - (4368530) - Martin Kinoo
+- (**ui**) page transitions with zoom animation and hover prefetch - (cebbcfd) - Martin Kinoo
+- (**ui**) align design tokens with Figma — typography, spacing, radius - (47524e8) - Martin Kinoo
+- (**ui**) retry images on 429 with useRetryImage hook - (fe8cdab) - Martin Kinoo
+- (**ui**) Netflix-style hero, homepage layout, and player - (bf656a4) - Martin Kinoo
+#### Bug Fixes
+- (**arte-api**) catch sury parse errors in server-side fetcher - (a829b99) - Martin Kinoo
+- (**arte-api**) catch sury parse errors as ParseError - (43caef6) - Martin Kinoo
+- (**player**) avoid top-level document access for SSR compatibility - (8dc45d0) - Martin Kinoo
+- (**player**) episodes icon, hide volume bar when muted, align fonts - (0ccc278) - Martin Kinoo
+- (**ui**) full-height hero image with slider visible above the fold - (0129342) - Martin Kinoo
+- (**ui**) delay preview description animation, full-width preview card - (b852d3a) - Martin Kinoo
+- (**ui**) timecode-only fallback on progress bar, full-width preview card - (a2df462) - Martin Kinoo
+- resolve all ReScript build warnings - (c004631) - Martin Kinoo
+#### Refactoring
+- (**arte-api**) extract into hexagonal lib - (7f91ddc) - Martin Kinoo
+#### Miscellaneous Chores
+- (**arte-api**) remove dead code and cleanup - (5eaefc4) - Martin Kinoo
+
+- - -
+
 ## v0.12.0 - 2026-02-19
 #### Features
 - (**api**) add trailer proxy endpoint and player fixes - (7b43f0b) - Martin Kinoo
