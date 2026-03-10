@@ -5,9 +5,9 @@ let cardRenderImage: MovieCardImage.renderImage = (~src, ~alt, ~className=?, ~on
   <Next.Image src alt ?className ?onLoad width=620 height=350 sizes=cardSizes />
 }
 
-let previewRenderImage: PreviewImage.renderImage = (~src, ~alt, ~className=?) => {
-  let src = src->MovieCardImage.ensureTypeText
-  <Next.Image src alt ?className width=620 height=350 sizes=cardSizes loading=#eager />
+let previewRenderImage: PreviewImage.renderImage = (~src, ~alt, ~className=?, ~onLoad=?) => {
+  let onLoad = onLoad->Option.map(f => (_): unit => f())
+  <Next.Image src alt ?className ?onLoad width=620 height=350 sizes=cardSizes loading=#eager />
 }
 
 let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>

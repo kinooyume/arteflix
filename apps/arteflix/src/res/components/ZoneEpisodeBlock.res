@@ -5,8 +5,10 @@ type props_ = {
   onEpisodeSelect?: NetflixMode.episode => unit,
 }
 
-let episodeRenderImage: EpisodeCard.renderImage = (~src, ~alt, ~className=?) =>
-  <Next.Image src alt ?className width=336 height=189 sizes="15vw" />
+let episodeRenderImage: EpisodeCard.renderImage = (~src, ~alt, ~className=?, ~onLoad=?) => {
+  let onLoad = onLoad->Option.map(f => (_): unit => f())
+  <Next.Image src alt ?className ?onLoad width=336 height=189 sizes="15vw" />
+}
 
 let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
   let description = switch content.fullDescription {

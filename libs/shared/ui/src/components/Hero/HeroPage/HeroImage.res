@@ -136,8 +136,26 @@ type props_ = {
   renderImage?: renderImage,
 }
 
+let preloadImage: (string, unit => unit) => unit = %raw(`
+  function(url, onLoad) {
+    var img = new Image();
+    img.onload = onLoad;
+    img.src = url;
+  }
+`)
+
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~renderImage=?) => {
+  let (assetStatus, assetOnLoad, _) = UseAsset.useAsset(~url=src, ~priority=High, ~ensureText=false)
+
+  React.useEffect(() => {
+    switch assetStatus {
+    | Ready(readyUrl) => preloadImage(readyUrl, assetOnLoad)
+    | _ => ()
+    }
+    None
+  }, [assetStatus])
+
   switch overflow {
   | true =>
     <section className={[Style.container, Style.containerFullscreen, Style.mobileHero]->cx}>
