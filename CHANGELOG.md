@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.13.1 - 2026-03-10
+#### Bug Fixes
+- (**ui**) add exponential backoff to image retry on error - (d41befc) - Martin Kinoo
+- (**ui**) replace retry-based image loading with asset queue - (990d298) - Martin Kinoo
+- (**ui**) lower hero text and taller hero for single visible slider - (54d0674) - Martin Kinoo
+
+- - -
+
 ## v0.13.0 - 2026-02-27
 #### Features
 - (**player**) thumbnail sprites on progress bar hover - (09fe105) - Martin Kinoo
