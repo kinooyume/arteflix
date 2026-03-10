@@ -16,12 +16,9 @@ type state = {
   mutable active: int,
   mutable cache: Dict.t<status>,
   mutable dispatched: Set.t<string>,
-  mutable paused: bool,
-  mutable pauseTimer: option<timeoutId>,
   mutable loadTimers: Dict.t<timeoutId>,
   maxConcurrent: int,
   maxRetries: int,
-  backoff429: int,
 }
 
 let isClient: unit => bool = %raw(`function() { return typeof window !== "undefined" }`)
@@ -37,12 +34,9 @@ let getState = () =>
       active: 0,
       cache: Dict.make(),
       dispatched: Set.make(),
-      paused: false,
-      pauseTimer: None,
       loadTimers: Dict.make(),
       maxConcurrent: 12,
       maxRetries: 3,
-      backoff429: 5000,
     }
     state := Some(s)
     s
@@ -62,60 +56,40 @@ let getCached = (url: string): option<status> => {
 
 let rec flush = () => {
   let s = getState()
-  if s.paused {
-    ()
-  } else {
-    s.pending->Array.sort((a, b) =>
-      (priorityToInt(a.priority) - priorityToInt(b.priority))->Int.toFloat
-    )
+  s.pending->Array.sort((a, b) =>
+    (priorityToInt(a.priority) - priorityToInt(b.priority))->Int.toFloat
+  )
 
-    let continue = ref(true)
-    while continue.contents && s.pending->Array.length > 0 {
-      let canDispatch = switch s.pending->Array.get(0) {
-      | Some({priority: High}) => true
-      | Some(_) => s.active < s.maxConcurrent
-      | None => false
+  let continue = ref(true)
+  while continue.contents && s.pending->Array.length > 0 {
+    let canDispatch = switch s.pending->Array.get(0) {
+    | Some({priority: High}) => true
+    | Some(_) => s.active < s.maxConcurrent
+    | None => false
+    }
+
+    if canDispatch {
+      switch s.pending->Array.shift {
+      | Some(entry) =>
+        s.active = s.active + 1
+        s.dispatched->Set.add(entry.url)->ignore
+
+        let timerId = setTimeout(() => {
+          s.loadTimers->Dict.delete(entry.url)
+          failInternal(~url=entry.url)
+        }, 30000)
+        s.loadTimers->Dict.set(entry.url, timerId)
+
+        entry.callbacks->Array.forEach(cb => cb())
+      | None => continue := false
       }
-
-      if canDispatch {
-        switch s.pending->Array.shift {
-        | Some(entry) =>
-          s.active = s.active + 1
-          s.dispatched->Set.add(entry.url)->ignore
-
-          let timerId = setTimeout(() => {
-            s.loadTimers->Dict.delete(entry.url)
-            failInternal(~url=entry.url, ~is429=false)
-          }, 30000)
-          s.loadTimers->Dict.set(entry.url, timerId)
-
-          entry.callbacks->Array.forEach(cb => cb())
-        | None => continue := false
-        }
-      } else {
-        continue := false
-      }
+    } else {
+      continue := false
     }
   }
 }
 
-and pause = (~ms) => {
-  let s = getState()
-  s.paused = true
-  switch s.pauseTimer {
-  | Some(t) => clearTimeout(t)
-  | None => ()
-  }
-  s.pauseTimer = Some(
-    setTimeout(() => {
-      s.paused = false
-      s.pauseTimer = None
-      flush()
-    }, ms),
-  )
-}
-
-and failInternal = (~url, ~is429) => {
+and failInternal = (~url) => {
   let s = getState()
   let retries = switch s.cache->Dict.get(url) {
   | Some(Failed(n)) => n
@@ -134,32 +108,8 @@ and failInternal = (~url, ~is429) => {
     s.active = Math.Int.max(0, s.active - 1)
   }
 
-  switch (is429, retries < s.maxRetries) {
-  | (true, true) =>
-    let backoff = s.backoff429 * Int.fromFloat(Math.pow(2.0, ~exp=retries->Int.toFloat))
-    pause(~ms=backoff)
-    s.cache->Dict.set(url, Failed(retries + 1))
-    let existingEntry = s.pending->Array.find(e => e.url == url)
-    switch existingEntry {
-    | Some(_) => ()
-    | None =>
-      s.pending->Array.push({url, priority: Medium, callbacks: []})
-    }
-  | (true, false) =>
-    s.cache->Dict.set(url, Failed(retries + 1))
-  | (false, true) =>
-    s.cache->Dict.set(url, Failed(retries + 1))
-    let existingEntry = s.pending->Array.find(e => e.url == url)
-    switch existingEntry {
-    | Some(_) => ()
-    | None =>
-      s.pending->Array.push({url, priority: Low, callbacks: []})
-    }
-    flush()
-  | (false, false) =>
-    s.cache->Dict.set(url, Failed(retries + 1))
-    flush()
-  }
+  s.cache->Dict.set(url, Failed(retries + 1))
+  flush()
 }
 
 let complete = (~url) => {
@@ -180,7 +130,7 @@ let complete = (~url) => {
   flush()
 }
 
-let fail = (~url, ~is429) => failInternal(~url, ~is429)
+let fail = (~url) => failInternal(~url)
 
 let request = (~url: string, ~priority: priority, ~onReady: unit => unit): (unit => unit) => {
   if !isClient() {

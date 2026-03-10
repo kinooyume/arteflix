@@ -135,7 +135,7 @@ let make = React.memo((
                 setImgLoaded(_ => true)
                 assetOnLoad()
               }}
-              onError={_ => assetOnError(false)}
+              onError={_ => assetOnError()}
               className={Style.image(~loaded=imgLoaded)}
               src=readyUrl
               alt

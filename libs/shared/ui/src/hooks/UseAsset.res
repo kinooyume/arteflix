@@ -59,15 +59,46 @@ let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: b
     | (true, WithText, Some(AssetQueue.Failed(n))) if n >= 3 =>
       setPhase(_ => WithoutText)
       setStatus(_ => Pending)
+    | (_, _, Some(AssetQueue.Failed(n))) if n >= 3 =>
+      setStatus(_ => Failed)
     | _ => ()
     }
     None
   }, (currentUrl, status))
 
+  let retryTimer = React.useRef(None)
+
+  React.useEffect(() => {
+    Some(() => {
+      switch retryTimer.current {
+      | Some(t) => clearTimeout(t)
+      | None => ()
+      }
+    })
+  }, [currentUrl])
+
   let onLoad = React.useCallback(() => AssetQueue.complete(~url=currentUrl), [currentUrl])
-  let onError = React.useCallback((is429: bool) => {
-    AssetQueue.fail(~url=currentUrl, ~is429)
-    setStatus(_ => Pending)
+  let onError = React.useCallback(() => {
+    AssetQueue.fail(~url=currentUrl)
+    let retries = switch AssetQueue.getCached(currentUrl) {
+    | Some(AssetQueue.Failed(n)) => n
+    | _ => 1
+    }
+    switch retryTimer.current {
+    | Some(t) => clearTimeout(t)
+    | None => ()
+    }
+    if retries < 3 {
+      let delay = 2000 * Int.fromFloat(Math.pow(2.0, ~exp=(retries - 1)->Int.toFloat))
+      retryTimer.current = Some(
+        setTimeout(() => {
+          retryTimer.current = None
+          setStatus(_ => Pending)
+        }, delay),
+      )
+    } else {
+      setStatus(_ => Pending)
+    }
   }, [currentUrl])
 
   (status, onLoad, onError)

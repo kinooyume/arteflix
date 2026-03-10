@@ -42,7 +42,7 @@ let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false, ~renderImage=?) => {
       | None =>
         <img
           onLoad={_ => assetOnLoad()}
-          onError={_ => assetOnError(false)}
+          onError={_ => assetOnError()}
           className={Style.image}
           src=readyUrl
           ?srcSet
