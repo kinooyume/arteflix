@@ -50,19 +50,24 @@ let make = (~zone: ArteZone.t) => {
       <ZoneBlockCards key=zone.id zone orientation=MovieCardImage.Horizontal forceTitle=true>
         BlockCardsTrailer.make
       </ZoneBlockCards>
+    | #"vertical-landscape" =>
+      <ZoneBlockCards key=zone.id zone orientation=MovieCardImage.Horizontal>
+        MovieBlockCards.make
+      </ZoneBlockCards>
+    | #"text-linear" =>
+      <GenrePills
+        title={zone.displayOptions.showZoneTitle ? Some(zone.title) : None}
+        items={zone.content.data->Array.map(c => {GenrePills.title: c.title, href: c.url})}
+      />
     | #"single-newsletter" => React.null
     | #"event-textOnLeftSide" => React.null
     | #"event-textOnRightSide" => React.null
-    | _ => React.null
-    // | _ =>
-    //   <div>
-    //     <p> {(zone.displayOptions.template :> string)->React.string} </p>
-    //     <ul className="content">
-    //       {zone.content.data
-    //       ->Array.map(content => <ZoneContentInfo content />)
-    //       ->React.array}
-    //     </ul>
-    //   </div>
+    | template =>
+      <MovieBlock title={Some((template :> string))}>
+        <Text.Regular.SmallBody>
+          {"Template not handled"->React.string}
+        </Text.Regular.SmallBody>
+      </MovieBlock>
     }
   }
 }
