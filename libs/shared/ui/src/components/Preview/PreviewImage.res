@@ -37,7 +37,7 @@ module Style = {
   `->rawCss
 }
 
-type renderImage = (~src: string, ~alt: string, ~className: string=?) => React.element
+type renderImage = (~src: string, ~alt: string, ~className: string=?, ~onLoad: unit => unit=?) => React.element
 
 type previewImageProps = {
   srcBase: string,
@@ -45,17 +45,41 @@ type previewImageProps = {
   renderImage?: renderImage,
 }
 
+let preloadImage: (string, unit => unit) => unit = %raw(`
+  function(url, onLoad) {
+    var img = new Image();
+    img.onload = onLoad;
+    img.src = url;
+  }
+`)
+
 @react.component(: previewImageProps)
 let make = (~srcBase, ~href, ~renderImage=?) => {
   let src = srcBase->String.replace("__SIZE__", "620x350")
+  let (assetStatus, assetOnLoad, _) = UseAsset.useAsset(~url=src, ~priority=Medium)
+
+  React.useEffect(() => {
+    switch (renderImage, assetStatus) {
+    | (None, Ready(readyUrl)) =>
+      preloadImage(readyUrl, assetOnLoad)
+      None
+    | _ => None
+    }
+  }, (renderImage, assetStatus))
+
   <Link href>
-    {switch renderImage {
-    | Some(render) =>
-      <div className={Style.container}>
-        {render(~src, ~alt="", ~className=Style.img)}
-      </div>
-    | None =>
-      <div className={bgStyle(src)} />
+    {switch assetStatus {
+    | Pending | Failed =>
+      <div className={Style.container} />
+    | Ready(readyUrl) =>
+      switch renderImage {
+      | Some(render) =>
+        <div className={Style.container}>
+          {render(~src=readyUrl, ~alt="", ~className=Style.img, ~onLoad=assetOnLoad)}
+        </div>
+      | None =>
+        <div className={bgStyle(readyUrl)} />
+      }
     }}
   </Link>
 }

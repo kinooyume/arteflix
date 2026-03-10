@@ -57,12 +57,6 @@ let sizeByOrientation = orientation =>
   | Vertical => "265x397"
   }
 
-let ensureTypeText = src =>
-  switch src->String.includes("?type=TEXT") {
-  | true => src
-  | false => src ++ "?type=TEXT"
-  }
-
 type renderImage = (
   ~src: string,
   ~alt: string,
@@ -108,39 +102,55 @@ let make = React.memo((
     `cursor: pointer; img { transform: scale(1.05); }`->rawCss,
   ])
 
-  let srcSized = srcBase->String.replace("__SIZE__", "620x350")
-  let src = switch ensureText {
-  | true => srcSized->ensureTypeText
-  | false => srcSized
-  }
+  let src = srcBase->String.replace("__SIZE__", "620x350")
 
-  let (loaded, setLoaded) = React.useState(() => false)
-  let (retrySrc, onRetryError) = UseRetryImage.useRetryImage(~src)
+  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Low, ~ensureText)
+  let (imgLoaded, setImgLoaded) = React.useState(() => false)
 
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle
   <Link className={Fn(className)} href>
     <div className={Style.imageContainer}>
-      {loaded ? React.null : <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />}
-      {switch renderImage {
-      | Some(render) =>
-        render(
-          ~src=retrySrc,
-          ~alt,
-          ~className=Style.image(~loaded),
-          ~onLoad=() => setLoaded(_ => true),
-        )
-      | None =>
-        <img
-          loading=#"lazy"
-          onLoad={_ => setLoaded(_ => true)}
-          onError=onRetryError
-          className={Style.image(~loaded)}
-          src=retrySrc
-          alt
-        />
+      {switch assetStatus {
+      | Pending | Failed =>
+        <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />
+      | Ready(readyUrl) =>
+        <>
+          {imgLoaded
+            ? React.null
+            : <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />}
+          {switch renderImage {
+          | Some(render) =>
+            render(
+              ~src=readyUrl,
+              ~alt,
+              ~className=Style.image(~loaded=imgLoaded),
+              ~onLoad=() => {
+                setImgLoaded(_ => true)
+                assetOnLoad()
+              },
+            )
+          | None =>
+            <img
+              onLoad={_ => {
+                setImgLoaded(_ => true)
+                assetOnLoad()
+              }}
+              onError={_ => assetOnError()}
+              className={Style.image(~loaded=imgLoaded)}
+              src=readyUrl
+              alt
+            />
+          }}
+        </>
       }}
     </div>
-    <div className={Style.overlay(~loaded)}>
+    <div
+      className={Style.overlay(
+        ~loaded=switch assetStatus {
+        | Ready(_) => imgLoaded
+        | _ => false
+        },
+      )}>
       {switch children {
       | Some(children) => children
       | None => React.null

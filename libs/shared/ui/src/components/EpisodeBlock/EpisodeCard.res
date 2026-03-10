@@ -17,6 +17,7 @@ type renderImage = (
   ~src: string,
   ~alt: string,
   ~className: string=?,
+  ~onLoad: unit => unit=?,
 ) => React.element
 
 type props_ = {
@@ -30,12 +31,25 @@ type props_ = {
 
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false, ~renderImage=?) => {
-  let (retrySrc, onRetryError) = UseRetryImage.useRetryImage(~src)
+  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Low)
 
   <div className={Style.container}>
-    {switch renderImage {
-    | Some(render) => render(~src=retrySrc, ~alt, ~className=Style.image)
-    | None => <img loading=#"lazy" onError=onRetryError className={Style.image} src=retrySrc ?srcSet ?sizes alt />
+    {switch assetStatus {
+    | Pending | Failed => React.null
+    | Ready(readyUrl) =>
+      switch renderImage {
+      | Some(render) => render(~src=readyUrl, ~alt, ~className=Style.image, ~onLoad=assetOnLoad)
+      | None =>
+        <img
+          onLoad={_ => assetOnLoad()}
+          onError={_ => assetOnError()}
+          className={Style.image}
+          src=readyUrl
+          ?srcSet
+          ?sizes
+          alt
+        />
+      }
     }}
     {switch hover {
     | true => <CardOverlayPlay />
