@@ -62,6 +62,7 @@ type renderImage = (
   ~alt: string,
   ~className: string=?,
   ~onLoad: unit => unit=?,
+  ~onError: unit => unit=?,
 ) => React.element
 
 type t = {
@@ -128,6 +129,7 @@ let make = React.memo((
                 setImgLoaded(_ => true)
                 assetOnLoad()
               },
+              ~onError=assetOnError,
             )
           | None =>
             <img

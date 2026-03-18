@@ -37,7 +37,7 @@ module Style = {
   `->rawCss
 }
 
-type renderImage = (~src: string, ~alt: string, ~className: string=?, ~onLoad: unit => unit=?) => React.element
+type renderImage = (~src: string, ~alt: string, ~className: string=?, ~onLoad: unit => unit=?, ~onError: unit => unit=?) => React.element
 
 type previewImageProps = {
   srcBase: string,
@@ -45,10 +45,11 @@ type previewImageProps = {
   renderImage?: renderImage,
 }
 
-let preloadImage: (string, unit => unit) => unit = %raw(`
-  function(url, onLoad) {
+let preloadImage: (string, unit => unit, unit => unit) => unit = %raw(`
+  function(url, onLoad, onError) {
     var img = new Image();
     img.onload = onLoad;
+    img.onerror = onError;
     img.src = url;
   }
 `)
@@ -56,12 +57,12 @@ let preloadImage: (string, unit => unit) => unit = %raw(`
 @react.component(: previewImageProps)
 let make = (~srcBase, ~href, ~renderImage=?) => {
   let src = srcBase->String.replace("__SIZE__", "620x350")
-  let (assetStatus, assetOnLoad, _) = UseAsset.useAsset(~url=src, ~priority=Medium)
+  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Medium)
 
   React.useEffect(() => {
     switch (renderImage, assetStatus) {
     | (None, Ready(readyUrl)) =>
-      preloadImage(readyUrl, assetOnLoad)
+      preloadImage(readyUrl, assetOnLoad, assetOnError)
       None
     | _ => None
     }
@@ -75,7 +76,7 @@ let make = (~srcBase, ~href, ~renderImage=?) => {
       switch renderImage {
       | Some(render) =>
         <div className={Style.container}>
-          {render(~src=readyUrl, ~alt="", ~className=Style.img, ~onLoad=assetOnLoad)}
+          {render(~src=readyUrl, ~alt="", ~className=Style.img, ~onLoad=assetOnLoad, ~onError=assetOnError)}
         </div>
       | None =>
         <div className={bgStyle(readyUrl)} />
