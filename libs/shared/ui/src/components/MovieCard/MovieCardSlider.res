@@ -20,8 +20,7 @@ let slickStyle = `
     margin-left: 0;
   }
   .slick-list {
-    width: 100%;
-    margin: 0 -4px;
+    margin: 0 32px;
     overflow: visible;
   }
   .slick-prev.slick-disabled, .slick-next.slick-disabled {
@@ -52,6 +51,10 @@ let slickStyle = `
   }
 
   ${Responsive.mobileDown} {
+    .slick-list {
+      width: 100%;
+      margin: 0 -4px;
+    }
     .slick-prev, .slick-next {
       display: none !important;
     }
