@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.14.0 - 2026-03-19
+#### Features
+- (**ui**) add text-linear and vertical-landscape zone templates - (7e7a5bd) - Martin Kinoo
+#### Bug Fixes
+- (**ui**) wire onError through renderImage for asset queue retry - (c056b50) - Martin Kinoo
+
+- - -
+
 ## v0.13.1 - 2026-03-10
 #### Bug Fixes
 - (**ui**) add exponential backoff to image retry on error - (d41befc) - Martin Kinoo
