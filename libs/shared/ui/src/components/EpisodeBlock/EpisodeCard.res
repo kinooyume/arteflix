@@ -38,10 +38,13 @@ let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false, ~renderImage=?) => {
     | Pending | Failed => React.null
     | Ready(readyUrl) =>
       switch renderImage {
-      | Some(render) => render(~src=readyUrl, ~alt, ~className=Style.image, ~onLoad=assetOnLoad)
+      | Some(render) => render(~src=readyUrl, ~alt, ~className=Style.image, ~onLoad=() => assetOnLoad(0))
       | None =>
         <img
-          onLoad={_ => assetOnLoad()}
+          onLoad={e => {
+            let w = (e->JsxEvent.Image.target->Obj.magic)["naturalWidth"]
+            assetOnLoad(w)
+          }}
           onError={_ => assetOnError()}
           className={Style.image}
           src=readyUrl

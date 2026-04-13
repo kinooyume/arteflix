@@ -77,7 +77,32 @@ let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: b
     })
   }, [currentUrl])
 
-  let onLoad = React.useCallback(() => AssetQueue.complete(~url=currentUrl), [currentUrl])
+  let onLoad = React.useCallback((naturalWidth: int) => {
+    if naturalWidth > 0 && naturalWidth < 100 {
+      AssetQueue.fail(~url=currentUrl)
+      let retries = switch AssetQueue.getCached(currentUrl) {
+      | Some(AssetQueue.Failed(n)) => n
+      | _ => 1
+      }
+      switch retryTimer.current {
+      | Some(t) => clearTimeout(t)
+      | None => ()
+      }
+      if retries < 3 {
+        let delay = 2000 * Int.fromFloat(Math.pow(2.0, ~exp=(retries - 1)->Int.toFloat))
+        retryTimer.current = Some(
+          setTimeout(() => {
+            retryTimer.current = None
+            setStatus(_ => Pending)
+          }, delay),
+        )
+      } else {
+        setStatus(_ => Pending)
+      }
+    } else {
+      AssetQueue.complete(~url=currentUrl)
+    }
+  }, [currentUrl])
   let onError = React.useCallback(() => {
     AssetQueue.fail(~url=currentUrl)
     let retries = switch AssetQueue.getCached(currentUrl) {

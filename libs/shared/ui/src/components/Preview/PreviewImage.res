@@ -45,10 +45,10 @@ type previewImageProps = {
   renderImage?: renderImage,
 }
 
-let preloadImage: (string, unit => unit, unit => unit) => unit = %raw(`
+let preloadImage: (string, int => unit, unit => unit) => unit = %raw(`
   function(url, onLoad, onError) {
     var img = new Image();
-    img.onload = onLoad;
+    img.onload = function() { onLoad(img.naturalWidth); };
     img.onerror = onError;
     img.src = url;
   }
@@ -76,7 +76,7 @@ let make = (~srcBase, ~href, ~renderImage=?) => {
       switch renderImage {
       | Some(render) =>
         <div className={Style.container}>
-          {render(~src=readyUrl, ~alt="", ~className=Style.img, ~onLoad=assetOnLoad, ~onError=assetOnError)}
+          {render(~src=readyUrl, ~alt="", ~className=Style.img, ~onLoad=() => assetOnLoad(0), ~onError=assetOnError)}
         </div>
       | None =>
         <div className={bgStyle(readyUrl)} />
