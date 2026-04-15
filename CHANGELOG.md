@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.14.1 - 2026-04-15
+#### Bug Fixes
+- (**ui**) attempt to detect 429 error images via naturalWidth check - (e04f1f0) - Martin Kinoo
+
+- - -
+
 ## v0.14.0 - 2026-03-19
 #### Features
 - (**ui**) add text-linear and vertical-landscape zone templates - (7e7a5bd) - Martin Kinoo
