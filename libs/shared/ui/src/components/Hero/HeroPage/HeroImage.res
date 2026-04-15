@@ -136,10 +136,10 @@ type props_ = {
   renderImage?: renderImage,
 }
 
-let preloadImage: (string, unit => unit) => unit = %raw(`
+let preloadImage: (string, int => unit) => unit = %raw(`
   function(url, onLoad) {
     var img = new Image();
-    img.onload = onLoad;
+    img.onload = function() { onLoad(img.naturalWidth); };
     img.src = url;
   }
 `)

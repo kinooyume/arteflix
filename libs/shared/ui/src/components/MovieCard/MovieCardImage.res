@@ -127,15 +127,16 @@ let make = React.memo((
               ~className=Style.image(~loaded=imgLoaded),
               ~onLoad=() => {
                 setImgLoaded(_ => true)
-                assetOnLoad()
+                assetOnLoad(0)
               },
               ~onError=assetOnError,
             )
           | None =>
             <img
-              onLoad={_ => {
+              onLoad={e => {
+                let w = (e->JsxEvent.Image.target->Obj.magic)["naturalWidth"]
                 setImgLoaded(_ => true)
-                assetOnLoad()
+                assetOnLoad(w)
               }}
               onError={_ => assetOnError()}
               className={Style.image(~loaded=imgLoaded)}
