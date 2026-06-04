@@ -16,6 +16,7 @@ type props_ = {params: Params.home}
 @react.component(: props_)
 let make = (~params) => {
   let {data, error} = Swr.useSWR(params->Urls.home, fetcher(validateArteData, ...))
+  let offset = Responsive.useViewportHeight()
 
   <>
     {switch error {
@@ -41,7 +42,7 @@ let make = (~params) => {
           {arteData.zones
           ->Array.sliceToEnd(~start=1)
           ->Array.map(zone =>
-            <Lazyload key={zone.id} once=true height=300 offset=200>
+            <Lazyload key={zone.id} once=true height=300 offset>
               <Zone zone />
             </Lazyload>
           )

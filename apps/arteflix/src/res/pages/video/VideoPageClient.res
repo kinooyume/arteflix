@@ -136,6 +136,7 @@ module VideoPageZones = {
   @react.component(: props_)
   let make = (~params, ~arteData, ~episodes) => {
     let (currentProgramId, setCurrentProgramId) = React.useState(() => params.id)
+    let offset = Responsive.useViewportHeight()
 
     let currentId = `${currentProgramId}_${params.lang}`
     let remappedEpisodes =
@@ -178,7 +179,7 @@ module VideoPageZones = {
       <div>
         {sortedZones
         ->Array.mapWithIndex((zone, index) =>
-          <Lazyload key={index->Int.toString} once=true height=300 offset=200>
+          <Lazyload key={index->Int.toString} once=true height=300 offset>
             <ZoneVideo
               id={currentProgramId}
               key={index->Int.toString}

@@ -23,6 +23,8 @@ type state = {
 
 let isClient: unit => bool = %raw(`function() { return typeof window !== "undefined" }`)
 
+@val external requestAnimationFrame: (float => unit) => int = "requestAnimationFrame"
+
 let state: ref<option<state>> = ref(None)
 
 let getState = () =>
@@ -132,6 +134,17 @@ let complete = (~url) => {
 
 let fail = (~url) => failInternal(~url)
 
+let flushPending = ref(false)
+
+let scheduleFlush = () =>
+  if !flushPending.contents {
+    flushPending := true
+    requestAnimationFrame(_ => {
+      flushPending := false
+      flush()
+    })->ignore
+  }
+
 let request = (~url: string, ~priority: priority, ~onReady: unit => unit): (unit => unit) => {
   if !isClient() {
     onReady()
@@ -186,7 +199,7 @@ let request = (~url: string, ~priority: priority, ~onReady: unit => unit): (unit
           s.cache->Dict.set(url, Loading)
           let entry = {url, priority, callbacks: [onReady]}
           s.pending->Array.push(entry)
-          flush()
+          scheduleFlush()
           () => {
             entry.callbacks =
               entry.callbacks->Array.filter(cb => cb !== onReady)
@@ -200,7 +213,7 @@ let request = (~url: string, ~priority: priority, ~onReady: unit => unit): (unit
                   s.loadTimers->Dict.delete(url)
                 | None => ()
                 }
-                flush()
+                scheduleFlush()
               } else {
                 s.pending = s.pending->Array.filter(e => e.url != url)
               }

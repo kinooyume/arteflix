@@ -28,6 +28,7 @@ let makePlayer = (~playerConfig: ArtePlayerConfig.t) => {
 @react.component
 let make = (~params: Params.live) => {
   let {data, error} = Swr.useSWR(params->Urls.live, fetcher(validateArteData, ...))
+  let offset = Responsive.useViewportHeight()
 
   // {switch playerConfig.data {
   // | Some(playerConfig) => makePlayer(~playerConfig)
@@ -39,8 +40,8 @@ let make = (~params: Params.live) => {
     {switch error {
     | Some(err) =>
       switch err {
+        | ClientFetcher.ParseError(_) => <ServerError message="A parsing error occur" />
       | ClientFetcher.FetchError(_) => <ServerError message="A fetch error occur" />
-      | ClientFetcher.ParseError(_) => <ServerError message="A parsing error occur" />
       | Exn.Error(_) => <ServerError message="500 Error | Failed to fetch Arte error" />
       | _ => <ServerError message="500 Error | Failed to fetch Arte error" />
       }
@@ -52,7 +53,7 @@ let make = (~params: Params.live) => {
         <div>
           {arteData.zones
           ->Array.map(zone =>
-            <Lazyload key={zone.id} once=true height=300 offset=200>
+            <Lazyload key={zone.id} once=true height=300 offset>
               <ZoneVideo
                 id="LIVE"
                 lang={params.lang}
