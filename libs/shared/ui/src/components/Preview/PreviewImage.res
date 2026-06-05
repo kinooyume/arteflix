@@ -1,22 +1,6 @@
 open Emotion
 open ReactAria
 
-let bgStyle = imagePath =>
-  ReactDOM.Style.make(
-    ~display="flex",
-    ~width="100%",
-    ~height="100%",
-    ~flexShrink="0",
-    ~backgroundImage=`url(${imagePath})`,
-    ~backgroundColor="lightgray",
-    ~backgroundSize="cover",
-    ~backgroundPosition="50%",
-    ~backgroundRepeat="no-repeat",
-    ~borderRadius="4px 4px 0 0",
-    ~outline="none",
-    (),
-  )->css
-
 module Style = {
   let container = `
     width: 100%;
@@ -37,7 +21,13 @@ module Style = {
   `->rawCss
 }
 
-type renderImage = (~src: string, ~alt: string, ~className: string=?, ~onLoad: unit => unit=?, ~onError: unit => unit=?) => React.element
+type renderImage = (
+  ~src: string,
+  ~alt: string,
+  ~className: string=?,
+  ~onLoad: unit => unit=?,
+  ~onError: unit => unit=?,
+) => React.element
 
 type previewImageProps = {
   srcBase: string,
@@ -45,42 +35,35 @@ type previewImageProps = {
   renderImage?: renderImage,
 }
 
-let preloadImage: (string, int => unit, unit => unit) => unit = %raw(`
-  function(url, onLoad, onError) {
-    var img = new Image();
-    img.onload = function() { onLoad(img.naturalWidth); };
-    img.onerror = onError;
-    img.src = url;
-  }
-`)
-
 @react.component(: previewImageProps)
 let make = (~srcBase, ~href, ~renderImage=?) => {
   let src = srcBase->String.replace("__SIZE__", "620x350")
   let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Medium)
 
-  React.useEffect(() => {
-    switch (renderImage, assetStatus) {
-    | (None, Ready(readyUrl)) =>
-      preloadImage(readyUrl, assetOnLoad, assetOnError)
-      None
-    | _ => None
-    }
-  }, (renderImage, assetStatus))
-
   <Link href>
     {switch assetStatus {
-    | Pending | Failed =>
-      <div className={Style.container} />
+    | Pending | Failed => <div className={Style.container} />
     | Ready(readyUrl) =>
-      switch renderImage {
-      | Some(render) =>
-        <div className={Style.container}>
-          {render(~src=readyUrl, ~alt="", ~className=Style.img, ~onLoad=() => assetOnLoad(0), ~onError=assetOnError)}
-        </div>
-      | None =>
-        <div className={bgStyle(readyUrl)} />
-      }
+      <div className={Style.container}>
+        {switch renderImage {
+        | Some(render) =>
+          render(
+            ~src=readyUrl,
+            ~alt="",
+            ~className=Style.img,
+            ~onLoad=() => assetOnLoad(0),
+            ~onError=assetOnError,
+          )
+        | None =>
+          <img
+            className={Style.img}
+            src=readyUrl
+            alt=""
+            onLoad={_ => assetOnLoad(0)}
+            onError={_ => assetOnError()}
+          />
+        }}
+      </div>
     }}
   </Link>
 }
