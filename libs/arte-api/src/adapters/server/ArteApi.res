@@ -7,13 +7,13 @@ exception ParseError(S.error)
 
 module Urls = {
   let home = ({lang}: Params.home) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/HOME`
+    `https://api-cdn.arte.tv/api/emac/v4/${lang}/web/pages/HOME`
   let category = (lang: string, code: string) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/${code}`
+    `https://api-cdn.arte.tv/api/emac/v4/${lang}/web/pages/${code}`
   let program = ({lang, id}: Params.program) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/programs/${id}`
+    `https://api-cdn.arte.tv/api/emac/v4/${lang}/web/programs/${id}`
   let collection = ({lang, id}: Params.collection) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/collections/${id}`
+    `https://api-cdn.arte.tv/api/emac/v4/${lang}/web/collections/${id}`
   let player = ({lang, id}: Params.player) =>
     `https://api.arte.tv/api/player/v2/config/${lang}/${id}`
   let trailer = ({lang, id}: Params.player) =>
@@ -21,11 +21,11 @@ module Urls = {
   let playlist = ({lang, id}: Params.player) =>
     `https://api.arte.tv/api/player/v2/playlist/${lang}/${id}`
   let live = ({lang}: Params.live) =>
-    `https://www.arte.tv/api/rproxy/emac/v4/${lang}/web/pages/LIVE`
+    `https://api-cdn.arte.tv/api/emac/v4/${lang}/web/pages/LIVE`
 }
 
 module Gateway = {
-  let validateArteData = text => text->S.parseJsonStringOrThrow(ArteDataApi.contentSchema)
+  let validateArteData = text => text->S.parseJsonStringOrThrow(ArteData.schema)
   let validatePlayerData = text => text->S.parseJsonStringOrThrow(ArteDataApi.playerSchema)
 
   @val external cachedFetch: (string, {..}) => promise<Response.t> = "fetch"
@@ -51,28 +51,22 @@ module Gateway = {
 module Fetcher = {
   let home = async (params: Params.home) => {
     let url = Urls.home(params)
-    let content = await Gateway.contentFetcher(url)
-    content.value
+    await Gateway.contentFetcher(url)
   }
 
   let live = async (params: Params.live) => {
     let url = Urls.live(params)
-    let content = await Gateway.contentFetcher(url)
-    content.value
+    await Gateway.contentFetcher(url)
   }
 
   let program = async (params: Params.program) => {
     let contentUrl = params->Urls.program
-    let content = await Gateway.contentFetcher(contentUrl)
-
-    content.value
+    await Gateway.contentFetcher(contentUrl)
   }
 
   let collection = async (params: Params.collection) => {
     let contentUrl = params->Urls.collection
-    let content = await Gateway.contentFetcher(contentUrl)
-
-    content.value
+    await Gateway.contentFetcher(contentUrl)
   }
 
   let category = async (~resolveCategory, {lang, slug}: Params.category) => {
@@ -81,8 +75,7 @@ module Fetcher = {
     | None => raise(NextDataError("No routes found for the given language and slug"))
     }
     let contentUrl = Urls.category(lang, code)
-    let content = await Gateway.contentFetcher(contentUrl)
-    content.value
+    await Gateway.contentFetcher(contentUrl)
   }
 
 

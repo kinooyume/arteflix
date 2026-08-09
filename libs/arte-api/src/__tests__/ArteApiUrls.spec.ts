@@ -1,5 +1,4 @@
 jest.mock('../domain/ArteDataApi.bs.mjs', () => ({
-  contentSchema: {},
   playerSchema: {},
 }));
 
@@ -9,13 +8,13 @@ describe('ArteApi.Urls', () => {
   describe('home', () => {
     it('builds the correct home URL for a given language', () => {
       expect(Urls.home({ lang: 'fr' })).toBe(
-        'https://www.arte.tv/api/rproxy/emac/v4/fr/web/pages/HOME'
+        'https://api-cdn.arte.tv/api/emac/v4/fr/web/pages/HOME'
       );
     });
 
     it('works with different languages', () => {
       expect(Urls.home({ lang: 'de' })).toBe(
-        'https://www.arte.tv/api/rproxy/emac/v4/de/web/pages/HOME'
+        'https://api-cdn.arte.tv/api/emac/v4/de/web/pages/HOME'
       );
     });
   });
@@ -23,7 +22,7 @@ describe('ArteApi.Urls', () => {
   describe('category', () => {
     it('builds the correct category URL', () => {
       expect(Urls.category('fr', 'CIN')).toBe(
-        'https://www.arte.tv/api/rproxy/emac/v4/fr/web/pages/CIN'
+        'https://api-cdn.arte.tv/api/emac/v4/fr/web/pages/CIN'
       );
     });
   });
@@ -31,7 +30,7 @@ describe('ArteApi.Urls', () => {
   describe('program', () => {
     it('builds the correct program URL', () => {
       expect(Urls.program({ lang: 'fr', id: '12345' })).toBe(
-        'https://www.arte.tv/api/rproxy/emac/v4/fr/web/programs/12345'
+        'https://api-cdn.arte.tv/api/emac/v4/fr/web/programs/12345'
       );
     });
   });
@@ -39,7 +38,7 @@ describe('ArteApi.Urls', () => {
   describe('collection', () => {
     it('builds the correct collection URL', () => {
       expect(Urls.collection({ lang: 'de', id: 'RC-001' })).toBe(
-        'https://www.arte.tv/api/rproxy/emac/v4/de/web/collections/RC-001'
+        'https://api-cdn.arte.tv/api/emac/v4/de/web/collections/RC-001'
       );
     });
   });
@@ -71,7 +70,7 @@ describe('ArteApi.Urls', () => {
   describe('live', () => {
     it('builds the correct live URL', () => {
       expect(Urls.live({ lang: 'fr' })).toBe(
-        'https://www.arte.tv/api/rproxy/emac/v4/fr/web/pages/LIVE'
+        'https://api-cdn.arte.tv/api/emac/v4/fr/web/pages/LIVE'
       );
     });
   });
