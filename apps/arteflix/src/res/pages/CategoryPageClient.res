@@ -4,19 +4,17 @@
 // let make = (~content, ~apiPlayerConfig) =>
 
 open ArteContract
-open ClientFetcher
-open ArteApiProxy
 
 type props_ = {params: Params.category}
 @react.component(: props_)
 let make = (~params) => {
-  let {data, error} = Swr.useSWR(params->Urls.category, fetcher(validateArteData, ...))
+  let {data, error} = Swr.useSWR(params->ArteCategory.key, _ => ArteCategory.fetch(params))
   let offset = Responsive.useViewportHeight()
 
   <>
     {switch error {
     | Some(err) =>
-      let url = params->Urls.category
+      let url = params->ArteCategory.key
       Console.error3("[CategoryPageClient]", url, err)
       switch err {
       | ClientFetcher.FetchError(e) => <ServerError message={`Fetch error on ${url}: ${e->Exn.message->Option.getOr("unknown")}`} />

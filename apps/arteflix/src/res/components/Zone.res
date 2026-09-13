@@ -23,8 +23,7 @@ let makeHero = (zone: ArteZone.t) => {
   }
 }
 
-@react.component
-let make = (~zone: ArteZone.t) => {
+let render = (zone: ArteZone.t) => {
   switch zone.content.data->Array.length == 0 {
   | true => React.null
   | false =>
@@ -71,6 +70,17 @@ let make = (~zone: ArteZone.t) => {
     }
   }
 }
+
+@react.component
+let make = (~zone: ArteZone.t) =>
+  switch ZoneContent.use(zone) {
+  | Ready(zone) => render(zone)
+  | Loading =>
+    switch zone.displayOptions.template {
+    | #"slider-square" => <Shimmer width="100%" height="clamp(300px, 56vw, 720px)" borderRadius="0px" />
+    | _ => <RowSkeleton />
+    }
+  }
 
 // @react.component
 // let make = (~zone: ArteZone.t) =>

@@ -1,13 +1,15 @@
 open ArteContract
 
+let emac = "https://api-cdn.arte.tv/api/emac/v4"
+
 module Urls = {
-  let home = ({lang}: Params.home) => `/proxy/api/${lang}`
-  let program = ({lang, id}: Params.program) => `/proxy/api/${lang}/program/${id}`
-  let collection = ({lang, id}: Params.collection) => `/proxy/api/${lang}/collection/${id}`
-  let category = ({lang, slug}: Params.category) => `/proxy/api/${lang}/page/${slug}`
+  let page = (lang, code) => `${emac}/${lang}/web/pages/${code}?bypassESI=true`
+  let home = ({lang}: Params.home) => page(lang, "HOME")
+  let live = ({lang}: Params.live) => page(lang, "LIVE")
+  let program = ({lang, id}: Params.program) => `${emac}/${lang}/web/programs/${id}?bypassESI=true`
+  let collection = ({lang, id}: Params.collection) =>
+    `${emac}/${lang}/web/collections/${id}?bypassESI=true`
   let player = ({lang, id}: Params.program) => `/proxy/api/${lang}/player/${id}`
   let playlist = ({lang, id}: Params.program) => `/proxy/api/${lang}/playlist/${id}`
   let trailer = ({lang, id}: Params.program) => `/proxy/api/${lang}/trailer/${id}`
-  let live = ({lang}: Params.live) => `/proxy/api/${lang}/live`
-  // let livePlayer = ({lang}: Params.live) => `/proxy/api/${lang}/player/LIVE`
 }
