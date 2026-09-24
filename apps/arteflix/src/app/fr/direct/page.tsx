@@ -7,6 +7,6 @@ export let metadata = {
   title: 'Arteflix',
   description: 'Arte with Netflix UI',
 };
-export default async function Page({ params }: { params: any }) {
-  return LiveRes(params);
+export default async function Page() {
+  return LiveRes(Promise.resolve({ lang: 'fr' }));
 }
