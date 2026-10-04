@@ -1,41 +1,10 @@
 type status = Pending | Ready(string) | Failed
 
-let ensureTypeText = url =>
-  switch url->String.includes("type=TEXT") {
-  | true => url
-  | false =>
-    let sep = url->String.includes("?") ? "&" : "?"
-    url ++ sep ++ "type=TEXT"
-  }
-
-let stripTypeText = url =>
-  url
-  ->String.replaceAll("&type=TEXT", "")
-  ->String.replaceAll("?type=TEXT&", "?")
-  ->String.replaceAll("?type=TEXT", "")
-
-type phase = WithText | WithoutText
-
-let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: bool=true) => {
-  let urlWithText = ensureText ? ensureTypeText(url) : url
-  let urlWithoutText = ensureText ? stripTypeText(url) : url
-  let initialUrl = ensureText ? urlWithText : url
-
-  let (phase, setPhase) = React.useState((): phase => WithText)
-  let currentUrl = switch (ensureText, phase) {
-  | (true, WithText) => urlWithText
-  | (true, WithoutText) => urlWithoutText
-  | (false, _) => url
-  }
-
+let useAsset = (~url: string, ~priority: AssetQueue.priority=Low) => {
   let (status, setStatus) = React.useState(() =>
-    switch AssetQueue.getCached(currentUrl) {
-    | Some(AssetQueue.Loaded) => Ready(currentUrl)
-    | Some(AssetQueue.Failed(n)) if n >= 3 =>
-      switch (ensureText, phase) {
-      | (true, WithText) => Pending
-      | _ => Failed
-      }
+    switch AssetQueue.getCached(url) {
+    | Some(AssetQueue.Loaded) => Ready(url)
+    | Some(AssetQueue.Failed(n)) if n >= 3 => Failed
     | _ => Pending
     }
   )
@@ -46,25 +15,21 @@ let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: b
     | Failed => None
     | Pending =>
       let cleanup = AssetQueue.request(
-        ~url=currentUrl,
+        ~url,
         ~priority,
-        ~onReady=() => setStatus(_ => Ready(currentUrl)),
+        ~onReady=() => setStatus(_ => Ready(url)),
       )
       Some(cleanup)
     }
-  }, (currentUrl, status))
+  }, (url, status))
 
   React.useEffect(() => {
-    switch (ensureText, phase, AssetQueue.getCached(currentUrl)) {
-    | (true, WithText, Some(AssetQueue.Failed(n))) if n >= 3 =>
-      setPhase(_ => WithoutText)
-      setStatus(_ => Pending)
-    | (_, _, Some(AssetQueue.Failed(n))) if n >= 3 =>
-      setStatus(_ => Failed)
+    switch AssetQueue.getCached(url) {
+    | Some(AssetQueue.Failed(n)) if n >= 3 => setStatus(_ => Failed)
     | _ => ()
     }
     None
-  }, (currentUrl, status))
+  }, (url, status))
 
   let retryTimer = React.useRef(None)
 
@@ -75,12 +40,12 @@ let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: b
       | None => ()
       }
     })
-  }, [currentUrl])
+  }, [url])
 
   let onLoad = React.useCallback((naturalWidth: int) => {
     if naturalWidth > 0 && naturalWidth < 100 {
-      AssetQueue.fail(~url=currentUrl)
-      let retries = switch AssetQueue.getCached(currentUrl) {
+      AssetQueue.fail(~url=url)
+      let retries = switch AssetQueue.getCached(url) {
       | Some(AssetQueue.Failed(n)) => n
       | _ => 1
       }
@@ -100,12 +65,12 @@ let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: b
         setStatus(_ => Pending)
       }
     } else {
-      AssetQueue.complete(~url=currentUrl)
+      AssetQueue.complete(~url=url)
     }
-  }, [currentUrl])
+  }, [url])
   let onError = React.useCallback(() => {
-    AssetQueue.fail(~url=currentUrl)
-    let retries = switch AssetQueue.getCached(currentUrl) {
+    AssetQueue.fail(~url=url)
+    let retries = switch AssetQueue.getCached(url) {
     | Some(AssetQueue.Failed(n)) => n
     | _ => 1
     }
@@ -124,7 +89,7 @@ let useAsset = (~url: string, ~priority: AssetQueue.priority=Low, ~ensureText: b
     } else {
       setStatus(_ => Pending)
     }
-  }, [currentUrl])
+  }, [url])
 
   (status, onLoad, onError)
 }

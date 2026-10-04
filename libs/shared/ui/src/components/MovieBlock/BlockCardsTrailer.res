@@ -33,7 +33,7 @@ let make = (~title, ~cards, ~showDuration=false) => {
       {cards->Array.map(cardData => {
         // On peut tres bien supprimer le mot props
         let (cardProps, _previewProps) = cardData
-        <MovieCardImage {...cardProps} key={`${key}-${cardProps.id}-image`} ensureText=false>
+        <MovieCardImage {...cardProps} key={`${key}-${cardProps.id}-image`}>
           {overlays
           ->Array.mapWithIndex((overlay, index) =>
             <React.Fragment key={`${key}-${cardProps.id}-${index->Int.toString}-overlay`}>

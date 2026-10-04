@@ -80,7 +80,6 @@ type t = {
 
 type props_ = {
   ...t,
-  ensureText?: bool,
   onHoverStart?: HoverEvent.t => unit,
   children?: React.element,
   renderImage?: renderImage,
@@ -91,7 +90,6 @@ let make = React.memo((
   ~srcBase,
   ~alt,
   ~href,
-  ~ensureText=true,
   ~children=?,
   ~onHoverStart=_ => (),
   ~renderImage=?,
@@ -105,7 +103,7 @@ let make = React.memo((
 
   let src = srcBase->String.replace("__SIZE__", "620x350")
 
-  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Low, ~ensureText)
+  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Low)
   let (imgLoaded, setImgLoaded) = React.useState(() => false)
 
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle

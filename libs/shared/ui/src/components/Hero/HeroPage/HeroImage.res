@@ -146,7 +146,7 @@ let preloadImage: (string, int => unit) => unit = %raw(`
 
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~renderImage=?) => {
-  let (assetStatus, assetOnLoad, _) = UseAsset.useAsset(~url=src, ~priority=High, ~ensureText=false)
+  let (assetStatus, assetOnLoad, _) = UseAsset.useAsset(~url=src, ~priority=High)
 
   React.useEffect(() => {
     switch assetStatus {
