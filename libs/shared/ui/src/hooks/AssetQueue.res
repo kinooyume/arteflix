@@ -17,6 +17,7 @@ type state = {
   mutable cache: Dict.t<status>,
   mutable dispatched: Set.t<string>,
   mutable loadTimers: Dict.t<timeoutId>,
+  mutable pausedUntil: float,
   maxConcurrent: int,
   maxRetries: int,
 }
@@ -37,12 +38,15 @@ let getState = () =>
       cache: Dict.make(),
       dispatched: Set.make(),
       loadTimers: Dict.make(),
+      pausedUntil: 0.,
       maxConcurrent: 12,
       maxRetries: 3,
     }
     state := Some(s)
     s
   }
+
+let pauseMs = 60000
 
 let priorityToInt = p =>
   switch p {
@@ -62,7 +66,7 @@ let rec flush = () => {
     (priorityToInt(a.priority) - priorityToInt(b.priority))->Int.toFloat
   )
 
-  let continue = ref(true)
+  let continue = ref(Date.now() >= s.pausedUntil)
   while continue.contents && s.pending->Array.length > 0 {
     let canDispatch = switch s.pending->Array.get(0) {
     | Some({priority: High}) => true
@@ -111,7 +115,16 @@ and failInternal = (~url) => {
   }
 
   s.cache->Dict.set(url, Failed(retries + 1))
+  pause()
   flush()
+}
+
+and pause = () => {
+  let s = getState()
+  if Date.now() >= s.pausedUntil {
+    s.pausedUntil = Date.now() +. pauseMs->Int.toFloat
+    setTimeout(flush, pauseMs)->ignore
+  }
 }
 
 let complete = (~url) => {
