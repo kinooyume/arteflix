@@ -25,7 +25,7 @@ let makeEpisode = (content: ArteZoneContent.t, currentId: string) => {
     title: content.title,
     id: content.id,
     selected: content.id == currentId,
-    imageSrc: ArteImage.resolveUrl(content.mainImage.url, "336x189"),
+    imageSrc: ArteImage.resolveUrl(content.mainImage.url, "620x350"),
     description,
     duration: content.durationLabel,
     imageAlt: switch content.mainImage.caption {
