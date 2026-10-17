@@ -1,6 +1,7 @@
 const [base = 'https://arteflix.kinoo.dev', origin = 'https://arteflix.kinoo.dev'] = process.argv.slice(2);
 
 const ARTE_CDN = 'https://api-cdn.arte.tv/api/emac/v4/fr/web';
+const LIVE_COUNTRIES = ['FR', 'DE'];
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let failures = 0;
@@ -33,7 +34,12 @@ const probe = async (path) => {
   return { res, text, json };
 };
 
-const verifyPlayer = async (label, path) => {
+const callerCountry = async () => {
+  const trace = await (await fetch('https://www.cloudflare.com/cdn-cgi/trace')).text();
+  return trace.match(/^loc=(\w+)$/m)?.[1];
+};
+
+const verifyPlayer = async (label, path, { expectStreams = true } = {}) => {
   const first = await probe(path);
   check(`${label} status`, first.res.status === 200, `${first.res.status} ${first.text.slice(0, 120)}`);
   check(`${label} valid json`, first.json !== undefined);
@@ -48,10 +54,19 @@ const verifyPlayer = async (label, path) => {
   const geo = first.json?.attributes?.restriction?.geoblocking;
   const arteError = first.json?.attributes?.error?.code;
   check(
-    `${label} has a stream`,
-    streams.length > 0,
-    `${streams.length} streams, seen by arte from ${geo?.userCountryCode ?? '?'}${arteError ? `, ${arteError}` : ''}`
+    `${label} geolocated as the caller`,
+    geo?.userCountryCode === country,
+    `arte saw ${geo?.userCountryCode ?? '?'}, caller is ${country}`
   );
+  if (expectStreams) {
+    check(
+      `${label} has a stream`,
+      streams.length > 0,
+      `${streams.length} streams${arteError ? `, ${arteError}` : ''}`
+    );
+  } else {
+    check(`${label} geoblocked outside FR/DE`, arteError === 'ERROR_GEOLOCATION', arteError ?? 'no error');
+  }
   if (warnings.length) console.log(`     warnings: ${warnings.map((w) => w.code).join(', ')}`);
 
   if (streams[0]?.url) {
@@ -64,9 +79,12 @@ const verifyPlayer = async (label, path) => {
   check(`${label} cached`, second.res.headers.get('x-proxy-cache') === 'HIT', second.res.headers.get('x-proxy-cache') ?? 'missing');
 };
 
-console.log(`verifying ${base} as ${origin}\n`);
+const country = await callerCountry();
+console.log(`verifying ${base} as ${origin} from ${country}\n`);
 
-await verifyPlayer('player LIVE', '/proxy/api/fr/player/LIVE');
+await verifyPlayer('player LIVE', '/proxy/api/fr/player/LIVE', {
+  expectStreams: LIVE_COUNTRIES.includes(country),
+});
 
 const trailerId = await firstTrailerId();
 if (trailerId) {
