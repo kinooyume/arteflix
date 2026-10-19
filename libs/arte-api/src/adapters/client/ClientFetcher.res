@@ -7,6 +7,8 @@ let validateArteData = text => text->S.parseJsonStringOrThrow(ArteData.schema)
 let validatePlayerData = text => text->S.parseJsonStringOrThrow(ArtePlayerConfig.schema)
 let validateZoneContent = text => text->S.parseJsonStringOrThrow(ArteZone.zoneContentSchema)
 
+let relativeArteLinks = text => text->String.replaceAll(`"https://www.arte.tv/`, `"/`)
+
 let fetcher = async (validate, url) => {
   try {
     let resp = await fetch(
@@ -16,7 +18,7 @@ let fetcher = async (validate, url) => {
       },
     )
     let stringData = await Response.text(resp)
-    stringData->validate
+    stringData->relativeArteLinks->validate
   } catch {
   | S.Error(e) => raise(ParseError(e))
   | Exn.Error(err) => raise(FetchError(err))

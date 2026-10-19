@@ -1,4 +1,4 @@
-import { resolvedFetcher } from '../adapters/client/ClientFetcher.bs.mjs';
+import { resolvedFetcher, relativeArteLinks } from '../adapters/client/ClientFetcher.bs.mjs';
 
 const item = {
   id: 'item-1',
@@ -61,5 +61,21 @@ describe('resolvedFetcher', () => {
     await resolvedFetcher('https://page');
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('relativeArteLinks', () => {
+  it('turns arte.tv links into app paths and leaves other hosts alone', () => {
+    const json = JSON.stringify({
+      url: 'https://www.arte.tv/fr/videos/RC-028300/blood/',
+      image: 'https://api-cdn.arte.tv/img/v2/image/abc/__SIZE__',
+      stream: 'https://artesimulcast.akamaized.net/index.m3u8',
+    });
+
+    expect(JSON.parse(relativeArteLinks(json))).toEqual({
+      url: '/fr/videos/RC-028300/blood/',
+      image: 'https://api-cdn.arte.tv/img/v2/image/abc/__SIZE__',
+      stream: 'https://artesimulcast.akamaized.net/index.m3u8',
+    });
   });
 });
