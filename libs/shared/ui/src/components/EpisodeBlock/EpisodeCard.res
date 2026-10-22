@@ -31,28 +31,22 @@ type props_ = {
 
 @react.component(: props_)
 let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~hover=false, ~renderImage=?) => {
-  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Low)
+  let (imageStatus, onImageLoad, onImageError) = UseImage.useImage(src)
 
   <div className={Style.container}>
-    {switch assetStatus {
-    | Pending | Failed => React.null
-    | Ready(readyUrl) =>
-      switch renderImage {
-      | Some(render) => render(~src=readyUrl, ~alt, ~className=Style.image, ~onLoad=() => assetOnLoad(0))
-      | None =>
-        <img
-          onLoad={e => {
-            let w = (e->JsxEvent.Image.target->Obj.magic)["naturalWidth"]
-            assetOnLoad(w)
-          }}
-          onError={_ => assetOnError()}
-          className={Style.image}
-          src=readyUrl
-          ?srcSet
-          ?sizes
-          alt
-        />
-      }
+    {switch (imageStatus, renderImage) {
+    | (Failed, _) => React.null
+    | (_, Some(render)) => render(~src, ~alt, ~className=Style.image, ~onLoad=() => onImageLoad(0))
+    | (_, None) =>
+      <img
+        onLoad={e => onImageLoad((e->JsxEvent.Image.target->Obj.magic)["naturalWidth"])}
+        onError={_ => onImageError()}
+        className={Style.image}
+        src
+        ?srcSet
+        ?sizes
+        alt
+      />
     }}
     {switch hover {
     | true => <CardOverlayPlay />

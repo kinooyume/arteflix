@@ -103,55 +103,34 @@ let make = React.memo((
 
   let src = srcBase->String.replace("__SIZE__", "620x350")
 
-  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Low)
-  let (imgLoaded, setImgLoaded) = React.useState(() => false)
+  let (imageStatus, onImageLoad, onImageError) = UseImage.useImage(src)
+  let loaded = imageStatus == Loaded
 
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle
   <Link className={Fn(className)} href>
     <div className={Style.imageContainer}>
-      {switch assetStatus {
-      | Pending | Failed =>
-        <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />
-      | Ready(readyUrl) =>
-        <>
-          {imgLoaded
-            ? React.null
-            : <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />}
-          {switch renderImage {
-          | Some(render) =>
-            render(
-              ~src=readyUrl,
-              ~alt,
-              ~className=Style.image(~loaded=imgLoaded),
-              ~onLoad=() => {
-                setImgLoaded(_ => true)
-                assetOnLoad(0)
-              },
-              ~onError=assetOnError,
-            )
-          | None =>
-            <img
-              onLoad={e => {
-                let w = (e->JsxEvent.Image.target->Obj.magic)["naturalWidth"]
-                setImgLoaded(_ => true)
-                assetOnLoad(w)
-              }}
-              onError={_ => assetOnError()}
-              className={Style.image(~loaded=imgLoaded)}
-              src=readyUrl
-              alt
-            />
-          }}
-        </>
+      {loaded ? React.null : <Shimmer width="100%" height="100%" className={Style.shimmerOverlay} />}
+      {switch (imageStatus, renderImage) {
+      | (Failed, _) => React.null
+      | (_, Some(render)) =>
+        render(
+          ~src,
+          ~alt,
+          ~className=Style.image(~loaded),
+          ~onLoad=() => onImageLoad(0),
+          ~onError=onImageError,
+        )
+      | (_, None) =>
+        <img
+          onLoad={e => onImageLoad((e->JsxEvent.Image.target->Obj.magic)["naturalWidth"])}
+          onError={_ => onImageError()}
+          className={Style.image(~loaded)}
+          src
+          alt
+        />
       }}
     </div>
-    <div
-      className={Style.overlay(
-        ~loaded=switch assetStatus {
-        | Ready(_) => imgLoaded
-        | _ => false
-        },
-      )}>
+    <div className={Style.overlay(~loaded)}>
       {switch children {
       | Some(children) => children
       | None => React.null

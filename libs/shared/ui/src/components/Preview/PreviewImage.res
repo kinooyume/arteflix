@@ -38,32 +38,23 @@ type previewImageProps = {
 @react.component(: previewImageProps)
 let make = (~srcBase, ~href, ~renderImage=?) => {
   let src = srcBase->String.replace("__SIZE__", "620x350")
-  let (assetStatus, assetOnLoad, assetOnError) = UseAsset.useAsset(~url=src, ~priority=Medium)
+  let (imageStatus, onImageLoad, onImageError) = UseImage.useImage(src)
 
   <Link href>
-    {switch assetStatus {
-    | Pending | Failed => <div className={Style.container} />
-    | Ready(readyUrl) =>
-      <div className={Style.container}>
-        {switch renderImage {
-        | Some(render) =>
-          render(
-            ~src=readyUrl,
-            ~alt="",
-            ~className=Style.img,
-            ~onLoad=() => assetOnLoad(0),
-            ~onError=assetOnError,
-          )
-        | None =>
-          <img
-            className={Style.img}
-            src=readyUrl
-            alt=""
-            onLoad={_ => assetOnLoad(0)}
-            onError={_ => assetOnError()}
-          />
-        }}
-      </div>
-    }}
+    <div className={Style.container}>
+      {switch (imageStatus, renderImage) {
+      | (Failed, _) => React.null
+      | (_, Some(render)) =>
+        render(~src, ~alt="", ~className=Style.img, ~onLoad=() => onImageLoad(0), ~onError=onImageError)
+      | (_, None) =>
+        <img
+          className={Style.img}
+          src
+          alt=""
+          onLoad={e => onImageLoad((e->JsxEvent.Image.target->Obj.magic)["naturalWidth"])}
+          onError={_ => onImageError()}
+        />
+      }}
+    </div>
   </Link>
 }
