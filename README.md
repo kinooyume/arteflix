@@ -79,7 +79,7 @@ Components include cards, hero banners, episode lists, player, preview overlays,
 ```
 feature/* → develop → main
               │         │
-           CI tests   Release (Docker + GitHub Release)
+           CI tests   Release (GitHub Release + Cloudflare deploy)
 ```
 
 Follows **Gitflow**: feature branches merge into `develop`, `develop` merges into `main` for releases.
@@ -87,7 +87,7 @@ Follows **Gitflow**: feature branches merge into `develop`, `develop` merges int
 - **feature → develop**: squash merge
 - **develop → main**: merge commit
 
-PRs to `develop` run build + unit tests + e2e. Pushing to `main` triggers a release: [cocogitto](https://docs.cocogitto.io/) bumps the version, generates a changelog, builds a Docker image, pushes it to `ghcr.io`, and creates a GitHub release. After that, `main` is merged back into `develop`.
+PRs to `develop` run build + unit tests + e2e. Pushing to `main` triggers a release: [cocogitto](https://docs.cocogitto.io/) bumps the version, generates a changelog, creates a GitHub release, then deploys the static site and its Worker to Cloudflare and checks the proxy online. After that, `main` is merged back into `develop`.
 
 Commits must follow [Conventional Commits](https://www.conventionalcommits.org):
 ```
@@ -95,12 +95,21 @@ feat(ui): add trailer overlay
 fix: locale detection for polish
 ```
 
-**Secrets needed**: `GITHUB_TOKEN` (automatic)
+**Secrets needed**: `GITHUB_TOKEN` (automatic), `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 
 
 ## Deployment
 
-The app builds as a standalone Next.js server and runs in Docker. The production setup uses Caddy as a reverse proxy with automatic TLS. Check `apps/arteflix/Dockerfile` and `deploy/` for details.
+The app is a static export (`apps/arteflix/out`): a single page whose client router picks the screen from the URL, and the browser fetches Arte content straight from `api-cdn.arte.tv`. A Cloudflare Worker (`apps/arteflix-proxy`) on `arteflix.kinoo.dev` serves those files, falls back to `index.html` for any page URL, and only runs code for `/proxy/api/*`: player and trailer configs, which Arte serves without CORS.
+
+```bash
+bun nx run arteflix:all:build      # static export
+bun nx run arteflix-proxy:dev      # serve it locally with the proxy
+bun nx run arteflix-proxy:deploy   # deploy site + worker
+bun nx run arteflix-proxy:verify   # check the proxy on the live domain
+```
+
+In `next dev`, `/proxy/api/*` is forwarded to the deployed worker (override with `ARTEFLIX_PROXY`).
 
 
 ## Stack

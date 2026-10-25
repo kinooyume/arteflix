@@ -22,8 +22,7 @@ let langOptions: array<HeaderLangSelector.lang> = [
 
 @react.component
 let make = () => {
-  let params = Next.Navigation.useParams()
-  let lang = params->Dict.get("lang")->Option.getOr("fr")
+  let lang = Location.usePath()->Option.flatMap(Location.langOf)->Option.getOr("fr")
 
   let allCategories =
     CategoryData.data

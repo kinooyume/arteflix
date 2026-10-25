@@ -2,7 +2,12 @@ name = "arteflix-proxy"
 main = "src/index.ts"
 compatibility_date = "2026-08-01"
 
-routes = [{ pattern = "arteflix.kinoo.dev/proxy/api/*", zone_name = "kinoo.dev" }]
+routes = [{ pattern = "arteflix.kinoo.dev/*", zone_name = "kinoo.dev" }]
+
+[assets]
+directory = "../arteflix/out"
+not_found_handling = "single-page-application"
+run_worker_first = ["/proxy/api/*"]
 
 [vars]
 ALLOWED_ORIGINS = "https://arteflix.kinoo.dev,http://localhost:3000"
