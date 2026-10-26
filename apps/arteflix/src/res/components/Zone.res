@@ -1,6 +1,3 @@
-let heroRenderImage = (~src, ~alt, ~className=?) =>
-  <Next.Image src alt ?className width=1920 height=1080 priority=true sizes="100vw" />
-
 let makeHero = (zone: ArteZone.t) => {
   switch zone.content.data->Array.get(0) {
   | Some(content) => {
@@ -16,7 +13,6 @@ let makeHero = (zone: ArteZone.t) => {
         description=content.teaserText
         callToAction=content.callToAction
         url=content.url
-        renderImage=heroRenderImage
       />
     }
   | None => <> </>

@@ -1,17 +1,3 @@
-let cardSizes = "(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1099px) 25vw, (max-width: 1399px) 20vw, 336px"
-
-let cardRenderImage: MovieCardImage.renderImage = (~src, ~alt, ~className=?, ~onLoad=?, ~onError=?) => {
-  let onLoad = onLoad->Option.map(f => (_): unit => f())
-  let onError = onError->Option.map(f => (_): unit => f())
-  <Next.Image src alt ?className ?onLoad ?onError width=620 height=350 sizes=cardSizes />
-}
-
-let previewRenderImage: PreviewImage.renderImage = (~src, ~alt, ~className=?, ~onLoad=?, ~onError=?) => {
-  let onLoad = onLoad->Option.map(f => (_): unit => f())
-  let onError = onError->Option.map(f => (_): unit => f())
-  <Next.Image src alt ?className ?onLoad ?onError width=620 height=350 sizes=cardSizes loading=#eager />
-}
-
 let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
   zoneContents->Array.map((content): MovieCard.t => {
     let kindLabel = switch content.kind.label {
@@ -39,7 +25,6 @@ let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
       alt: content.title,
       href: content.url,
       forceLabel: liveLabel,
-      renderImage: cardRenderImage,
     }
 
     let previewProps: MoviePreview.props = {
@@ -60,7 +45,6 @@ let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
           Some(audioVersions->Array.map(audioVersion => (audioVersion.code :> string)))
         | None => None
         },
-        renderImage: previewRenderImage,
       }
     }
     (imageProps, previewProps)
