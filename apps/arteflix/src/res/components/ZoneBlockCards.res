@@ -40,6 +40,7 @@ let makeCards = (zoneContents: array<ArteZoneContent.t>, ~orientation) =>
           }
         | None => None
         },
+        url: Trailer.url(content),
         audios: switch content.audioVersions {
         | Some(audioVersions) =>
           Some(audioVersions->Array.map(audioVersion => (audioVersion.code :> string)))
