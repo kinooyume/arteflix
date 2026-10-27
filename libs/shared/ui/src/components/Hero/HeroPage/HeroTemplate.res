@@ -8,6 +8,7 @@ type heroTemplateProps = {
   url: string,
   callToAction?: option<string>,
   renderImage?: HeroImage.renderImage,
+  trailer?: PlayerTransition.url,
 }
 
 @react.component(: heroTemplateProps)
@@ -21,8 +22,9 @@ let make = (
   ~overflow=true,
   ~callToAction=None,
   ~renderImage=?,
+  ~trailer=?,
 ) => {
-  <HeroImage src={imageSrc} sizes="100vw" alt={imageAlt} overflow ?renderImage>
+  <HeroImage src={imageSrc} sizes="100vw" alt={imageAlt} overflow ?renderImage ?trailer>
     <HeroContent title subtitle description callToAction href={url} />
   </HeroImage>
 }

@@ -25,3 +25,15 @@ let withOverflow: storyObj<HeroImage.props_> = {
     </div>,
   },
 }
+
+let withTrailer: storyObj<HeroImage.props_> = {
+  args: {
+    src: "https://api-cdn.arte.tv/img/v2/image/CPSfSGYzXeU98Hv7nPLRXQ/1920x1080",
+    alt: "Hero background with a trailer",
+    overflow: true,
+    trailer: PlayerTransition.Url("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"),
+    children: <div style={ReactDOM.Style.make(~color="white", ~fontSize="2rem", ())}>
+      {"The trailer fades in after 3 seconds"->React.string}
+    </div>,
+  },
+}

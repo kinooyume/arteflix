@@ -189,7 +189,12 @@ module Button = {
   @unboxed
   type classNameProps = String(string) | Fn(classNameFn)
 
-  type props_ = {onPress?: unit => unit, className?: classNameProps, children?: React.element}
+  type props_ = {
+    onPress?: unit => unit,
+    className?: classNameProps,
+    @as("aria-label") ariaLabel?: string,
+    children?: React.element,
+  }
   @module("react-aria-components") @react.component(: props_)
   external make: props => React.element = "Button"
 }

@@ -112,6 +112,13 @@ module Style = {
     z-index: 1;
   `->rawCss
 
+  let muteButton = `
+    position: absolute;
+    right: var(--side-padding);
+    top: min(42vw, calc(100vh - 340px));
+    z-index: 3;
+  `->rawCss
+
   let mobileHero = `
     ${Responsive.mobileDown} {
       --hero-height: 50vh;
@@ -134,27 +141,54 @@ type props_ = {
   overflow?: bool,
   children: React.element,
   renderImage?: renderImage,
+  trailer?: PlayerTransition.url,
 }
 
+let trailerDelay = 3000
+
 @react.component(: props_)
-let make = (~src, ~srcSet=?, ~sizes=?, ~alt, ~children, ~overflow=false, ~renderImage=?) => {
+let make = (
+  ~src,
+  ~srcSet=?,
+  ~sizes=?,
+  ~alt,
+  ~children,
+  ~overflow=false,
+  ~renderImage=?,
+  ~trailer=PlayerTransition.NoVideo,
+) => {
+  let (muted, setMuted) = React.useState(() => true)
+  let (playing, setPlaying) = React.useState(() => false)
+
   switch overflow {
   | true =>
     <section className={[Style.container, Style.containerFullscreen, Style.mobileHero]->cx}>
       <div className={Style.imgWrapper}>
-        {switch renderImage {
-        | Some(render) => render(~src, ~alt, ~className=Style.imgCover)
-        | None =>
-          ReactDOM.createElement(
-            "img",
-            ~props=Obj.magic({"className": Style.imgCover, "src": src, "srcSet": srcSet, "sizes": sizes, "alt": alt, "fetchPriority": "high"}),
-            [],
-          )
-        }}
+        <PlayerTransition
+          urlOption=trailer
+          delay=trailerDelay
+          muted
+          loop=false
+          onPlayingChange={isPlaying => setPlaying(_ => isPlaying)}>
+          {switch renderImage {
+          | Some(render) => render(~src, ~alt, ~className=Style.imgCover)
+          | None =>
+            ReactDOM.createElement(
+              "img",
+              ~props=Obj.magic({"className": Style.imgCover, "src": src, "srcSet": srcSet, "sizes": sizes, "alt": alt, "fetchPriority": "high"}),
+              [],
+            )
+          }}
+        </PlayerTransition>
         <div className={[Style.lateralVignetteBase, Style.lateralVignetteAbsolute]->cx} />
         <div className={[Style.gradientBase, Style.gradientAbsolute]->cx} />
       </div>
       <div className={Style.contentGrid}> children </div>
+      {playing
+        ? <div className={Style.muteButton}>
+            <MuteButton muted onToggle={() => setMuted(m => !m)} />
+          </div>
+        : React.null}
     </section>
   | false =>
     <section className={[Style.container, Style.mobileHero]->cx}>

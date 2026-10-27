@@ -13,6 +13,7 @@ let makeHero = (zone: ArteZone.t) => {
         description=content.teaserText
         callToAction=content.callToAction
         url=content.url
+        trailer={Trailer.url(content)}
       />
     }
   | None => <> </>
