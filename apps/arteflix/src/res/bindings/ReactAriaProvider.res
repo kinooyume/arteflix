@@ -1,6 +1,6 @@
 module RouterProvider = {
   type props_ = {
-    navigate: string => unit,
+    navigate: (string, option<ReactAria.routerOptions>) => unit,
     children: React.element,
   }
 

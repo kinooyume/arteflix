@@ -9,6 +9,7 @@ type moviePreviewProps = {
   ageRestriction: option<string>,
   audios: option<array<string>>,
   url?: PlayerTransition.url,
+  infoHref?: string,
   description: option<string>,
   linkAlt?: option<LinkAlt.make>,
   onExit?: unit => unit,
@@ -25,6 +26,7 @@ let make = React.memo((
   ~audios,
   ~description,
   ~url=NoVideo,
+  ~infoHref=?,
   ~linkAlt=None,
   ~isVisible=false,
   ~onExit=_ => (),
@@ -86,6 +88,10 @@ let make = React.memo((
           <PreviewDescription key={href ++ "-description"}>
             <PreviewDescriptionActions key={href ++ "-actions"}>
               <PlayButtonRounded href linkAlt />
+              {switch infoHref {
+              | Some(href) => <InfoButtonRounded href />
+              | None => React.null
+              }}
             </PreviewDescriptionActions>
             <PreviewDescriptionContent key={href ++ "-description-content"}>
               {switch meta->Array.length > 0 {

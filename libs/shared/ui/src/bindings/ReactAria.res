@@ -142,6 +142,8 @@ module Popover = {
   external make: buttonProps => React.element = "Popover"
 }
 
+type routerOptions = {play?: bool}
+
 module Link = {
   type linkRenderProps = {
     isHovered: bool,
@@ -164,6 +166,7 @@ module Link = {
 
   type props_ = {
     href: string,
+    routerOptions?: routerOptions,
     className?: classNameProps,
     children: React.element,
     onHoverStart?: HoverEvent.t => unit,

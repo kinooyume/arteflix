@@ -31,6 +31,10 @@ let parse = pathname =>
     })
   }
 
+let isCollection = id => id->String.startsWith("RC-")
+
+let pathOf = href => href->String.split("?")->Array.getUnsafe(0)
+
 let localeOf = language => {
   let locale = language->String.slice(~start=0, ~end=2)->String.toLowerCase
   locales->Array.includes(locale) ? locale : "en"

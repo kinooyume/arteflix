@@ -11,7 +11,8 @@ module TransitionProvider = {
 
 @react.component
 let make = (~children) => {
-  let pathname = Location.usePath()->Option.getOr("")
+  let location = Location.useLocation()
+  let pathname = location->Option.map(l => l.path)->Option.getOr("")
   let (transition, setTransition) = React.useState(() => {isLeaving: false, zoomIn: false})
   let timerRef = React.useRef(Nullable.null)
 
@@ -20,9 +21,17 @@ let make = (~children) => {
     None
   }, [pathname])
 
-  let navigateRef = React.useRef(ignore)
-  navigateRef.current = href => {
-    if href !== pathname {
+  let navigateRef = React.useRef((_, _) => ())
+  navigateRef.current = (href, options) => {
+    let play = options->Option.flatMap(o => o.ReactAria.play)->Option.getOr(false)
+    let opensModal = switch href->Routes.pathOf->Routes.parse {
+    | Video({id}) => Routes.isCollection(id) && !play
+    | _ => false
+    }
+    if opensModal {
+      let background = location->Option.flatMap(l => l.background)->Option.getOr(pathname)
+      Location.push(href, ~background)
+    } else if href !== pathname || play {
       switch timerRef.current->Nullable.toOption {
       | Some(id) => clearTimeout(id)
       | None => ()
@@ -31,12 +40,12 @@ let make = (~children) => {
       setTransition(_ => {isLeaving: true, zoomIn: isVideoPage})
       timerRef.current = Nullable.make(
         setTimeout(() => {
-          Location.push(href)
+          Location.push(href, ~play)
         }, 200),
       )
     }
   }
-  let navigate = React.useMemo0(() => href => navigateRef.current(href))
+  let navigate = React.useMemo0(() => (href, options) => navigateRef.current(href, options))
 
   <TransitionProvider value=transition>
     <RouterProvider navigate> children </RouterProvider>
