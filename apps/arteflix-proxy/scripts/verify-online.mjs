@@ -12,9 +12,9 @@ const check = (label, ok, detail = '') => {
 
 const firstTrailerId = async () => {
   const page = await (await fetch(`${ARTE_CDN}/pages/HOME?bypassESI=true`)).json();
-  for (const zone of page.zones.slice(0, 6)) {
-    await pause(1000);
-    const res = await fetch(`${ARTE_CDN}/zones/${zone.id}/content?bypassESI=true&page=1`);
+  for (const zone of page.zones) {
+    await pause(500);
+    const res = await fetch(zone.content?.esiInclude ?? `${ARTE_CDN}/zones/${zone.id}/content?bypassESI=true&page=1`);
     if (!res.ok) continue;
     const item = (await res.json()).data.find((i) => i.trailer?.id);
     if (item) return item.programId ?? item.id;
@@ -91,7 +91,7 @@ if (trailerId) {
   await pause(1000);
   await verifyPlayer(`trailer ${trailerId}`, `/proxy/api/fr/trailer/${trailerId}`);
 } else {
-  check('found a trailer id on HOME', false);
+  console.log('skip trailer — no trailer on HOME today');
 }
 
 const preflight = await fetch(`${base}/proxy/api/fr/player/LIVE`, {
