@@ -1,5 +1,6 @@
 let scale = 1.5
 let descH = 200.0
+let trailerDelay = 300
 let px = v => v->Float.toFixed(~digits=0) ++ "px"
 
 type moviePreviewProps = {
@@ -8,6 +9,7 @@ type moviePreviewProps = {
   ageRestriction: option<string>,
   audios: option<array<string>>,
   url?: PlayerTransition.url,
+  infoHref?: string,
   description: option<string>,
   linkAlt?: option<LinkAlt.make>,
   onExit?: unit => unit,
@@ -24,6 +26,7 @@ let make = React.memo((
   ~audios,
   ~description,
   ~url=NoVideo,
+  ~infoHref=?,
   ~linkAlt=None,
   ~isVisible=false,
   ~onExit=_ => (),
@@ -73,7 +76,9 @@ let make = React.memo((
           initial={{width: px(cardWidth), height: px(cardH)}}
           animate={{width: px(expW), height: px(expImgH), transition: {duration: 0.15}}}
           exit={{width: px(cardWidth), height: px(cardH), transition: {duration: 0.08}}}>
-          <PreviewImage srcBase=img href ?renderImage />
+          <PlayerTransition urlOption=url delay=trailerDelay>
+            <PreviewImage srcBase=img href ?renderImage />
+          </PlayerTransition>
         </Motion.div>
         <Motion.div
           key={href ++ "-description"}
@@ -83,6 +88,10 @@ let make = React.memo((
           <PreviewDescription key={href ++ "-description"}>
             <PreviewDescriptionActions key={href ++ "-actions"}>
               <PlayButtonRounded href linkAlt />
+              {switch infoHref {
+              | Some(href) => <InfoButtonRounded href />
+              | None => React.null
+              }}
             </PreviewDescriptionActions>
             <PreviewDescriptionContent key={href ++ "-description-content"}>
               {switch meta->Array.length > 0 {

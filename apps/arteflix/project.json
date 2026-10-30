@@ -5,6 +5,9 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {
+      "outputs": ["{projectRoot}/.next", "{projectRoot}/out"]
+    },
     "codegen": {
       "executor": "nx:run-commands",
       "options": {

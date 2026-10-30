@@ -6,11 +6,10 @@ on:
 
 permissions:
   contents: write
-  packages: write
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -53,31 +52,6 @@ jobs:
         id: changelog
         run: cog changelog --at ${{ steps.bump.outputs.version }} > /tmp/release_notes.md
 
-      - name: Set up Docker Buildx
-        if: steps.bump.outputs.version != ''
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Container Registry
-        if: steps.bump.outputs.version != ''
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        if: steps.bump.outputs.version != ''
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: apps/arteflix/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.bump.outputs.version }}
-            ghcr.io/${{ github.repository }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
       - name: Create GitHub Release
         if: steps.bump.outputs.version != ''
         uses: softprops/action-gh-release@v2
@@ -87,12 +61,13 @@ jobs:
           body_path: /tmp/release_notes.md
           make_latest: true
 
-      - name: Deploy to VPS
+      - name: Deploy proxy worker
         if: steps.bump.outputs.version != ''
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          port: ${{ secrets.VPS_PORT }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: "true"
+        run: bun nx run arteflix-proxy:deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Verify proxy online
+        if: steps.bump.outputs.version != ''
+        run: bun nx run arteflix-proxy:verify

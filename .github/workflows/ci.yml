@@ -8,7 +8,7 @@ on:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +36,10 @@ jobs:
         run: bun nx run arteflix:all:build
 
       - name: Test
-        run: bun nx run arteflix:test
+        run: bun nx run-many -t test -p arteflix arte-api ui arteflix-proxy
+
+      - name: Check proxy bundle
+        run: bun nx run arteflix-proxy:deploy --dry-run
 
       - name: E2E
         run: bun nx run arteflix-e2e:e2e

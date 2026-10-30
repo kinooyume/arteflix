@@ -1,6 +1,3 @@
-let heroRenderImage = (~src, ~alt, ~className=?) =>
-  <Next.Image src alt ?className width=1920 height=1080 priority=true sizes="100vw" />
-
 let makeHero = (zone: ArteZone.t) => {
   switch zone.content.data->Array.get(0) {
   | Some(content) => {
@@ -16,15 +13,14 @@ let makeHero = (zone: ArteZone.t) => {
         description=content.teaserText
         callToAction=content.callToAction
         url=content.url
-        renderImage=heroRenderImage
+        trailer={Trailer.url(content)}
       />
     }
   | None => <> </>
   }
 }
 
-@react.component
-let make = (~zone: ArteZone.t) => {
+let render = (zone: ArteZone.t) => {
   switch zone.content.data->Array.length == 0 {
   | true => React.null
   | false =>
@@ -71,6 +67,17 @@ let make = (~zone: ArteZone.t) => {
     }
   }
 }
+
+@react.component
+let make = (~zone: ArteZone.t) =>
+  switch ZoneContent.use(zone) {
+  | Ready(zone) => render(zone)
+  | Loading =>
+    switch zone.displayOptions.template {
+    | #"slider-square" => <Shimmer width="100%" height="clamp(300px, 56vw, 720px)" borderRadius="0px" />
+    | _ => <RowSkeleton />
+    }
+  }
 
 // @react.component
 // let make = (~zone: ArteZone.t) =>

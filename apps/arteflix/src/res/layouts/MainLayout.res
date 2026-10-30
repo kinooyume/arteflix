@@ -26,6 +26,8 @@ let default = ({children}: props) => {
   <html>
     <head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="preconnect" href="https://api-cdn.arte.tv" />
+      <link rel="preconnect" href="https://api-cdn.arte.tv" crossOrigin="anonymous" />
     </head>
     <body>
       <div>

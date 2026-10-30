@@ -16,3 +16,14 @@ let useTouchDevice = () => {
   }, [])
   isTouch
 }
+
+let getInnerHeight: unit => int = %raw(`function() { return window.innerHeight }`)
+
+let useViewportHeight = () => {
+  let (h, setH) = React.useState(() => 600)
+  React.useEffect(() => {
+    setH(_ => getInnerHeight())
+    None
+  }, [])
+  h
+}

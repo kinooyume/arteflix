@@ -90,13 +90,14 @@ type size = Large | Medium | Small | Rounded
 
 type buttonProps = {
   href: string,
+  routerOptions?: routerOptions,
   variant: variant,
   size: size,
   children: React.element,
 }
 
 @react.component(: buttonProps)
-let make = (~href, ~variant, ~children, ~size) => {
+let make = (~href, ~routerOptions=?, ~variant, ~children, ~size) => {
   let sizeStyle = switch size {
   | Large => Style.large
   | Medium => Style.medium
@@ -114,5 +115,5 @@ let make = (~href, ~variant, ~children, ~size) => {
 
   let className: Link.classNameFn = ({isHovered}) => isHovered ? onHover : defaultStyle
 
-  <Link className={Fn(className)} href> children </Link>
+  <Link className={Fn(className)} href ?routerOptions> children </Link>
 }

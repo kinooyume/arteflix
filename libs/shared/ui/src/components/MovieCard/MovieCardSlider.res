@@ -115,6 +115,7 @@ let make = (~children) => {
     dots: false,
     infinite: false,
     speed: 500,
+    lazyLoad: #ondemand,
     slidesToShow: 10,
     slidesToScroll: 10,
     draggable: isTouch,

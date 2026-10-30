@@ -49,6 +49,7 @@ let emptySingleProgramContent: ArteZone.t = {
   content: {
     data: [],
     pagination: None,
+    esiInclude: None,
   },
   link: None,
   displayOptions: {
@@ -136,6 +137,7 @@ module VideoPageZones = {
   @react.component(: props_)
   let make = (~params, ~arteData, ~episodes) => {
     let (currentProgramId, setCurrentProgramId) = React.useState(() => params.id)
+    let offset = Responsive.useViewportHeight()
 
     let currentId = `${currentProgramId}_${params.lang}`
     let remappedEpisodes =
@@ -178,7 +180,7 @@ module VideoPageZones = {
       <div>
         {sortedZones
         ->Array.mapWithIndex((zone, index) =>
-          <Lazyload key={index->Int.toString} once=true height=300 offset=200>
+          <Lazyload key={index->Int.toString} once=true height=300 offset>
             <ZoneVideo
               id={currentProgramId}
               key={index->Int.toString}
@@ -203,7 +205,7 @@ let make = (~params: Params.program) => {
   let {data, error} = if params.id->String.includes("-A") {
     Swr.useSWR_config(
       params->Urls.program,
-      fetcher(validateArteData, ...),
+      resolvedFetcher,
       Swr.swrConfiguration(
         ~fallbackData=(
           {
@@ -217,10 +219,10 @@ let make = (~params: Params.program) => {
     )
     // collection
   } else if params.id->String.includes("RC-") {
-    Swr.useSWR(params->Urls.collection, fetcher(validateArteData, ...))
+    Swr.useSWR(params->Urls.collection, resolvedFetcher)
     // category
   } else if params.id->String.includes("-A") {
-    Swr.useSWR(params->Urls.program, fetcher(validateArteData, ...))
+    Swr.useSWR(params->Urls.program, resolvedFetcher)
   } else {
     let slug = switch params.title {
     | Some(title) => `videos/${params.id}/${title}`
@@ -228,7 +230,7 @@ let make = (~params: Params.program) => {
     }
 
     let categoryParams: ArteContract.Params.category = {lang: params.lang, slug}
-    Swr.useSWR(categoryParams->Urls.category, fetcher(validateArteData, ...))
+    Swr.useSWR(categoryParams->ArteCategory.key, _ => ArteCategory.fetch(categoryParams))
   }
 
   let seriesCollectionId =
@@ -248,7 +250,7 @@ let make = (~params: Params.program) => {
     ->Option.map(id => Urls.collection({id, lang: params.lang}))
     ->Js.Nullable.fromOption
 
-  let {data: collectionData} = useSWRNullable(collectionUrl, fetcher(validateArteData, ...))
+  let {data: collectionData} = useSWRNullable(collectionUrl, resolvedFetcher)
 
   <>
     {switch error {

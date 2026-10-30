@@ -142,6 +142,8 @@ module Popover = {
   external make: buttonProps => React.element = "Popover"
 }
 
+type routerOptions = {play?: bool}
+
 module Link = {
   type linkRenderProps = {
     isHovered: bool,
@@ -164,6 +166,7 @@ module Link = {
 
   type props_ = {
     href: string,
+    routerOptions?: routerOptions,
     className?: classNameProps,
     children: React.element,
     onHoverStart?: HoverEvent.t => unit,
@@ -189,7 +192,12 @@ module Button = {
   @unboxed
   type classNameProps = String(string) | Fn(classNameFn)
 
-  type props_ = {onPress?: unit => unit, className?: classNameProps, children?: React.element}
+  type props_ = {
+    onPress?: unit => unit,
+    className?: classNameProps,
+    @as("aria-label") ariaLabel?: string,
+    children?: React.element,
+  }
   @module("react-aria-components") @react.component(: props_)
   external make: props => React.element = "Button"
 }

@@ -12,11 +12,15 @@ module Style = {
 type videoProps = {
   url: string,
   onLoaded?: unit => unit,
+  onError?: unit => unit,
+  onEnded?: unit => unit,
+  muted?: bool,
+  loop?: bool,
   options: VideoJs.playerOptions,
 }
 
 @react.component(: videoProps)
-let make = (~url, ~onLoaded=?, ~options) => {
+let make = (~url, ~onLoaded=?, ~onError=?, ~onEnded=?, ~muted=true, ~loop=true, ~options) => {
   let videoRef = React.useRef(Js.Nullable.null)
   let playerRef = React.useRef(Js.Nullable.null)
 
@@ -41,7 +45,7 @@ let make = (~url, ~onLoaded=?, ~options) => {
 
           ref->Element.appendChild(~child=videoElement)
           playerRef.current = Value(videoElement)
-          let opts = {...options, controls: false, loop: true, autoplay: #muted}
+          let opts = {...options, controls: false, loop, autoplay: #muted}
           let video = VideoJs.videojs(~id=#Element(videoElement), ~options=opts)
           playerRef.current = Value(video)
           // switch options.autoplay {
@@ -54,6 +58,14 @@ let make = (~url, ~onLoaded=?, ~options) => {
             | Some(cb) => video->VideoJs.on(~event="canplay", ~fn=cb)
             | None => ()
             }
+            switch onError {
+            | Some(cb) => video->VideoJs.on(~event="error", ~fn=cb)
+            | None => ()
+            }
+            switch onEnded {
+            | Some(cb) => video->VideoJs.on(~event="ended", ~fn=cb)
+            | None => ()
+            }
           }, ~sync=true)
           None
         }
@@ -61,6 +73,14 @@ let make = (~url, ~onLoaded=?, ~options) => {
       }
     }
   }, [videoRef])
+
+  React.useEffect(() => {
+    switch playerRef.current {
+    | Value(video) if !(video->VideoJs.isDisposed) => video->VideoJs.setMuted(muted)
+    | _ => ()
+    }
+    None
+  }, [muted])
 
   //   // Js.Json.strin
   //   // Colors->Dict.o

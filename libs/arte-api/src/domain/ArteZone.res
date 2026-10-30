@@ -121,8 +121,9 @@ type pagination = {
 }
 @schema
 type zoneContent = {
-  data: array<ArteZoneContent.t>,
+  data: @s.default([]) array<ArteZoneContent.t>,
   pagination: @s.nullable option<pagination>,
+  esiInclude: @s.nullable option<string>,
 }
 
 @schema

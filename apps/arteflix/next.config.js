@@ -22,7 +22,23 @@ const { composePlugins, withNx } = require('@nx/next');
  **/
 const nextConfig = {
   transpilePackages: transpileModules,
-  output: 'standalone',
+  output: 'export',
+  ...(process.env.NODE_ENV === 'development' && {
+    rewrites: async () => ({
+      beforeFiles: [
+        {
+          source: '/proxy/api/:path*',
+          destination: `${process.env.ARTEFLIX_PROXY ?? 'https://arteflix.kinoo.dev'}/proxy/api/:path*`,
+        },
+        {
+          source: '/:path((?!_next|proxy|static|fonts|favicon\\.ico).+)',
+          destination: '/',
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    }),
+  }),
   images: {
     loader: 'custom',
     loaderFile: './src/imageLoader.ts',

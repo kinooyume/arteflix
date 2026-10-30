@@ -1,0 +1,26 @@
+{
+  "name": "arteflix-proxy",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/arteflix-proxy/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": { "command": "wrangler dev", "cwd": "{projectRoot}" }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": { "command": "wrangler deploy", "cwd": "{projectRoot}" }
+    },
+    "verify": {
+      "executor": "nx:run-commands",
+      "options": { "command": "bun scripts/verify-online.mjs", "cwd": "{projectRoot}", "forwardAllArgs": true }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": { "jestConfig": "apps/arteflix-proxy/jest.config.ts" }
+    }
+  }
+}

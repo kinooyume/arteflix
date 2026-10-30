@@ -7,7 +7,7 @@ type props_ = {href: string, text: string}
 
 @react.component(: props_)
 let make = (~href, ~text) =>
-  <Button variant={Button.Secondary} size={Button.Medium} href>
+  <Button variant={Button.Secondary} size={Button.Medium} href routerOptions={play: true}>
     <div className={Style.inner}>
       <Svg.Triangle />
       {text->React.string}

@@ -24,7 +24,7 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'node apps/arteflix/.next/standalone/apps/arteflix/server.js',
+    command: 'bun nx run arteflix-proxy:dev --port 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,

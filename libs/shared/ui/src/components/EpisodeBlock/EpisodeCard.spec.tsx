@@ -8,17 +8,17 @@ describe('EpisodeCard', () => {
     alt: 'Episode thumbnail',
   };
 
-  it('renders an image with correct src and alt', () => {
+  it('renders an image with correct src and alt', async () => {
     render(<EpisodeCard {...defaultProps} />);
-    const img = screen.getByRole('img');
+    const img = await screen.findByRole('img');
     expect(img).toBeTruthy();
-    expect(img.getAttribute('src')).toBe('https://example.com/image.jpg?type=TEXT');
+    expect(img.getAttribute('src')).toBe('https://example.com/image.jpg');
     expect(img.getAttribute('alt')).toBe('Episode thumbnail');
   });
 
-  it('renders image after asset queue grants slot', () => {
+  it('renders image after asset queue grants slot', async () => {
     render(<EpisodeCard {...defaultProps} />);
-    const img = screen.getByRole('img');
+    const img = await screen.findByRole('img');
     expect(img).toBeTruthy();
   });
 

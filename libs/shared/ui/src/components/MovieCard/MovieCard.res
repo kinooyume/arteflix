@@ -21,6 +21,14 @@ type movieCardProps = {
   children?: React.element,
 }
 
+let onClickInside: (Dom.element, unit => unit) => unit => unit = %raw(`
+  function(element, callback) {
+    function onClick() { setTimeout(callback, 0); }
+    element.addEventListener("click", onClick, true);
+    return function() { element.removeEventListener("click", onClick, true); };
+  }
+`)
+
 module LazyPreview = {
   let make = React.lazy_(() => import(MoviePreview.make))
 }
@@ -53,6 +61,20 @@ let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
     },
   })
 
+  let previewRef = React.useRef(Nullable.null)
+
+  React.useEffect(() =>
+    previewRef.current
+    ->Nullable.toOption
+    ->Option.map(element =>
+      onClickInside(element, () => {
+        setCardHovered(_ => false)
+        setPreviewHovered(_ => false)
+        setIsOpen(_ => false)
+      })
+    )
+  , [isOpen])
+
   let isVisible = cardHovered || previewHovered
   React.useEffect(() => {
     if cardHovered {
@@ -79,9 +101,11 @@ let make = (~cardProps, ~previewProps, ~linkAlt=None, ~children=React.null) => {
       <Popover isOpen triggerRef placement=#top offset=popoverOffset>
         <Dialog ariaLabel={cardProps.title} className={Style.dialog} ariaLabelledBy="MovieCard">
           <div {...preview.hoverProps} className={Style.previewWrapper}>
-            <MoviePreview
+            <div ref={ReactDOM.Ref.domRef(previewRef)}>
+              <MoviePreview
               {...previewProps} isVisible cardWidth onExit={_ => setIsOpen(_ => false)}
-            />
+              />
+            </div>
           </div>
         </Dialog>
       </Popover>
