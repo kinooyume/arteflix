@@ -2,6 +2,35 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.15.0 - 2026-10-30
+#### Features
+- (**arte-api**) load zones from esi includes - (2bb50bf) - Martin Kinoo
+- (**proxy**) cloudflare worker for player and trailer - (0a76f93) - Martin Kinoo
+- (**ui**) hero trailer with mute toggle - (e8511ac) - Martin Kinoo
+- (**ui**) trailer preview on card hover - (ed98bdc) - Martin Kinoo
+- (**ui**) add RowSkeleton - (be83229) - Martin Kinoo
+- open collections in an info modal, play starts episode 1 - (9031c2b) - Martin Kinoo
+- static export with a client-side router - (9d572ce) - Martin Kinoo
+#### Bug Fixes
+- (**arte-api**) make arte.tv links relative - (40e50dd) - Martin Kinoo
+- (**arte-api**) move emac calls to api-cdn - (06d2b61) - Martin Kinoo
+- (**live**) pass lang to static live routes - (c7d8cda) - Martin Kinoo
+- (**ui**) close the hover preview when it is clicked - (852e6e9) - Martin Kinoo
+- (**ui**) pause asset queue for 60s after an image error - (fabb66b) - Martin Kinoo
+- (**ui**) keep arte image urls untouched - (ff188e8) - Martin Kinoo
+- (**video**) use cached thumbnail size for episodes - (ce3aebd) - Martin Kinoo
+#### Performance Improvements
+- (**ui**) drop PreviewImage CSS background fallback for proper img tag - (d0a1af6) - Martin Kinoo
+- (**ui**) viewport-aware lazyload offset + on-demand slider + rAF-debounced flush - (60c0def) - Martin Kinoo
+#### Continuous Integration
+- pin runners to ubuntu-24.04 - (8d5e783) - Martin Kinoo
+- deploy worker to cloudflare instead of vps - (bce64d8) - Martin Kinoo
+#### Refactoring
+- (**ui**) replace asset queue with a per-image hook - (90b94c8) - Martin Kinoo
+- drop next/image - (959d432) - Martin Kinoo
+
+- - -
+
 ## v0.14.1 - 2026-04-15
 #### Bug Fixes
 - (**ui**) attempt to detect 429 error images via naturalWidth check - (e04f1f0) - Martin Kinoo
