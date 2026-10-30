@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.15.1 - 2026-10-30
+#### Bug Fixes
+- (**proxy**) look for a trailer across every home zone in verify - (21cd1b8) - Martin Kinoo
+#### Documentation
+- rework readme with demo, screenshot and problems solved - (ab3b5e2) - Martin Kinoo
+
+- - -
+
 ## v0.15.0 - 2026-10-30
 #### Features
 - (**arte-api**) load zones from esi includes - (2bb50bf) - Martin Kinoo
